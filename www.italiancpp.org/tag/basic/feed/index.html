@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>basic &#8211; Italian C++ Community</title>
+	<atom:link href="https://www.italiancpp.org/tag/basic/feed/" rel="self" type="application/rss+xml" />
+	<link>https://www.italiancpp.org</link>
+	<description></description>
+	<lastBuildDate>Mon, 24 Aug 2020 13:03:53 +0000</lastBuildDate>
+	<language>it-IT</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.7.18</generator>
+<site xmlns="com-wordpress:feed-additions:1">106700034</site>	<item>
+		<title>Modern range-based iteration</title>
+		<link>https://www.italiancpp.org/2013/09/23/modern-range-based-iteration/</link>
+		<comments>https://www.italiancpp.org/2013/09/23/modern-range-based-iteration/#comments</comments>
+		<pubDate>Mon, 23 Sep 2013 07:29:47 +0000</pubDate>
+		<dc:creator><![CDATA[marco]]></dc:creator>
+				<category><![CDATA[Hands-on]]></category>
+		<category><![CDATA[basic]]></category>
+		<category><![CDATA[input iterator]]></category>
+		<category><![CDATA[iterazione]]></category>
+		<category><![CDATA[range]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1201</guid>
+		<description><![CDATA[La libreria standard è basata sul concetto di iteratore,  ovvero un oggetto che &#8220;punta&#8221; ad un elemento di un range e che consente di &#8220;spostarsi&#8221; (iterare) attraverso gli altri elementi, imitando per quanto possibile la sintassi usata con i puntatori. Tutti gli iteratori sono classificati in base ad alcune categorie, all&#8217;incirca a seconda che permettano [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p style="text-align: justify;">La libreria standard è basata sul concetto di <strong>iteratore</strong>,  ovvero un oggetto che &#8220;punta&#8221; ad un elemento di un range e che consente di &#8220;spostarsi&#8221; (iterare) attraverso gli altri elementi, imitando per quanto possibile la sintassi usata con i puntatori. Tutti gli iteratori sono classificati in base ad alcune categorie, all&#8217;incirca a seconda che permettano lettura e/o scrittura, e a seconda di che tipi di spostamento supportano (questa spiegazione va oltre lo scopo dell&#8217;articolo &#8211; <em>basic &#8211;</em> ma per saperne di più è possibile partire da <a href="http://www.cplusplus.com/reference/iterator/">qui</a>). In particolare, un vero <strong>puntatore</strong> è un caso particolare di iteratore:</p>
+<p><code lang="cpp" escaped="true">int arr[] = {1,2,3,4};<br />
+int* ptr = &amp;arr[1]; // ptr punta a 2<br />
+++ptr; // ptr punta a 3<br />
+*ptr = 10;<br />
+// arr è ora {1,2,10,4}</code></p>
+<p style="text-align: justify;">Questo articolo tratta alcune <strong>linee guida</strong> a proposito di <strong>iterazione su range</strong>. Un range è inteso come due <strong>iteratori </strong>che rappresentano l&#8217;inzio e la fine dell&#8217;intervallo di elementi sui quali iterare. Non si tratta, però, di iteratori qualsiasi bensì di quelli che lo standard definisce come <a href="http://www.cplusplus.com/reference/iterator/InputIterator/" target="_blank">InputIterator</a>. Questo categoria di iteratori è la più semplice e consente di scorrere serialmente gli elementi in &#8220;sola lettura&#8221; (solo input &#8211; a &#8220;scrivere&#8221; sono gli <strong>OutputIterator</strong>). Per essere più rigorosi (ma non troppo), un <strong>InputIterator</strong> è un qualsiasi tipo di oggetto che supporta almeno queste operazioni:</p>
+<ul>
+<li><span style="line-height: 12px;"><strong>value-semantics</strong> (ha un costruttore di copia, un operator= e un distruttore pubblici)</span></li>
+<li>si può testare<strong> l&#8217;uguaglianza</strong> (operator==, operator!=)</li>
+<li>può essere <strong>dereferenziato</strong> (*it, it-&gt;member), ma il risultato va trattato come se fosse di sola lettura (si può scrivere <em>auto x = *it</em>; ma non <em>*it = 10</em> come sopra)</li>
+<li>può essere <strong>incrementato di 1</strong> (con operator++)</li>
+</ul>
+<p style="text-align: justify;">Altre operazioni sono implicate (ad esempio,  la funzione <strong><em>swap</em></strong>) o supportate con certe limitazioni (il costruttore di default). Si noti però che non si parla mai della sequenza di oggetti &#8220;puntati&#8221;, che infatti potrebbe addirittura&#8230; non esistere! Un InputIterator potrebbe &#8220;fingere&#8221; di iterare su elementi che vengono creati al volo nell&#8217;istante in cui si de-referenzia (si vedrà un esempio più avanti). Secondo lo standard, de-referenziando due copie dello stesso iteratore non necessariamente si ottiene lo stesso valore!</p>
+<p style="text-align: justify;">Comunque, l&#8217;idea fondamentale è che <em>è necessario definire alcune funzioni anziché ereditare da una classe base</em>. Qualsiasi classe che &#8220;si comporta&#8221; come un InputIterator è allora considerata un InputIterator. Si tratta del classico approccio della <strong>generic programming</strong>, meglio formalizzato nei <a href="http://en.wikipedia.org/wiki/Concepts_(C%2B%2B)" target="_blank">Concepts</a>.</p>
+<p style="text-align: justify;">Spesso ci troviamo a scrivere cicli su strutture dati, ad esempio su vettori o liste. La libreria standard fornisce diversi algoritmi che internamente operano come dei cicli. Il più semplice è il <em>for_each</em>, che dati due InputIterator Begin/End esegue una certa funzione per ogni elemento nel range <strong>[Begin, End)</strong>.</p>
+<p>Un container può essere &#8220;descritto&#8221; da un range <strong>[Begin, End) </strong>e per questo definisce le quattro funzioni:</p>
+<ul>
+<li><strong>begin()</strong>, <strong>cbegin()</strong> (ovvero const-begin, che produce un iteratore di sola lettura)</li>
+<li><strong>end()</strong>, <strong>cend()</strong> (ovvero const-end)</li>
+</ul>
+<p style="text-align: justify;"><strong>begin()</strong> è, chiaramente, un InputIterator che punta al primo elemento del container, <strong>end()</strong>, invece, punta subito fuori dal range (<em>one-past-the-last-element</em>). Ci sono diverse motivazioni per questa scelta architetturale, ma (semplificando) è possibile pensare che questa sia in linea col classico pattern:</p>
+<p><code lang="cpp" escaped="true">for (int i=0; i!=END; ++i) // END escluso<br />
+...</code></p>
+<p style="text-align: justify;">con i = END il ciclo si arresta, quindi l&#8217;ultima iterazione è proprio con i = END &#8211; 1.</p>
+<p style="text-align: justify;"><span style="text-decoration: underline;">Nota</span>: gli iteratori ritornati dalle funzioni begin/end di un container sono generalmente più avanzati di un InputIterator (ad esempio possono supportare contemporaneamente input e output), ma tutti comunque ne supportano le specifiche.</p>
+<p><span style="text-align: justify;">Supponiamo, ora, di avere una classe </span><strong style="text-align: justify;">Plot</strong><span style="text-align: justify;"> che supporta un </span><strong style="text-align: justify;">replot</strong><span style="text-align: justify;">:</span><br />
+<code lang="cpp" escaped="true">class Plot<br />
+{<br />
+public:<br />
+   ...<br />
+   void replot();<br />
+   ...<br />
+};</code><br />
+dato un vector di Plot potremmo ridisegnare ogni plot con un banale ciclo, sfruttando le funzioni sopra citate:<br />
+<code lang="cpp" escaped="true">vector&lt;Plot&gt; plots;<br />
+for (auto it = plots.begin(); it != plots.end(); ++it)<br />
+{<br />
+   i-&gt;replot();<br />
+}</code><br />
+Ma potremmo usare anche un for_each:<br />
+<code lang="cpp" escaped="true">for_each(plots.begin(), plots.end(), [](Plot&amp; plot)<br />
+{<br />
+   plot.replot();<br />
+});</code><br />
+Cosa scegliere e perché? Ci sono almeno quattro buone ragioni per le quali scegliere un algoritmo invece di scrivere un ciclo:</p>
+<p><strong>1) Efficienza:</strong> un algoritmo è potenzialmente vincente perché:</p>
+<ul>
+<li style="text-align: justify;"><span style="line-height: 12px;">evita di ripetere alcune chiamate (e.g. <strong>plots.end()</strong>), mantenendo il codice compatto,</span></li>
+<li style="text-align: justify;">gli implementatori delle STL possono specializzare particolari algoritmi in base al container, massimizzando le performance,</li>
+<li style="text-align: justify;">(generalmente) gli algoritmi sono sofisticati e implementati rispettando lo stato dell&#8217;arte (e.g. sort). anche algoritmi apparentemente banali, come potrebbe essere &#8220;visitare tutti gli elementi&#8221; possono essere ottimizzati e nascondere  gradi di sofisticazione insospettabili!</li>
+</ul>
+<p style="text-align: justify;"><strong>2) Correttezza:</strong> scrivere un ciclo a mano è error-prone, richiede di controllare la validità del range in cui si itera e potenzialmente fa perdere più tempo a scrivere controlli che non a implementare il core del proprio algoritmo.</p>
+<p style="text-align: justify;"><strong>3)</strong> <strong>Manutenibilità</strong>: è più facile mettere mano su un codice che usa algoritmi standard, documentati e provati, oppure su listati completamente scritti a mano (e più verbosi)? Generalmente è molto più semplice leggere e comprendere un codice che utilizza algoritmi standard ed uno dei motivi principali è che questi ultimi sono ben documentati (e <em>i loro nomi hanno un significato che esprime <span style="text-decoration: underline;">l&#8217;intento</span> del programmatore</em>). Essi rappresentano un vero e proprio &#8220;vocabolario&#8221; con cui comunicare (ad esempio nel proprio team) e dal quale attingere funzionalità già pronte.</p>
+<p style="text-align: justify;"><strong>4) Astrazione</strong>: non sempre occorre avere a che fare con gli iteratori. Con un ciclo scritto a mano è necessario utilizzarli, dereferenziarli, &#8230; Con un algoritmo, invece, è possibile utilizzare direttamente l&#8217;oggetto &#8220;puntato&#8221;, come nell&#8217;esempio sopra, dove accediamo ad un&#8217;istanza di business, <strong>Plot</strong>, e non ad un iteratore.</p>
+<p style="text-align: justify;">Primo <span style="text-decoration: underline;"><strong><em>DO</em></strong></span> della giornata: <span style="color: #2945a4;"><strong>ove possibile,</strong> <strong>preferire l&#8217;utilizzo degli algoritmi ai cicli scritti a mano</strong>.</span></p>
+<p style="text-align: justify;">Questo primo DO è generale, non da applicarsi sol al C++. Veniamo al nocciolo di questo post. <strong>Iterare</strong> <strong>su un range: </strong><strong>quali sono le nuove linee guida</strong>?</p>
+<p style="text-align: justify;">All&#8217;inizio abbiamo detto che ogni container può essere descritto da un range <strong>(Begin. End]</strong>. Abbiamo anche fatto vedere come utilizzare le funzioni begin/end per iterare su un container. Il range <strong>(Begin, End]</strong> è del tipo:</p>
+<p><code lang="cpp" escaped="true">vector&lt;int&gt; vec {1,2,3,4,5};<br />
+auto first = vec.begin();<br />
+auto one_past_last = vec.end();<br />
+// [first, one_past_last) "descrive" vec</code></p>
+<p style="text-align: justify;">L&#8217;unico problema è che questo approccio non è abbastanza generico. Ad esempio non può essere applicato agli <strong>array C-style</strong> (e.g. int arr[]). Come rimediare? Il <strong>C++11</strong> introduce le <strong>funzioni non-membro</strong> begin/end, con un overload per gli array C-style. Oltre a supportare gli array, queste due funzioni danno uniformità e coerenza, promuovendo l&#8217;estensibilità (è possibile creare delle specializzazioni per i propri container) e incrementando l&#8217;incapsulamento. Le non-member functions begin/end sono fatte così:</p>
+<p><code lang="cpp" escaped="true">// C++11<br />
+template&lt; class C &gt;<br />
+auto begin( C&amp; c ) -&gt; decltype(c.begin());</p>
+<p>// C++11<br />
+template&lt; class C &gt;<br />
+auto begin( const C&amp; c ) -&gt; decltype(c.begin());</p>
+<p>// C++11 - overload per gli array C<br />
+template&lt; class T, size_t N &gt;<br />
+T* begin( T (&amp;array)[N] );</code></p>
+<p style="text-align: justify;"><span style="text-decoration: underline;"><em><strong>DO</strong></em></span>: <span style="color: #2945a4;"><strong>Utilizzare le funzioni non-membro begin(x) e end(x) invece di x.begin() e x.end().</strong></span></p>
+<p><code lang="cpp" escaped="true">for_each( begin(vec), end(vec), ... ) // C++11</code><br />
+E se avessimo bisogno di <strong>cbegin()</strong> e <strong>cend()</strong> ? Il <strong>C++14</strong> introduce anche queste due funzioni non-membro, sfuggite al C++11:<br />
+<code lang="cpp" escaped="true">// C++14<br />
+template&lt; class C &gt;<br />
+auto cbegin( const C&amp; c ) -&gt; decltype(std::begin(c));</p>
+<p>// C++14<br />
+template&lt; class C &gt;<br />
+auto cend( const C&amp; c ) -&gt; decltype(std::end(c));</code><br />
+<span style="text-decoration: underline;"><em><strong>DO</strong></em></span>: <span style="color: #2945a4;"><strong>[C++14] Utilizzare le funzioni non-membro cbegin(x) e cend(x) invece di x.cbegin() e x.cend().</strong></span></p>
+<p style="text-align: justify;">Concludiamo questo primo articolo a proposito di iterazione su range con una seconda novità del C++11: il <strong>range-based for loop (RBFL)</strong>. Questo costrutto equivale ad utilizzare un <strong><em>for_each</em></strong> su un container. Stesse garanzie di performance ma più compattezza:</p>
+<p><code lang="cpp" escaped="true">// C++11<br />
+for (const auto&amp; elem : vec)<br />
+{<br />
+   cout &lt;&lt; elem &lt;&lt; " ";<br />
+}</p>
+<p>// quando vec è una variabile locale, è come scrivere<br />
+for_each(begin(vec), end(vec), [](const T&amp; elem)<br />
+{<br />
+   cout &lt;&lt; elem &lt;&lt; " ";<br />
+});</code><br />
+La sintassi è semplice e probabilmente già vista in altri linguaggi. Da notare la possibilità di usare <strong>auto</strong>. Chiaramente, anche qui, il concetto di iteratore è celato e si opera direttamente sugli oggetti contenuti nel vettore.</p>
+<p style="text-align: justify;"><strong><span style="text-decoration: underline;"><em>DO</em></span></strong>: <span style="color: #2945a4;"><strong>Utilizzare il range-based for loop al posto del for_each, è più semplice e compatto.</strong></span></p>
+<p style="text-align: justify;">Il RBFL opera su strutture x che supportino il concetto di <strong>iterazione</strong>, ovvero:</p>
+<ul>
+<li><span style="line-height: 12px;">abbiano le funzioni<strong> membro</strong> x.<strong>begin() </strong>e<strong> </strong>x.<strong>end()</strong>, <em>oppure,</em></span></li>
+<li>abbiano le funzioni <strong>non-membro</strong> <strong>begin(x)</strong> e <strong>end(x)</strong> (trovate con ADL &#8211; Argument Dependent Lookup), <em>oppure,</em></li>
+<li>per le quali esistono le specializzazioni di <strong>std::begin(x)</strong> e <strong>std::end(x)</strong>.</li>
+</ul>
+<p>Le funzioni devono ritornare degli <strong>InputIterator </strong>(in realtà il requisito è più &#8220;leggero&#8221;, come vedremo nel prossimo esempio. Maggiori dettagli <a href="http://en.cppreference.com/w/cpp/language/range-for" target="_blank">qui</a>).</p>
+<h3>Bonus track</h3>
+<p style="text-align: justify;">Il RBFL permette di iterare su una qualsiasi struttura &#8220;iterabile&#8221;. Abbiamo detto poco fa cosa vuol dire, ma vogliamo vederne un esempio pratico?</p>
+<p style="text-align: justify;">Supponiamo di voler iterare su tutti gli interi entro un certo intervallo, qualcosa del tipo:</p>
+<p><code lang="cpp" escaped="true">for (int i=0; i&lt;100; ++i)<br />
+...</code></p>
+<p style="text-align: justify;">Possiamo usare il RBFL senza creare una sequenza intermedia? Sì, per farlo abbiamo proprio bisogno di scrivere una struttura iterabile e un InputIterator che ne abiliti l&#8217;iterazione. Per il nostro scopo, in realtà, dobbiamo solo implementare un wrapper ad un finto container che simuli una lista crescente di numeri ed un suo iteratore.</p>
+<p style="text-align: justify;">Per ricapitolare, vogliamo qualcosa del genere:</p>
+<p><code lang="cpp" escaped="true">for (auto i : range{0,10})<br />
+{<br />
+   cout &lt;&lt; i &lt;&lt; " ";<br />
+}<br />
+// 0 1 2 3 4 5 6 7 8 9</code><br />
+Ribadisco che questo è solo un esempio, molto probabilmente non efficiente quanto un for da 0 a N!</p>
+<p>Iniziamo da questo &#8220;finto container&#8221;. Abbiamo detto che per usare il RBFL è sufficiente implementare una delle tre opzioni:</p>
+<ul>
+<li>funzioni<strong> membro</strong> x.<strong>begin() </strong>e<strong> </strong>x.<strong>end()</strong>, <em>oppure</em></li>
+<li>funzioni <strong>non-membro</strong> <strong>begin(x)</strong> e <strong>end(x)</strong> (trovate con ADL &#8211; Argument Dependent Lookup), <em>oppure</em></li>
+<li>specializzazioni <strong>std::begin(x)</strong> e <strong>std::end(x)</strong></li>
+</ul>
+<p>Scegliamo la prima e supponiamo, per un attimo, di aver già pensato al nostro InputIterator ad-hoc:<br />
+<code lang="cpp" escaped="true">class range_t<br />
+{<br />
+public:<br />
+   class range_it<br />
+   {<br />
+   // lo vediamo dopo<br />
+   }</p>
+<p>   range_t(int s, int e)<br />
+      : start_it{s}, end_it{e}<br />
+   {<br />
+   }</p>
+<p>   range_it begin()<br />
+   {<br />
+      return start_it;<br />
+   }</p>
+<p>   range_it end()<br />
+   {<br />
+      return end_it;<br />
+   }</p>
+<p>private:<br />
+   range_it start_it;<br />
+   range_it end_it;<br />
+};</code><br />
+La nostra classe <strong>range_t</strong> mantiene due iteratori che rappresentano inizio e fine range. Ora vediamo una possibile implementazione di <strong>range_it</strong>:<br />
+<code lang="cpp" escaped="true">class range_it<br />
+{<br />
+public:<br />
+   range_it(int val)<br />
+      : value{val}<br />
+   {<br />
+   }</p>
+<p>   int operator*() const<br />
+   {<br />
+      return value;<br />
+   }</p>
+<p>   bool operator!=(const range_it&amp; o) const<br />
+   {<br />
+      return value != o.value;<br />
+   }</p>
+<p>   range_it&amp; operator++()<br />
+   {<br />
+      ++value;<br />
+      return *this;<br />
+   }</p>
+<p>private:<br />
+   int value;<br />
+};</code></p>
+<p style="text-align: justify;">L&#8217;idea (banale) è di wrappare un valore del range in questo iteratore range_it. Le operazioni su un range_it sono in realtà operazioni sul valore che wrappa.</p>
+<p style="text-align: justify;">Non siamo totalmente conformi alle <a href="http://www.cplusplus.com/reference/iterator/InputIterator/">specifiche di un InputIterator</a> ma siamo dentro ai requisiti del RBFL (perché questo ha bisogno solo degli operatori che abbiamo implementato):</p>
+<p><code lang="cpp" escaped="true">for (auto i : range_t{0, 10})<br />
+{<br />
+   cout &lt;&lt; i &lt;&lt; " ";<br />
+}<br />
+// 0 1 2 3 4 5 6 7 8 9</code></p>
+<p style="text-align: justify;">L&#8217;esempio è volutamente semplice. Restano aperte alcune questioni (anch&#8217;esse non complicate da affrontare) che lasciamo ai lettori, come ad esempio:</p>
+<ul>
+<li><span style="line-height: 12px;">generalizzare il range per qualsiasi tipo numerico (attenzione all&#8217;operator!= su float e double&#8230;),</span></li>
+<li>completare range_it in modo che implementi tutte le specifiche di un InputIterator,</li>
+<li>personalizzare lo step (e.g. {0, 10} a step di 0.1).</li>
+</ul>
+]]></content:encoded>
+			<wfw:commentRss>https://www.italiancpp.org/2013/09/23/modern-range-based-iteration/feed/</wfw:commentRss>
+		<slash:comments>5</slash:comments>
+	<post-id xmlns="com-wordpress:feed-additions:1">1201</post-id>	</item>
+		<item>
+		<title>Puntatori? Vivi senza!</title>
+		<link>https://www.italiancpp.org/2013/08/23/puntatori-vivi-senza/</link>
+		<comments>https://www.italiancpp.org/2013/08/23/puntatori-vivi-senza/#comments</comments>
+		<pubDate>Fri, 23 Aug 2013 08:24:56 +0000</pubDate>
+		<dc:creator><![CDATA[franco]]></dc:creator>
+				<category><![CDATA[Hands-on]]></category>
+		<category><![CDATA[basic]]></category>
+		<category><![CDATA[containers]]></category>
+		<category><![CDATA[puntatori]]></category>
+		<category><![CDATA[stl]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1070</guid>
+		<description><![CDATA[Molte volte il C++, essendo un &#8220;figlio&#8221; del C, viene identificato con in puntatori. Altro non possiamo dire che &#8220;non è vero&#8220;. Ma cominciamo con le basi. Nota bene: nel seguito utilizzeremo termini come &#8220;heap&#8221; e &#8220;stack&#8220;, anche se lo standard ISO C++ non ne fa menzione (di fatti non è detto che una piattaforma disponga [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p style="text-align: justify;">Molte volte il C++, essendo un &#8220;figlio&#8221; del C, viene identificato con in puntatori. Altro non possiamo dire che &#8220;<em>non è vero</em>&#8220;.</p>
+<p style="text-align: justify;">Ma cominciamo con le basi. <em>Nota bene</em>: nel seguito utilizzeremo termini come &#8220;<em>heap</em>&#8221; e &#8220;<em>stack</em>&#8220;, anche se lo standard ISO C++ non ne fa menzione (di fatti non è detto che una piattaforma disponga di stack, ad esempio).</p>
+<p style="text-align: justify;">Tutti voi sapete che ogni variabile dichiarata in un blocco di codice, di fatti è allocata in modo automatico sullo stack, una memoria molto veloce <i>ed estremamente limitata</i>:</p>
+<p><code lang="cpp" escaped="true"><br />
+if (true)<br />
+{<br />
+    int i; // Stack<br />
+    i = 42;<br />
+}</code></p>
+<p style="text-align: justify;">Nell&#8217;esempio, la variabile i è allocata sullo stack. Ma cosa succede se dovessimo utilizzare classi molto onerose dal punto di vista dell&#8217;occupazione di memoria?</p>
+<p style="text-align: justify;">Lo stack non è più una opzione valida, perché è una memoria preziosa. Come hanno insegnato, è necessario allocare tutto sullo <em>heap</em>. E questo sicuramente vi fa venire in mente i puntatori:</p>
+<p><code lang="cpp" escaped="true"><br />
+if (true)<br />
+{<br />
+    myHugeClass *p;        // Stack<br />
+    p = new myHugeClass(); // Heap<br />
+    // ...<br />
+    delete p;<br />
+}</code></p>
+<p style="text-align: justify;">Funziona tutto benissimo. Come si nota, il <em>puntatore è allocato sullo stack</em>, è dunque una variabile automatica, e la memoria è deallocata quando si esce dal blocco. Il dato, è invece allocato sullo heap dall&#8217;operatore <em>new</em>. Al termine dell&#8217;utilizzo della variabile <em>p</em>, dobbiamo ricordarci di <em>deallocare la memoria</em>, e questo è il compito dell&#8217;operatore <em>delete</em>.</p>
+<p style="text-align: justify;">C&#8217;è solo un piccolo problema: e se scordassimo il <em>delete</em>? Benvenuti nel tragico mondo dei <em>memory leak</em>.</p>
+<p style="text-align: justify;">La memoria non verrebbe mai deallocata, e la vostra applicazione allocherà nuovamente uno spazio per <em>myHugeClass</em> ogni volta che verrà eseguito il codice. Potenzialmente, potremmo saturare la RAM, con conseguenze catastrofiche. Come ovviare al problema? Essenzialmente dovremmo fare una accoppiata di tutti i <em>new</em>, con un <em>delete</em>, ma questo risulta impraticabile, come vedremo fra breve: non è sempre ovvio dove si trovi una deallocazione.</p>
+<h3 style="text-align: justify;">Smart Pointers</h3>
+<p style="text-align: justify;">Lo standard ISO C++11 fornisce una soluzione elegante e semplice: utilizzare uno <em>smart pointer</em>, ovvero un puntatore &#8220;intelligente&#8221;, che dealloca la memoria automaticamente come se fosse sullo stack. La sintassi è estremamente semplice, e l&#8217;esempio precedente si riassume in questo codice:</p>
+<p><code lang="cpp" escaped="true"><br />
+if (true)<br />
+{<br />
+    unique_ptr&lt;myHugeClass&gt; p(new myHugeClass()); // Heap<br />
+    // C++14: auto p = make_unique&lt;myHugeClass&gt;();<br />
+    // ...<br />
+}</code></p>
+<p style="text-align: justify;">Abbiamo risolto il problema. In questo caso, <i>p</i> è allocato sullo stack, mentre l&#8217;istanza di <em>myHugeClass</em> è allocata sullo heap, come ogni puntatore. La cosa &#8220;intelligente&#8221; degli smart pointers è che alla fine dello <em>scope </em>di <em>p</em>, tutta la memoria verrà automaticamente deallocata, sia ovviamente quello sullo stack, che quella sullo heap. Un <em>delete</em> non è più necessario, e dite addio al memory leak.</p>
+<p style="text-align: justify;">Solo per menzionarlo, un altro tipo di smart pointer è lo <em>shared_ptr</em>. Mentre lo <em>unique_ptr</em> consente che ci sia solo un &#8220;proprietario&#8221; dell&#8217;oggetto referenziato, lo <em>shared_ptr</em> permette di condividerne la proprietà:</p>
+<p><code lang="cpp" escaped="true"><br />
+auto ptr = make_shared&lt;myHugeClass&gt;();<br />
+auto ptr2 = ptr; // Istanza condivisa</code></p>
+<p style="text-align: justify;">La vita dell&#8217;oggetto puntato viene gestita tramite <strong>reference-counting</strong>, cioè si contano quanti shared_ptr referenziano l&#8217;oggetto puntato e quando uno shared_ptr viene distrutto è come se dicesse &#8220;io non sono più interessato alla vita dell&#8217;oggetto&#8221;. Quando l&#8217;ultimo <em>shared_ptr</em> viene distrutto si porta dietro anche l&#8217;oggetto puntato e il gioco è fatto!</p>
+<p style="text-align: justify;">Per chi viene dal mondo Java, potete vedere il parallelo facilmente: ogni oggetto in Java può essere pensato come uno <em>shared_ptr</em> (con un <em>garbage collector</em>). Solo che in C++ avete la possibilità di scegliere se usare un pointer o uno smart pointer.</p>
+<h3 style="text-align: justify;">Eccezioni</h3>
+<p style="text-align: justify;">Una ulteriore motivazione sull&#8217;uso degli smart pointers al posto dei <em>raw pointers</em>, è nel caso di eccezioni. Prendiamo il secondo esempio. Se allochiamo con <i>new</i> una istanza di <em>myHugeClass</em>, ed il costruttore va in eccezione? A questo punto il codice è inutilizzabile, perché <em>p</em> punta ad una zona di memoria non valida. Cosa dovremmo fare per evitare la catastrofe di utilizzare un pointer invalido? Un semplice trucco consisterebbe nell&#8217;uso di <em>try</em>/<em>catch</em>:</p>
+<p><code lang="cpp" escaped="true"><br />
+if (true)<br />
+{<br />
+    myHugeClass *p = nullptr;   // Stack<br />
+    try<br />
+    {<br />
+        p = new myHugeClass(); // Heap<br />
+        // ...<br />
+        delete p;              // Rilascio la memoria: ho terminato<br />
+    }<br />
+    catch(...)<br />
+    {<br />
+        delete p;              // Rilascio la memoria: errore rilevato<br />
+    }<br />
+}</code></p>
+<p style="text-align: justify;">Sembra semplice, ma questo ci fa venire in mente il problema dell&#8217;accoppiamento <em>new</em> con <em>delete</em>. Mentre prima potevamo contare i <em>new</em>, e controllare che il numero di <em>delete</em> fosse uguale, ora non è più valida questa soluzione: abbiamo due deallocazioni, una per un funzionamento fisiologico, una per quello patologico con eccezioni. E la cosa si complica notevolmente con molte variabili e più modi di gestire varie eccezioni.</p>
+<p style="text-align: justify;">E dunque gli smart pointers ci aiutano? Certamente: è garantito dallo standard che, nel caso in cui una eccezione venga lanciata, la memoria debba essere automaticamente deallocata. Ecco come diventa l&#8217;esempio di prima:</p>
+<p><code lang="cpp" escaped="true"><br />
+if (true)<br />
+{<br />
+    auto p = make_unique&lt;myHugeClass&gt;(); // C++14 style<br />
+} // Il delete è automatico</code></p>
+<h3 style="text-align: justify;">Conclusioni</h3>
+<p style="text-align: justify;">Gli smart pointers sono utili classi da utilizzare sempre, ove possibile. Certo è che non è sempre praticabile l&#8217;uso degli smart pointers, alcune volte serviranno i cari vecchi raw pointers, ma sono casi particolari. In genere, utilizzare un raw pointer è sconsigliato.</p>
+<p style="text-align: justify;">Ma le buone notizie non terminano con questo. Se utilizzate ad esempio i containers, come <em>vector</em>, l&#8217;implementazione garantisce che la variabile sia sullo stack, mentre i dati siano allocati dinamicamente sullo heap. E questo non vale ovviamente solo per <em>vector</em>!</p>
+<p style="text-align: justify;">Ancora più interessante è il caso in cui voi vogliate usare una funzione che come valore di ritorno ha una istanza molto grande, come ad esempio un <em>vector</em> con molti elementi. Potreste pensare che, associando una variabile al valore di ritorno della vostra funzione, venga <em>copiato ogni elemento</em> dentro il vettore, con chiamate a non finire al costruttore dell&#8217;oggetto contenuto nel <em>vector </em>(ad esempio un vettore di <em>myHugeClass</em>): questo sarebbe un overhead enorme. In realtà, dipendentemente dal compilatore però, il C++ fornisce una soluzione automatica, non copiando l&#8217;elemento, ma <em>muovendolo</em>, con una tecnica semplice chiamata <em>return value optimization</em>. Ma questa, è un&#8217;altra storia.</p>
+]]></content:encoded>
+			<wfw:commentRss>https://www.italiancpp.org/2013/08/23/puntatori-vivi-senza/feed/</wfw:commentRss>
+		<slash:comments>24</slash:comments>
+	<post-id xmlns="com-wordpress:feed-additions:1">1070</post-id>	</item>
+		<item>
+		<title>auto: il linguaggio non è tutto</title>
+		<link>https://www.italiancpp.org/2013/06/24/auto-il-linguaggio-non-e-tutto/</link>
+		<comments>https://www.italiancpp.org/2013/06/24/auto-il-linguaggio-non-e-tutto/#comments</comments>
+		<pubDate>Mon, 24 Jun 2013 09:44:06 +0000</pubDate>
+		<dc:creator><![CDATA[davide]]></dc:creator>
+				<category><![CDATA[Hands-on]]></category>
+		<category><![CDATA[basic]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=625</guid>
+		<description><![CDATA[Molta enfasi di recente è stata posta sul nuovo uso della keyword auto in C++11 (si veda per esempio qui). In sintesi, auto sostituisce un tipo esplicito con una richiesta rivolta al compilatore di riempire con l&#8217;informazione corretta: std::vector&#60;double&#62; v; auto it = v.begin(); Il frammento sopra afferma: lascio al compilatore la deduzione del tipo di [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p style="text-align: justify;">Molta enfasi di recente è stata posta sul nuovo uso della keyword <strong>auto</strong> in C++11 (si veda per esempio <a title="qui" href="http://herbsutter.com/2013/06/05/gotw-92-auto-variables-part-1/">qui</a>). In sintesi, auto sostituisce un tipo esplicito con una richiesta rivolta al compilatore di riempire con l&#8217;informazione corretta:</p>
+<p><code lang="cpp" escaped="true"><br />
+std::vector&lt;double&gt; v;<br />
+auto it = v.begin();<br />
+</code></p>
+<p style="text-align: justify;">Il frammento sopra afferma: <em>lascio al compilatore la deduzione del tipo di it.</em></p>
+<p style="text-align: justify;">La maggior parte dei commenti però tende a enfatizzare <em>i casi in cui usare auto,</em> ma il vero problema è quando <em>non </em>usarlo. Siccome la keyword risparmia fatica al programmatore, ricordare continuamente &#8220;usate auto qui, usate auto là&#8221; porta facilmente a pensare che vada usato sempre, e diventa abbastanza naturale abusarne. auto però non è gratis: <strong>è fondamentale che il codice esprima correttamente l&#8217;intento del programmatore</strong>. se l&#8217;intento è chiaro, i bug diventano evidenti e si possono correggere facilmente. ma <strong>ci sono casi in cui l&#8217;uso di auto nasconde l&#8217;intento</strong>:</p>
+<ul style="text-align: justify;">
+<li>rileggendo il codice a distanza di tempo,<strong> diventa più difficile</strong> <strong>capire cosa</strong> <strong>sta</strong> <strong>succedendo</strong> (soprattutto se <em>tutte</em> le variabili locali sono auto&#8230; caso realmente accaduto)</li>
+<li>ci sono casi in cui un <strong>cast</strong> viene <strong>involontariamente</strong> <strong>eliminato: </strong>nell&#8217;esempio semplificato sopra, it poteva essere const_iterator, ma il programmatore intendeva dire <em>auto it = v.cbegin() </em>oppure <em>const_iterator it = v.begin()</em>?.</li>
+<li>(caso particolare del punto precedente) alcuni container restituiscono dei proxy, e l&#8217;uso indiscriminato di auto può rompere del codice funzionante</li>
+</ul>
+<p><code lang="cpp" escaped="true"><br />
+bool f1()<br />
+{<br />
+   std::vector&lt;bool&gt;* vp = new std::vector&lt;bool&gt;(1000, true);<br />
+   bool y = (*vp)[314]; // ok<br />
+   delete vp;<br />
+   return y;<br />
+}</p>
+<p>bool f2()<br />
+{<br />
+   std::vector&lt;bool&gt;* vp = new std::vector&lt;bool&gt;(1000, true);<br />
+   auto y = (*vp)[314]; // mmm...<br />
+   delete vp;<br />
+   return y; // argh! il proxy potrebbe leggere il container già distrutto<br />
+}<br />
+</code></p>
+<ul>
+<li> un <strong>IDE</strong> che fa un parsing euristico potrebbe <strong>non</strong> essere più <strong>in grado</strong> <strong>di</strong> <strong>elencare</strong> <strong>correttamente</strong> <strong>tutti</strong> <strong>i punti in cui un tipo viene usato; </strong>a volte il <em>completamento automatico</em> non funziona più. si pensi ad esempio a:</li>
+</ul>
+<p><code lang="cpp" escaped="true"><br />
+class ABC<br />
+{<br />
+   int size() const;<br />
+};<br />
+</code></p>
+<p>ABC GimmeMyObject();</p>
+<p><code lang="cpp" escaped="true"><br />
+// molto più tardi...<br />
+auto abc = GimmeMyObject();<br />
+auto n = GimmeMyObject().size();<br />
+</code></p>
+<p style="text-align: justify;">Durante il refactoring, si vogliono trovare tutti gli oggetti di tipo ABC; normalmente basta una ricerca di testo (ci possono essere mille motivi: progetto troppo grosso, o stiamo usando un modem a 56k e vi&#8230;), ma se la variabile è auto, ci vuole un IDE più sofisticato e ben integrato con il compilatore.</p>
+<p style="text-align: justify;">In sintesi, <span style="line-height: 12px;">è una <span style="text-decoration: underline;">buona</span> idea usare auto quando:</span></p>
+<ol style="text-align: justify;">
+<li><strong>chiunque è in grado di dedurre il tipo </strong>senza saltellare attraverso il codice<strong>,</strong> vuoi per il nome della variabile, vuoi per la semplicità dell&#8217;inizializzazione (cfr. esempio #1). Di solito, il tipo è un nome dipendente e lunghissimo (std::map&lt;std::string, std::list&lt;double&gt;, MySpecialComparisonOperator, MyCustomAllocator&gt;::const_iterator&#8230;); questa è una buona indicazione per usare auto.</li>
+<li>il <strong>tipo</strong> della variabile <strong>potrebbe</strong> <strong>cambiare</strong> in qualsiasi momento, <strong>mantenendo</strong> <strong>la</strong> <strong>stessa</strong> <strong>interfaccia</strong>. Nell&#8217;esempio #2, si pensi che le prime righe siano in realtà <em>generate da un programma esterno che emette codice c++</em> (ad esempio, <a title="questo" href="http://code.google.com/p/protobuf/">questo</a>). Il tipo esatto di &#8220;n&#8221; potrebbe variare semplicemente aggiornando il programma esterno, ma il cambiamento <em>potrebbe</em> non essere rilevante (spesso basta che sia n un intero con certe proprietà);</li>
+<li>quando c&#8217;è un limite di  80 caratteri per riga (ma suvvia&#8230; siamo nel 2013, <a title="chi mai" href="http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml#Line_Length">chi</a> mai segue una regola del genere?).</li>
+</ol>
+<p style="text-align: justify;">Per enfatizzare che il nostro scopo è <em>scoraggiare criticamente</em>, riportiamo anche i casi contrari: è una <span style="text-decoration: underline;">cattiva</span> idea usare auto quando:</p>
+<ol style="text-align: justify;">
+<li>l&#8217;<strong>inizializzazione non è ovvia</strong>, ovvero solo guardando cosa c&#8217;è a destra dell&#8217;= non è possibile dedurre il tipo della variabile. auto significa &#8220;lascio la deduzione al compilatore&#8221;, ma non &#8220;lascio la deduzione al compilatore&#8230; perché io non la so fare&#8221; (questo si applica anche alle somme di interi di tipo diverso, p.es. short + unsigned char)</li>
+<li>c&#8217;è un <strong>cast  </strong>di mezzo<br />
+<code lang="cpp" escaped="true"><br />
+auto x = static_cast&lt;int&gt;(GetNumberAsDouble()); // mmm... l'intento è chiaro, ma il codice è contorto<br />
+</code></li>
+<li>c&#8217;è un <strong>proxy</strong>: auto rischia di tenere in vita degli oggetti che non sono pensati per sopravvivere a lungo</li>
+<li><span style="line-height: 12px;">si esagera! non è il caso di iniziare un sorgente con:</span></li>
+</ol>
+<p><code lang="cpp" escaped="true"><br />
+auto main(auto argc, const auto* argv[]) -&gt; int // uhm... forse in c++2075...<br />
+</code></p>
+<p class="lang:c++ decode:true">
+]]></content:encoded>
+			<wfw:commentRss>https://www.italiancpp.org/2013/06/24/auto-il-linguaggio-non-e-tutto/feed/</wfw:commentRss>
+		<slash:comments>1</slash:comments>
+	<post-id xmlns="com-wordpress:feed-additions:1">625</post-id>	</item>
+		<item>
+		<title>C++ Revolution</title>
+		<link>https://www.italiancpp.org/2013/06/11/cpp-revolution/</link>
+		<comments>https://www.italiancpp.org/2013/06/11/cpp-revolution/#comments</comments>
+		<pubDate>Tue, 11 Jun 2013 09:52:40 +0000</pubDate>
+		<dc:creator><![CDATA[marco]]></dc:creator>
+				<category><![CDATA[Hands-on]]></category>
+		<category><![CDATA[News]]></category>
+		<category><![CDATA[basic]]></category>
+		<category><![CDATA[C++11]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=450</guid>
+		<description><![CDATA[Da circa un paio d&#8217;anni l&#8217;interesse per il C++ è aumentato notevolmente. Che sia per la rivoluzione portata dal nuovo standard (C++11) o per necessità industriali, &#8211; legate, ad esempio, a scalabilità e performance &#8211; è indubbio che il linguaggio sia profondamente radicato in sistemi che usiamo quotidianamente. Ad esempio MySQL, Oracle, ma anche Office, [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p style="text-align: justify;">Da circa un paio d&#8217;anni l&#8217;interesse per il C++ è aumentato notevolmente. Che sia per la rivoluzione portata dal nuovo standard (<strong>C++11</strong>) o per necessità industriali, &#8211; legate, ad esempio, a scalabilità e performance &#8211; è indubbio che il linguaggio sia profondamente radicato in sistemi che usiamo quotidianamente. Ad esempio <em>MySQL</em>, <em>Oracle</em>, ma anche <em>Office</em>, <em>Photoshop</em> e <em>Facebook</em>. E <a href="http://www.stroustrup.com/applications.html">questo link</a> ne raccoglie molti altri.</p>
+<p style="text-align: justify;">Il nuovo standard ha cambiato notevolmente il linguaggio, non solo per aver aggiunto elementi inediti alla libreria, ma anche &#8211; e soprattutto &#8211; per averne mutato lo <strong>stile</strong> e gli <strong>idiomi</strong> più classici. Pensiamo, ad esempio, al tornare un oggetto da una funzione. Nel C++98 non è insolito utilizzare uno stile C-like per evitare di <strong>ritornare per oggetti per valore</strong>. Questo &#8211; a meno di ottimizzazioni del compilatore, come il <em>Return-Value Optimization</em> (<em>RVO</em>) &#8211; è per tenersi lontano da copie potenzialmente costose. Ora, grazie all&#8217;introduzione della move semantics, funzioni di questo genere:</p>
+<p><code lang="cpp" escaped="true"><br />
+void Calculate(vector&lt;HugeType&gt;&amp; result) <br />
+{<br />
+   // ... fill result<br />
+}</code><br />
+possono essere trasformate in:<br />
+<code lang="cpp" escaped="true">vector&lt;HugeType&gt; Calculate()<br />
+{<br />
+   vector&lt;HugeType&gt; result;<br />
+   // ... fill result<br />
+   return result;<br />
+}</code></p>
+<p style="text-align: justify;">senza incorrere in inutili copie. Questo è garantito dallo standard, senza doversi affidare alle opzioni del compilatore. Più in generale, il C++11 consente di operare con una sintassi chiara su oggetti temporanei o, più in generale, su <strong>RVALUE</strong>.</p>
+<p style="text-align: justify;">Ma il C++11 aggiunge anche diverse facilitazioni per migliorare <strong>produttività</strong> e <strong>sintesi</strong>. Come <strong>auto</strong>, per dedurre automaticamente il tipo di una variabile:</p>
+<p><code lang="cpp" escaped="true">map&lt;string, vector&lt;int&gt;&gt; aMap;</p>
+<p>// C++98<br />
+map&lt;string, vector&lt;int&gt;&gt;::iterator it = aMap.begin();</p>
+<p>// C++11<br />
+auto it = aMap.begin();</code><br />
+Oppure il<strong> range-based for loop</strong> per iterare su un range con una sintassi compatta:<br />
+<code lang="cpp" escaped="true">// C++98<br />
+for (vector&lt;int&gt;::iterator i = v.begin(); i != v.end(); ++i)<br />
+{<br />
+   cout &lt;&lt; *i &lt;&lt; " ";<br />
+}</p>
+<p>// C++11<br />
+for (auto i : v)<br />
+{<br />
+   cout &lt;&lt; i &lt;&lt; " ";<br />
+}</code><br />
+Le <strong>lambda expressions</strong> facilitano e rendono naturale l&#8217;utilizzo degli algoritmi e dello stile funzionale:<br />
+<code lang="cpp" escaped="true">all_of( begin(vec), end(vec), [](int i){ return (i%2)==0; } );</code></p>
+<p style="text-align: justify;">Le <strong>initializer_list</strong> estendono la classica inizializzazione con parentesi graffe delle struct, per essere usata in modo personalizzato:</p>
+<p><code lang="cpp" escaped="true">class MyVector<br />
+{<br />
+public:<br />
+   MyVector(std::initializer_list&lt;int&gt; list);<br />
+   ...<br />
+};</p>
+<p>...</p>
+<p>MyVector vec = {1,2,3,4,5};</code></p>
+<p style="text-align: justify;">Correlato alle <strong>initializer_list</strong>, anche il fastidioso problema del <a href="http://en.wikipedia.org/wiki/Most_vexing_parse">most vexing parse</a> è stato risolto, con la<strong> uniform initialization</strong>. Il C++11 consente di inizializzare qualsiasi oggetto con una sintassi omogenea:</p>
+<p><code lang="cpp" escaped="true">struct BasicStruct<br />
+{<br />
+    int x;<br />
+    double y;<br />
+};</p>
+<p>struct AltStruct<br />
+{<br />
+    AltStruct(int x, double y) : x_{x}, y_{y} {}</p>
+<p>private:<br />
+    int x_;<br />
+    double y_;<br />
+};</p>
+<p>BasicStruct var1{5, 3.2};<br />
+AltStruct var2{2, 4.3};</code><br />
+Proseguendo questa panoramica molto generale, è importante ricordare che anche la<strong> libreria standard</strong> ha accolto tante novità. A partire dagli <em>smart pointers</em>, deprecando il frainteso <em>auto_ptr</em>:<br />
+<code lang="cpp" escaped="true">// C++98<br />
+int* anIntPtr = new int(10);</p>
+<p>... </p>
+<p>delete anIntPtr;</p>
+<p>// C++11<br />
+unique_ptr&lt;int&gt; anIntPtr( new int(10) ); // will be deleted</code></p>
+<p style="text-align: justify;">Passando poi per nuove strutture dati, come gli <strong>unordered container</strong>, le <strong>tuple</strong>, le <strong>forward_list</strong>, &#8230; Anche il supporto alla <strong>metaprogrammazione</strong> è cresciuto, con l&#8217;introduzione di diversi <strong>type_traits</strong> standard e <strong>decltype</strong> per inferire il tipo di un&#8217;espressione.</p>
+<p>E finalmente è possibile scrivere codice <strong>multi-thread</strong> portabile, sfruttando la libreria nativa:<br />
+<code lang="cpp" escaped="true">thread aThread( some_function ); // may be a lambda or any callable obj<br />
+thread anotherThread ( another_function );<br />
+aThread.join();<br />
+anotherThread.join();</code></p>
+<p style="text-align: justify;">Questa panoramica è solo una piccoa parte di tutta la storia. Per tutte le novità del C++11 potete consultare, ad esempio, la <a href="http://en.wikipedia.org/wiki/C%2B%2B11">pagina relativa su wikipedia</a>.</p>
+<p style="text-align: justify;">Non tutto è però gratuito. Per sfruttare al massimo tutte le innovazioni del C++11 (e tra breve del<strong> C++14</strong>) è necessario comprenderle ed applicarle con disciplina. Non è difficile trovare siti, articoli, tutorial e molto altro su tantissimi aspetti del nuovo standard. Spesso tutto questo volume di informazioni mette in difficoltà chi desidera apprendere gradualmente e non sa da dove iniziare. La prossima sezione raccoglie in modo ordinato alcune delle risorse più importanti ad apprendere e restare aggiornati.</p>
+<p style="text-align: justify;">Inoltre, il motivo di questa categoria &#8211; <strong>DOs &amp; DON&#8217;Ts &#8211; </strong>è proprio quello di suggerire al lettore alcune nuove pratiche e idiomi, rimpiazzando il vecchio stile.</p>
+<p><span style="color: #ffffff;"> </span></p>
+<h4>C++ Revolution: come inziare</h4>
+<p style="text-align: justify;">Il C++11 ha mosso molti programmatori C++ verso la riscoperta e la rivisitazione del linguaggio; alcuni si sono ritirati perché convinti in un aumento di complessità, mentre altri ne hanno tratto diversi benefici. Negli ultimi anni sono proliferate risorse, articoli, video e materiale divulgativo per apprendere e approfondire molti aspetti del nuovo standard. Questa breve sezione conclusiva vuole raccogliere in modo ordinato risorse utili per approfondire e restare aggiornati, specialmente per chi è ancora indeciso e smarrito.</p>
+<h5 style="text-align: justify;"><span style="color: #ffffff;"> </span></h5>
+<h5 style="text-align: justify;">Consulta isocpp.org periodicamente<br />
+<span style="color: #ffffff;"> </span></h5>
+<p style="text-align: justify;">Il riferimento ufficiale dello standard &#8211; da circa novembre 2012 &#8211; è <a href="http://www.isocpp.org">isocpp.org</a>. Si tratta dell&#8217;unico catalizzatore ufficiale di risorse e news. Consultare periodicamente questo sito consente di restare aggiornati su eventi, libri, video, articoli e molto altro.</p>
+<h5 style="text-align: justify;"><span style="color: #ffffff;"> </span><br />
+Considera alcuni testi fondamentali<br />
+<span style="color: #ffffff;"> </span></h5>
+<p style="text-align: justify;">I testi che sento di raccomandare a chi vuole conoscere in modo approfondito le novità del C++11 sono i seguenti:</p>
+<ul>
+<li><a href="http://www.amazon.com/The-Programming-Language-4th-Edition/dp/0321563840/">The C++ Programming Language (4th edition)</a>, di Bjarne Stroustrup (la bibbia, aggiornata al C++11)</li>
+<li><a style="line-height: 12px;" href="http://www.artima.com/shop/overview_of_the_new_cpp">Overview of the New C++</a><span style="line-height: 12px;">, di Scott Meyers (sono slides dense di contenuti),</span></li>
+<li><a href="http://www.josuttis.com/libbook/">The C++ Standard Library (2nd edition)</a>, di Nicolai Josuttis (attualmente la reference più completa sulla libreria standard, aggiornata al C++11),</li>
+<li><a href="http://www.manning.com/williams/">C++ Concurrency in Action</a>, di Anthony Williams (a proposito di multithreading in C++11).</li>
+</ul>
+<h5><span style="color: #ffffff;"> </span><br />
+Guarda i video delle ultime conferenze<br />
+<span style="color: #ffffff;"> </span></h5>
+<p>Se desiderate guardare qualche video, consiglierei:</p>
+<ul>
+<li><span style="line-height: 12px;"><a href="http://channel9.msdn.com/Series/C9-Lectures-Stephan-T-Lavavej-Core-C-">Le lezioni di Stephen T. Lavavej</a> (esistono anche lezioni sulla standard library, <a href="http://www.eventhelix.com/realtimemantra/object_oriented/stl-tutorial.htm">basic </a>&amp; <a href="http://www.eventhelix.com/realtimemantra/object_oriented/stl-tutorial-advanced.htm">advanced</a>),</span></li>
+<li><a href="http://channel9.msdn.com/Events/GoingNative/GoingNative-2012">GoingNative2012 </a>(un&#8217;importante conferenza by Microsoft),</li>
+<li><a href="http://channel9.msdn.com/search?term=c%2B%2B+and+beyond+2012">C++ And Beyond 2012</a> (conferenza di Meyers/Sutter/Alexandrescu)</li>
+</ul>
+<h5 style="text-align: justify;"><span style="color: #ffffff;"> </span></h5>
+<h5 style="text-align: justify;">Prova diversi compilatori<br />
+<span style="color: #ffffff;"> </span></h5>
+<p style="text-align: justify;">Un altro suggerimento è di provare il proprio codice su diversi compilatori, perché non tutti sono 100% compliant col C++11 (ad oggi solo GCC). Grazie ad alcuni <a href="http://www.italiancpp.org/gruppi/compilatori/forum/topic/compilatori-online/">compilatori online</a> è possibile compilare ed eseguire direttamente dal browser.</p>
+<h5 style="text-align: justify;"><span style="color: #ffffff;"> </span></h5>
+<h5 style="text-align: justify;">Consulta la categoria DOs &amp; DON&#8217;Ts!<br />
+<span style="color: #ffffff;"> </span></h5>
+<p style="text-align: justify;">Come annunciato, l&#8217;obiettivo della nostra categoria <strong>DOs &amp; DON&#8217;Ts</strong> è quello di suggerire nuovi idiomi e pratiche stilistiche, rimpiazzando il vecchio modo di programmare in C++, ove possibile. Preferiamo la sinteticità del codice. Non mancheranno, quindi, snippet con confronti &#8220;ieri/oggi&#8221; e link a codice da compilare e provare direttamente online. Speriamo, poi, di poter discutere con i lettori non solo nei commenti ma anche (e soprattutto) nei vari <a href="http://www.italiancpp.org/gruppi/">gruppi di discussione</a>.</p>
+<p style="text-align: justify;"><span style="color: #ffffff;"> </span></p>
+<p style="text-align: justify;">
+<h5 style="text-align: justify;">Chiaramente, invitiamo chiunque voglia contribuire a <a href="http://www.italiancpp.org/press/diventa-un-autore/">farlo</a>!</h5>
+<p><span style="color: #ffffff;"> </span></p>
+<p><span style="color: #ffffff;"> </span></p>
+]]></content:encoded>
+			<wfw:commentRss>https://www.italiancpp.org/2013/06/11/cpp-revolution/feed/</wfw:commentRss>
+		<slash:comments>2</slash:comments>
+	<post-id xmlns="com-wordpress:feed-additions:1">450</post-id>	</item>
+	</channel>
+</rss>

@@ -1,0 +1,22 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20200409T190000
+DTEND;TZID=Europe/Rome:20200409T210000
+DTSTAMP:20200908T150248
+CREATED:20200228T142652Z
+LAST-MODIFIED:20200410T132928Z
+UID:9360-1586458800-1586466000@www.italiancpp.org
+SUMMARY:Meetup ONLINE - Test basati su proprietà con rapidcheck
+DESCRIPTION: \nTest basati su proprietà con rapidcheck\nYuri Valentini\nUn nuovo appuntamento a Modena dedicato al C++ organizzato in collaborazione con l&#8217;associazione ConoscereLinux. \n  \n19:00 \nArrivo e saluti iniziali &#8211; Marco Arena \n19:05 \nTest basati su proprietà con rapidcheck &#8211; Yuri Valentini \nAmplieremo il nostro arsenale di strumenti per il test del codice in C++.\nNelle scorse sessioni abbiamo affrontato i test di unità con GoogleTest e i test di comportamento con GoogleMock\, ora parleremo di test basati sulle proprietà con rapidcheck. Spiegheremo come scegliere l&#8217;approccio di test più adatto nei vari casi e mostreremo dei &#8220;pattern&#8221; per scrivere test basati sulle proprietà. \n� \nMateriale \n\nSlides\nDemo\nVideo\n\n\nCome sono strutturati i nostri meetup serali: \n\npresentazione tecnica con formato a scelta dello speaker (talk frontale\, workshop\, live coding\, ecc)\nspazio fare domande e confrontarsi\nuna pizza tutti insieme per fare networking e\, perché no\, parlare d&#8217;altro\n\nIn regalo a tutti i partecipanti i nostri mitici stickers 🙂 \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-0420/
+LOCATION:Via Strada Barchetta\, 77\, Modena\, 41123\, Italia
+CATEGORIES:Meetup
+END:VEVENT
+END:VCALENDAR

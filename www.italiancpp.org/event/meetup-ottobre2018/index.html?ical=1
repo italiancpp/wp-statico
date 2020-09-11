@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20181011T200000
+DTEND;TZID=Europe/Rome:20181011T223000
+DTSTAMP:20200908T154619
+CREATED:20180924T162135Z
+LAST-MODIFIED:20181017T083418Z
+UID:8785-1539288000-1539297000@www.italiancpp.org
+SUMMARY:Meetup Ottobre / Modena - GIS in C++
+DESCRIPTION: \nGIS in C++\, cosa si nasconde dietro alla App mappe del tuo smartphone?\nOspite: Alberto Bignotti\nUn nuovo appuntamento a Modena dedicato al C++ organizzato in collaborazione con l&#8217;associazione ConoscereLinux. \n  \n20:00 \nArrivo e saluti iniziali &#8211; Marco Arena \n20:05 \nGIS in C++\, cosa si nasconde dietro alla App mappe del tuo smartphone? &#8211; Alberto Bignotti \nVerrà mostrata l&#8217;architettura di un componente C++ dedicato allo sviluppo di app Map centriche (Desktop/Mobile). \nIn particolare vedremo alcuni concetti fondamentali di una applicazione GIS: \n\ncreazione di componenti grafici per il disegno di geometrie e immagini\nsistemi di coordinate\, breve introduzione alla libreria proj4 (https://proj4.org/)\ninterazione con la mappa\, mouse + touch gestures\nmanipolazione di geometrie in C++\, breve introduzione alla libreria geos (http://trac.osgeo.org/geos)\ndescrizione e esempio di alcuni standard per dati vettoriali e raster (WMS\, OpenStreetMap\, Bing Maps\, GeoJson\, WKB/WKT&#8230;)\nesempio di App QML (Desktop/Mobile) per mostrare gli argomenti trattati\n\nNegli esempi\, verrà utilizzato il framework Qt per l&#8217;interfaccia\, C++14 per le componenti core. \n22:00 \nPizza e networking \n� \n� \n\nCome sono strutturati i nostri meetup serali: \n\npresentazione tecnica con formato a scelta dello speaker (talk frontale\, workshop\, live coding\, ecc)\nspazio fare domande e confrontarsi\nuna pizza tutti insieme per fare networking e\, perché no\, parlare d&#8217;altro\n\nIn regalo a tutti i partecipanti i nostri mitici stickers 🙂 \n \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-ottobre2018/
+LOCATION:Via Strada Barchetta\, 77\, Modena\, 41123\, Italia
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

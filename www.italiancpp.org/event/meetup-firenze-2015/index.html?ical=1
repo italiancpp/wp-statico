@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20150620T090000
+DTEND;TZID=Europe/Rome:20150620T180000
+DTSTAMP:20200908T151151
+CREATED:20150330T210529Z
+LAST-MODIFIED:20170824T064930Z
+UID:4497-1434790800-1434823200@www.italiancpp.org
+SUMMARY:Meetup a Firenze
+DESCRIPTION:\n \nTutte le foto\n  \nLeggi il post sull&#8217;evento!\n\n\nVideo delle sessioni\n� \nQuesto meetup è piaciuto?\n� \n#cppFI su Storify\n� \nSabato 20 Giugno\n&#8220;la porti un compilatore a Firenze!&#8221;\n \n50+ partecipanti. \n  \n\nPerché partecipare:\n� \n7 Sessioni tecniche\nNetworking\nSorprese e promozioni esclusive\n� \nSpeaker d&#8217;eccezione: Bartosz Milewski!\n \n \n\n  \nProgramma della giornata (nei link slides\, demo e video):\n  \n\n\nquando\nquanto\ncosa\nchi\n\n\n\n8.30 &#8211; 9.00\n30'\nRegistrazione\n-\n\n\n9.00 &#8211; 9.20\n20'\nPresentazione della giornata\nMarco Arena & Develer\n\n\n9.20 &#8211; 10.05\n45'\nC++ and Why you Care\nGian Lorenzo Meocci\n\n\n10.15 &#8211; 10.45\n30'\nTeaching C++14 on Raspberry PI 2\nMarco Foco\n\n\n10.45 &#8211; 11.10\n25'\nBreak\n-\n\n\n11.10 &#8211; 12.10\n60'\nQt e C++: binomio perfetto\nLuca Ottaviano\n\n\n12.15 &#8211; 13.00\n45'\nCat's Anatomy: a C++14 Functional Library\nNicola Bonelli\n\n\n13.00 &#8211; 14.20\n80'\nPranzo\n-\n\n\n14.20 &#8211; 15.20\n60'\nIntroduzione al game-development in C++11/C++14\nVittorio Romeo\n\n\n15.30 &#8211; 16.30\n60'\nSolving Constraint Satisfaction Problem using monads\nBartosz Milewski\n\n\n16.30 &#8211; 17.00\n30'\nBreak\n\n\n17.00 &#8211; 18.00\n60'\nUtilize your CPU power – Cache optimizations and SIMD instructions\nMario Mulansky\n\n\n18.00 &#8211; 18.15\n15'\nSaluti\nMarco Arena & Develer\n\n\nPranzo insieme all&#8217;Outside Bistrot\n� \nGuarda i video delle sessioni\n\n\n\n  \nSorprese e promozioni esclusive durante l&#8217;evento\n� \n  \nEstrazione di licenze gratuite JetBrains per CLion e ReSharper C++\n� \n  \n \nEstrazione di 4 Libri O&#8217;Reilly e diffusione di codici per sconti fino al 50%\n� \n  \n\nTutti i partecipanti al meetup hanno diritto ad una licenza gratuita di CppDepend!\n  \n\n� \n\n \nAbbiamo organizzato questo meetup con:\n\n\n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-firenze-2015/
+LOCATION:Lungarno del Tempio\, 44\, Firenze\, 50121\, Italia
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

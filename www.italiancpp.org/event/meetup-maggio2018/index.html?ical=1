@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20180510T200000
+DTEND;TZID=Europe/Rome:20180510T223000
+DTSTAMP:20200908T154612
+CREATED:20180421T163303Z
+LAST-MODIFIED:20180513T090003Z
+UID:8595-1525982400-1525991400@www.italiancpp.org
+SUMMARY:Meetup Maggio / Modena
+DESCRIPTION: \nTeach me how to test in C++\nSpeaker: Roberto Bettazzoni\nUn nuovo appuntamento a Modena dedicato al C++ organizzato in collaborazione con l&#8217;associazione ConoscereLinux. \n  \nIn questa serata avremo il piacere di ospitare Roberto Bettazzoni: \n20:00 \nArrivo e saluti iniziali &#8211; Marco Arena \n20:10 \nTeach me how to test in C++ &#8211; Roberto Bettazzoni \nQual&#8217;è lo stato dell&#8217;arte del testing in ambiente C++?\nUna domanda enorme\, vastissima\, ed abbiamo poco tempo. Proviamo a restringere il campo:\nquali sono le librerie\, i tools\, gli ambienti e le best practices per fare testing unitario in C++? \nSe cerco il nome di una libreria di testing C++ sulla rete ne trovo una marea: Boost.Test\, Catch\, Google Test\, CPP Test\, Cxx Test\, MiniCPPUnit\, Qt Test\, ecc.\ndavvero volete farvi una idea della babele di test libraries? 😀 \nPersonalmente ne ho utilizzate solo due o tre. Vorrei\, con voi\, farmi una idea di quali siano le caratteristiche importanti delle librerie che noi tutti utilizziamo.\nIl mio scopo è scambiare opinioni da esperienza diretta e generare un piccolo “riassunto” che sintetizzi alcuni punti salienti sull&#8217;argomento. Non penso sia un riassunto esatto\, ma sarà un riassunto vero\, frutto della nostra esperienza combinata. \nAnche se non hai esperienza diretta\, ma sei curioso\, sei il benvenuto: le domande giuste\, quelle che fanno nascere le buone idee\, solitamente nascono da menti curiose. \nSe non conosci il C++\, ti posso consigliare una buona pizzeria 🙂 \n22:00 \nPizza e networking \n  \nQualche foto della serata (tutte le foto sulla nostra pagina Facebook): \n                               \n\n\nCome sono strutturati i nostri meetup serali: \n\npresentazione tecnica con formato a scelta dello speaker (talk frontale\, workshop\, live coding\, ecc)\nspazio fare domande e confrontarsi\nuna pizza tutti insieme per fare networking e\, perché no\, parlare d&#8217;altro\n\nIn regalo a tutti i partecipanti i nostri mitici stickers 🙂 \n \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-maggio2018/
+LOCATION:Via Strada Barchetta\, 77\, Modena\, 41123\, Italia
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

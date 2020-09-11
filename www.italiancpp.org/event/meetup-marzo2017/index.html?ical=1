@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20170321T190000
+DTEND;TZID=Europe/Rome:20170321T223000
+DTSTAMP:20200908T150958
+CREATED:20170123T083034Z
+LAST-MODIFIED:20170824T065132Z
+UID:7401-1490122800-1490135400@www.italiancpp.org
+SUMMARY:Mini-Meetup Serale / Bologna
+DESCRIPTION: \nL&#8217;Italian C++ Community ha co-organizzato con l’XPUG di Bologna un mini-meetup serale\, con l&#8217;obiettivo aprire un dialogo sullo sviluppo C++ nel Bolognese. \nSpeaker e moderatore dell&#8217;evento: Marco Arena\, fondatore e presidente della community. Le novità del C++17 “for the daily job” hanno costituito la traccia della serata\, completamente guidata da esempi lanciati sulle ultime versioni dei maggiori compilatori esistenti &#8211; GCC\, Visual Studio 2017\, Clang – per capire anche chi supporta cosa. \nLa serata ha voluto essere soprattutto un momento di incontro\, per conoscersi\, discutere\, interagire. Tutti si sono presentati\, hanno fatto osservazioni e domande. \nIl meetup si è concluso con una pizza in compagnia. \n� \n\n		\n			#gallery-1 {\n				margin: auto;\n			}\n			#gallery-1 .gallery-item {\n				float: left;\n				margin-top: 10px;\n				text-align: center;\n				width: 25%;\n			}\n			#gallery-1 img {\n				border: 2px solid #cfcfcf;\n			}\n			#gallery-1 .gallery-caption {\n				margin-left: 0;\n			}\n			/* see gallery_shortcode() in wp-includes/media.php */\n		\n		\n			\n				\n			\n				\n				Mini-Meetup Bologna\, 21 Marzo 2017\n				\n			\n				\n			\n				\n				Mini-Meetup Bologna\, 21 Marzo 2017\n				\n			\n				\n			\n				\n				Mini-Meetup Bologna\, 21 Marzo 2017\n				\n			\n				\n			\n				\n				Mini-Meetup Bologna\, 21 Marzo 2017\n				\n			\n				\n			\n				\n				Mini-Meetup Bologna\, 21 Marzo 2017\n				\n			\n				\n			\n				\n				Mini-Meetup Bologna\, 21 Marzo 2017\n				\n			\n				\n			\n				\n				Mini-Meetup Bologna\, 21 Marzo 2017\n				\n			\n				\n			\n				\n				Mini-Meetup Bologna\, 21 Marzo 2017\n				\n			\n				\n			\n				\n				Mini-Meetup Bologna\, 21 Marzo 2017\n				\n			\n				\n			\n				\n				Mini-Meetup Bologna\, 21 Marzo 2017\n				\n			\n				\n			\n				\n				Mini-Meetup Bologna\, 21 Marzo 2017\n				\n			\n				\n			\n				\n				Mini-Meetup Bologna\, 21 Marzo 2017\n				\n		\n\n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-marzo2017/
+LOCATION:Via Sario Bassanelli\, 9\, Bologna\, 40129\, Italia
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

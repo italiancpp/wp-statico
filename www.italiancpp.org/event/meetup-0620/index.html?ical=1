@@ -1,0 +1,22 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20200611T190000
+DTEND;TZID=Europe/Rome:20200611T210000
+DTSTAMP:20200908T150308
+CREATED:20200514T084647Z
+LAST-MODIFIED:20200611T191754Z
+UID:9488-1591902000-1591909200@www.italiancpp.org
+SUMMARY:ONLINE Meetup - Using vcpkg at work to manage your C/C++ libraries
+DESCRIPTION: \nA very special meetup with the participation of some members of the Microsoft Visual C++ Team!\n\nUsing vcpkg at work to manage your C/C++ libraries\nAugustin Popa &#8211; Program Manager\, Microsoft C++ Team\n\n \n This meetup was hosted on Microsoft Teams and live streamed to YouTube! \n7 PM \nWelcome &#8211; Marco Arena \n7:05 PM \nUsing vcpkg at work to manage your C/C++ libraries &#8211; Augustin Popa \nVcpkg appeared in 2016 as an open source C/C++ library manager with an expansive catalog of open source libraries that are tested together for compatibility. More recently\, the team has been developing new features based on user feedback\, including features relevant to enterprises with complex package management needs. This talk will give an overview of the tool and how to use it in a real-world scenario at your job\, using new features we are planning on our roadmap: https://aka.ms/vcpkg/roadmap. \n Here is a preview of what we will go over:\n1) How to cache library binaries for re-use across your development and CI machines \n2) Using the vcpkg.json manifest file to declare all your dependencies easily \n3) Using the new versioning support to lock yourself to specific versions of certain dependencies\, or to maintain multiple versions of the same library on the same machine \n4) How to install your own private libraries with vcpkg\, alongside popular open source ones like Boost \n8:30 PM  \nEnd \nResources \n\nSlides\nVideo\n\n\n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-0620/
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

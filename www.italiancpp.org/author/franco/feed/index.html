@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>franco &#8211; Italian C++ Community</title>
+	<atom:link href="https://www.italiancpp.org/author/franco/feed/" rel="self" type="application/rss+xml" />
+	<link>https://www.italiancpp.org</link>
+	<description></description>
+	<lastBuildDate>Mon, 24 Aug 2020 13:03:53 +0000</lastBuildDate>
+	<language>it-IT</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.7.18</generator>
+<site xmlns="com-wordpress:feed-additions:1">106700034</site>	<item>
+		<title>Puntatori? Vivi senza!</title>
+		<link>https://www.italiancpp.org/2013/08/23/puntatori-vivi-senza/</link>
+		<comments>https://www.italiancpp.org/2013/08/23/puntatori-vivi-senza/#comments</comments>
+		<pubDate>Fri, 23 Aug 2013 08:24:56 +0000</pubDate>
+		<dc:creator><![CDATA[franco]]></dc:creator>
+				<category><![CDATA[Hands-on]]></category>
+		<category><![CDATA[basic]]></category>
+		<category><![CDATA[containers]]></category>
+		<category><![CDATA[puntatori]]></category>
+		<category><![CDATA[stl]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1070</guid>
+		<description><![CDATA[Molte volte il C++, essendo un &#8220;figlio&#8221; del C, viene identificato con in puntatori. Altro non possiamo dire che &#8220;non è vero&#8220;. Ma cominciamo con le basi. Nota bene: nel seguito utilizzeremo termini come &#8220;heap&#8221; e &#8220;stack&#8220;, anche se lo standard ISO C++ non ne fa menzione (di fatti non è detto che una piattaforma disponga [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p style="text-align: justify;">Molte volte il C++, essendo un &#8220;figlio&#8221; del C, viene identificato con in puntatori. Altro non possiamo dire che &#8220;<em>non è vero</em>&#8220;.</p>
+<p style="text-align: justify;">Ma cominciamo con le basi. <em>Nota bene</em>: nel seguito utilizzeremo termini come &#8220;<em>heap</em>&#8221; e &#8220;<em>stack</em>&#8220;, anche se lo standard ISO C++ non ne fa menzione (di fatti non è detto che una piattaforma disponga di stack, ad esempio).</p>
+<p style="text-align: justify;">Tutti voi sapete che ogni variabile dichiarata in un blocco di codice, di fatti è allocata in modo automatico sullo stack, una memoria molto veloce <i>ed estremamente limitata</i>:</p>
+<p><code lang="cpp" escaped="true"><br />
+if (true)<br />
+{<br />
+    int i; // Stack<br />
+    i = 42;<br />
+}</code></p>
+<p style="text-align: justify;">Nell&#8217;esempio, la variabile i è allocata sullo stack. Ma cosa succede se dovessimo utilizzare classi molto onerose dal punto di vista dell&#8217;occupazione di memoria?</p>
+<p style="text-align: justify;">Lo stack non è più una opzione valida, perché è una memoria preziosa. Come hanno insegnato, è necessario allocare tutto sullo <em>heap</em>. E questo sicuramente vi fa venire in mente i puntatori:</p>
+<p><code lang="cpp" escaped="true"><br />
+if (true)<br />
+{<br />
+    myHugeClass *p;        // Stack<br />
+    p = new myHugeClass(); // Heap<br />
+    // ...<br />
+    delete p;<br />
+}</code></p>
+<p style="text-align: justify;">Funziona tutto benissimo. Come si nota, il <em>puntatore è allocato sullo stack</em>, è dunque una variabile automatica, e la memoria è deallocata quando si esce dal blocco. Il dato, è invece allocato sullo heap dall&#8217;operatore <em>new</em>. Al termine dell&#8217;utilizzo della variabile <em>p</em>, dobbiamo ricordarci di <em>deallocare la memoria</em>, e questo è il compito dell&#8217;operatore <em>delete</em>.</p>
+<p style="text-align: justify;">C&#8217;è solo un piccolo problema: e se scordassimo il <em>delete</em>? Benvenuti nel tragico mondo dei <em>memory leak</em>.</p>
+<p style="text-align: justify;">La memoria non verrebbe mai deallocata, e la vostra applicazione allocherà nuovamente uno spazio per <em>myHugeClass</em> ogni volta che verrà eseguito il codice. Potenzialmente, potremmo saturare la RAM, con conseguenze catastrofiche. Come ovviare al problema? Essenzialmente dovremmo fare una accoppiata di tutti i <em>new</em>, con un <em>delete</em>, ma questo risulta impraticabile, come vedremo fra breve: non è sempre ovvio dove si trovi una deallocazione.</p>
+<h3 style="text-align: justify;">Smart Pointers</h3>
+<p style="text-align: justify;">Lo standard ISO C++11 fornisce una soluzione elegante e semplice: utilizzare uno <em>smart pointer</em>, ovvero un puntatore &#8220;intelligente&#8221;, che dealloca la memoria automaticamente come se fosse sullo stack. La sintassi è estremamente semplice, e l&#8217;esempio precedente si riassume in questo codice:</p>
+<p><code lang="cpp" escaped="true"><br />
+if (true)<br />
+{<br />
+    unique_ptr&lt;myHugeClass&gt; p(new myHugeClass()); // Heap<br />
+    // C++14: auto p = make_unique&lt;myHugeClass&gt;();<br />
+    // ...<br />
+}</code></p>
+<p style="text-align: justify;">Abbiamo risolto il problema. In questo caso, <i>p</i> è allocato sullo stack, mentre l&#8217;istanza di <em>myHugeClass</em> è allocata sullo heap, come ogni puntatore. La cosa &#8220;intelligente&#8221; degli smart pointers è che alla fine dello <em>scope </em>di <em>p</em>, tutta la memoria verrà automaticamente deallocata, sia ovviamente quello sullo stack, che quella sullo heap. Un <em>delete</em> non è più necessario, e dite addio al memory leak.</p>
+<p style="text-align: justify;">Solo per menzionarlo, un altro tipo di smart pointer è lo <em>shared_ptr</em>. Mentre lo <em>unique_ptr</em> consente che ci sia solo un &#8220;proprietario&#8221; dell&#8217;oggetto referenziato, lo <em>shared_ptr</em> permette di condividerne la proprietà:</p>
+<p><code lang="cpp" escaped="true"><br />
+auto ptr = make_shared&lt;myHugeClass&gt;();<br />
+auto ptr2 = ptr; // Istanza condivisa</code></p>
+<p style="text-align: justify;">La vita dell&#8217;oggetto puntato viene gestita tramite <strong>reference-counting</strong>, cioè si contano quanti shared_ptr referenziano l&#8217;oggetto puntato e quando uno shared_ptr viene distrutto è come se dicesse &#8220;io non sono più interessato alla vita dell&#8217;oggetto&#8221;. Quando l&#8217;ultimo <em>shared_ptr</em> viene distrutto si porta dietro anche l&#8217;oggetto puntato e il gioco è fatto!</p>
+<p style="text-align: justify;">Per chi viene dal mondo Java, potete vedere il parallelo facilmente: ogni oggetto in Java può essere pensato come uno <em>shared_ptr</em> (con un <em>garbage collector</em>). Solo che in C++ avete la possibilità di scegliere se usare un pointer o uno smart pointer.</p>
+<h3 style="text-align: justify;">Eccezioni</h3>
+<p style="text-align: justify;">Una ulteriore motivazione sull&#8217;uso degli smart pointers al posto dei <em>raw pointers</em>, è nel caso di eccezioni. Prendiamo il secondo esempio. Se allochiamo con <i>new</i> una istanza di <em>myHugeClass</em>, ed il costruttore va in eccezione? A questo punto il codice è inutilizzabile, perché <em>p</em> punta ad una zona di memoria non valida. Cosa dovremmo fare per evitare la catastrofe di utilizzare un pointer invalido? Un semplice trucco consisterebbe nell&#8217;uso di <em>try</em>/<em>catch</em>:</p>
+<p><code lang="cpp" escaped="true"><br />
+if (true)<br />
+{<br />
+    myHugeClass *p = nullptr;   // Stack<br />
+    try<br />
+    {<br />
+        p = new myHugeClass(); // Heap<br />
+        // ...<br />
+        delete p;              // Rilascio la memoria: ho terminato<br />
+    }<br />
+    catch(...)<br />
+    {<br />
+        delete p;              // Rilascio la memoria: errore rilevato<br />
+    }<br />
+}</code></p>
+<p style="text-align: justify;">Sembra semplice, ma questo ci fa venire in mente il problema dell&#8217;accoppiamento <em>new</em> con <em>delete</em>. Mentre prima potevamo contare i <em>new</em>, e controllare che il numero di <em>delete</em> fosse uguale, ora non è più valida questa soluzione: abbiamo due deallocazioni, una per un funzionamento fisiologico, una per quello patologico con eccezioni. E la cosa si complica notevolmente con molte variabili e più modi di gestire varie eccezioni.</p>
+<p style="text-align: justify;">E dunque gli smart pointers ci aiutano? Certamente: è garantito dallo standard che, nel caso in cui una eccezione venga lanciata, la memoria debba essere automaticamente deallocata. Ecco come diventa l&#8217;esempio di prima:</p>
+<p><code lang="cpp" escaped="true"><br />
+if (true)<br />
+{<br />
+    auto p = make_unique&lt;myHugeClass&gt;(); // C++14 style<br />
+} // Il delete è automatico</code></p>
+<h3 style="text-align: justify;">Conclusioni</h3>
+<p style="text-align: justify;">Gli smart pointers sono utili classi da utilizzare sempre, ove possibile. Certo è che non è sempre praticabile l&#8217;uso degli smart pointers, alcune volte serviranno i cari vecchi raw pointers, ma sono casi particolari. In genere, utilizzare un raw pointer è sconsigliato.</p>
+<p style="text-align: justify;">Ma le buone notizie non terminano con questo. Se utilizzate ad esempio i containers, come <em>vector</em>, l&#8217;implementazione garantisce che la variabile sia sullo stack, mentre i dati siano allocati dinamicamente sullo heap. E questo non vale ovviamente solo per <em>vector</em>!</p>
+<p style="text-align: justify;">Ancora più interessante è il caso in cui voi vogliate usare una funzione che come valore di ritorno ha una istanza molto grande, come ad esempio un <em>vector</em> con molti elementi. Potreste pensare che, associando una variabile al valore di ritorno della vostra funzione, venga <em>copiato ogni elemento</em> dentro il vettore, con chiamate a non finire al costruttore dell&#8217;oggetto contenuto nel <em>vector </em>(ad esempio un vettore di <em>myHugeClass</em>): questo sarebbe un overhead enorme. In realtà, dipendentemente dal compilatore però, il C++ fornisce una soluzione automatica, non copiando l&#8217;elemento, ma <em>muovendolo</em>, con una tecnica semplice chiamata <em>return value optimization</em>. Ma questa, è un&#8217;altra storia.</p>
+]]></content:encoded>
+			<wfw:commentRss>https://www.italiancpp.org/2013/08/23/puntatori-vivi-senza/feed/</wfw:commentRss>
+		<slash:comments>24</slash:comments>
+	<post-id xmlns="com-wordpress:feed-additions:1">1070</post-id>	</item>
+	</channel>
+</rss>

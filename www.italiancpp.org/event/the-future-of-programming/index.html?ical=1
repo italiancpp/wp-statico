@@ -1,0 +1,22 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20170606T203000
+DTEND;TZID=Europe/Rome:20170606T230000
+DTSTAMP:20200908T153235
+CREATED:20170523T074112Z
+LAST-MODIFIED:20171209T180510Z
+UID:8043-1496781000-1496790000@www.italiancpp.org
+SUMMARY:The Future of Programming con Bartosz Milewski
+DESCRIPTION:Martedì 6 Giugno dalle 20.30 l&#8217;Associazione ConoscereLinux ha ospitato una serata con Bartosz Milewski\, un esperto internazionale di sviluppo software\, programmazione funzionale e teoria delle categorie. \n \n \n\nLink al video del talk\n  \nThe Future of Programming\nProgramming has been in a permanent state of crisis practically since its inception. The smart money on it continuing in the same vein. Programming is about constantly generating complexity and dealing with it. There are two emerging trends: one relies on mathematics and the other on neural networks. Both come with their own advantages and shortcomings. \n \n \nAbout Bartosz: \nBartosz started as a quantum physicist\, joined Microsoft to build the search engine for Windows and became an avid proponent of OOP. Then he got into concurrency and parallelism and now he’s evangelizing FP and writing the online book Category theory for programmers. \n  \n\n Programma della serata:\nore 20.30: Breve introduzione e saluti &#8211; Associazione ConoscereLinux \nore 20.40: The Future of Programming &#8211; Bartosz Milewski \nore 22.00: Cena in pizzeria e networking \n\n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/the-future-of-programming/
+LOCATION:Via Strada Barchetta\, 77\, Modena\, 41123\, Italia
+CATEGORIES:Meetup
+END:VEVENT
+END:VCALENDAR

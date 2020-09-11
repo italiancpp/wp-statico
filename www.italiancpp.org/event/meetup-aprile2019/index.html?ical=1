@@ -1,0 +1,22 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20190411T200000
+DTEND;TZID=Europe/Rome:20190411T223000
+DTSTAMP:20200908T152620
+CREATED:20190311T132352Z
+LAST-MODIFIED:20190412T081854Z
+UID:9010-1555012800-1555021800@www.italiancpp.org
+SUMMARY:Meetup Aprile / Modena - Comunicazione real-time con WebRTC in C++
+DESCRIPTION: \nComunicazione real-time con WebRTC in C++\nYuri Valentini\nUn nuovo appuntamento a Modena dedicato al C++ organizzato in collaborazione con l&#8217;associazione ConoscereLinux. \n  \n20:00 \nArrivo e saluti iniziali &#8211; Marco Arena \n20:05 \nComunicazione real-time con WebRTC in C++ &#8211; Yuri Valentini \nWebRTC è una libreria di Google\, scritta in C++\, per la comunicazione audio/video/dati in tempo reale via internet.\nRappresenta lo standard di fatto in quanto è integrata all&#8217;interno dei maggiori web browser e utilizzata da tantissime applicazioni web-javascript per audio/video chat.\nDopo avere visto i principali concetti relativi al problema della trasmissione in tempo reale\, e i principali oggetti che li\nimplementano\, vedremo come utilizzare la libreria all&#8217;interno di programmi C++. \n22:00 \nPizza e networking \nMateriale \n\nSlides e demo\nVideo\n\n\nCome sono strutturati i nostri meetup serali: \n\npresentazione tecnica con formato a scelta dello speaker (talk frontale\, workshop\, live coding\, ecc)\nspazio fare domande e confrontarsi\nuna pizza tutti insieme per fare networking e\, perché no\, parlare d&#8217;altro\n\nIn regalo a tutti i partecipanti i nostri mitici stickers 🙂 \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-aprile2019/
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

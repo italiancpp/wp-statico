@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Commenti a: Modern range-based iteration</title>
+	<atom:link href="https://www.italiancpp.org/2013/09/23/modern-range-based-iteration/feed/" rel="self" type="application/rss+xml" />
+	<link>https://www.italiancpp.org/2013/09/23/modern-range-based-iteration/</link>
+	<description></description>
+	<lastBuildDate>Mon, 20 Mar 2017 21:21:21 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.7.18</generator>
+	<item>
+		<title>Di: marco</title>
+		<link>https://www.italiancpp.org/2013/09/23/modern-range-based-iteration/#comment-47</link>
+		<dc:creator><![CDATA[marco]]></dc:creator>
+		<pubDate>Tue, 24 Sep 2013 08:13:06 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1201#comment-47</guid>
+		<description><![CDATA[Ciao Luca, grazie dell&#039;osservazione. Come dicevo all&#039;inizio, essendo l&#039;articolo basic ho solo accennato a questo genere di questioni, ma in ogni caso il tuo commento può costituire un punto d&#039;inizio per tutti coloro che vogliono spingersi un po&#039; oltre (insieme, ad esempio, alla &lt;a href=&quot;http://www.cplusplus.com/reference/iterator/&quot; rel=&quot;nofollow&quot;&gt;reference&lt;/a&gt;). Sicuramente spenderemo almeno un altro articolo su questioni più &quot;avanzate&quot;, come la tua proposta!]]></description>
+		<content:encoded><![CDATA[<p>Ciao Luca, grazie dell&#8217;osservazione. Come dicevo all&#8217;inizio, essendo l&#8217;articolo basic ho solo accennato a questo genere di questioni, ma in ogni caso il tuo commento può costituire un punto d&#8217;inizio per tutti coloro che vogliono spingersi un po&#8217; oltre (insieme, ad esempio, alla <a href="http://www.cplusplus.com/reference/iterator/" rel="nofollow">reference</a>). Sicuramente spenderemo almeno un altro articolo su questioni più &#8220;avanzate&#8221;, come la tua proposta!</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: Luca Risolia</title>
+		<link>https://www.italiancpp.org/2013/09/23/modern-range-based-iteration/#comment-46</link>
+		<dc:creator><![CDATA[Luca Risolia]]></dc:creator>
+		<pubDate>Mon, 23 Sep 2013 23:12:47 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1201#comment-46</guid>
+		<description><![CDATA[Scusate se non concentro tutte le osservazioni in un&#039;unica risposta, ma alcuni spunti di riflessione mi vengono in mente solo dopo una seconda rilettura.
+
+Cito il seguente periodo dell&#039;articolo:
+
+&quot;Comunque, l’idea fondamentale è che è necessario definire alcune funzioni anziché ereditare da una classe base. Qualsiasi classe che “si comporta” come un InputIterator è allora considerata un InputIterator.&quot;
+
+Mi trovo ovviamente d&#039;accordo con la seconda affermazione. Per quanto riguarda la prima affermazione varrebbe spendere qualche parolina in più. 
+
+Al lettore più ingenuo, soprattutto, vorrei dire che lo standard, in realtà, definisce intenzionalmente la classe template std::iterator come classe base da cui si dovrebbe sempre ereditare, parametrizzandola in maniera opportuna, quando si implementa un iteratore.
+
+std::iterator definisce solo tipi membro e viene &quot;configurata&quot; sulla base dei tipi di argomenti ad essa passati. I tipi così definiti servono ad un&#039;altra classe template dello standard, std::iterator_traits (che prende come parametro il tipo iteratore *standard*), per determinare alcune proprietà degli iteratori, le quali possono servire alle implementazioni degli algoritmi generici dello standard. La particolarità di std::iterator_traits, infatti, è che è specializzata per gli iteratori che sono puntatori a elementi di tipo T, T* e const T* nello specifico: ciò consente di definire una sola implementazione di un dato algoritmo (vedi sotto per un esempio). E allo stesso modo l&#039;utente può scrivere altri algoritmi generici *senza* bisogno di doverli specializzare per iteratori di tipo puntatore, sfruttando std::iterator_traits. 
+
+Un classico esempio è count(). Con interator_traits si può scrivere una sola volta:
+
+&lt;code&gt;
+template &lt;class In, class T&gt;
+typename iterator_traits&lt;In&gt;::difference_type
+   count(In first, In last, const T&#038; val) { /*...*/ }
+&lt;/code&gt;
+Si può scrivere, cioè, un&#039;implementazione valida anche quando l&#039;iteratore è di tipo T* o const T*,perchè std::iterator_traits è specializzato per iteratori di tipo T* e const T* (quando In deriva da std::iterator appunto).
+
+Al contrario, se non si usasse iterator_traits (o non si potesse usare perchè il proprio iteratore non è derivato opportunamente, come dicevo prima, da std::iterator), allora si sarebbe costretti a scrivere, per essere &quot;veramente generici&quot;, più implementazioni di count(), di cui una una specializzata per T*, per esempio:
+
+&lt;code&gt;
+template &lt;class In, class T&gt;
+typename In::difference_type count(In first, In last, const T&#038; v);
+
+template &lt;class In, class T&gt; ptrdiff_t count(T* first, T* last, const T&#038; v);
+&lt;/code&gt;
+
+Se si devono scrivere molti algoritmi generici, si capisce bene il vantaggio della coppia std::iterator e std::iterator_traits.
+
+Non vorrei aver dato un taglio &quot;avanzato&quot; alla discussione, ma direi che il prossimo spunto può essere quello di imparare a conoscere/riconoscere le varie categorie di iteratori per saper approfittare adeguatamente di std::interator e std::iterator_traits.]]></description>
+		<content:encoded><![CDATA[<p>Scusate se non concentro tutte le osservazioni in un&#8217;unica risposta, ma alcuni spunti di riflessione mi vengono in mente solo dopo una seconda rilettura.</p>
+<p>Cito il seguente periodo dell&#8217;articolo:</p>
+<p>&#8220;Comunque, l’idea fondamentale è che è necessario definire alcune funzioni anziché ereditare da una classe base. Qualsiasi classe che “si comporta” come un InputIterator è allora considerata un InputIterator.&#8221;</p>
+<p>Mi trovo ovviamente d&#8217;accordo con la seconda affermazione. Per quanto riguarda la prima affermazione varrebbe spendere qualche parolina in più. </p>
+<p>Al lettore più ingenuo, soprattutto, vorrei dire che lo standard, in realtà, definisce intenzionalmente la classe template std::iterator come classe base da cui si dovrebbe sempre ereditare, parametrizzandola in maniera opportuna, quando si implementa un iteratore.</p>
+<p>std::iterator definisce solo tipi membro e viene &#8220;configurata&#8221; sulla base dei tipi di argomenti ad essa passati. I tipi così definiti servono ad un&#8217;altra classe template dello standard, std::iterator_traits (che prende come parametro il tipo iteratore *standard*), per determinare alcune proprietà degli iteratori, le quali possono servire alle implementazioni degli algoritmi generici dello standard. La particolarità di std::iterator_traits, infatti, è che è specializzata per gli iteratori che sono puntatori a elementi di tipo T, T* e const T* nello specifico: ciò consente di definire una sola implementazione di un dato algoritmo (vedi sotto per un esempio). E allo stesso modo l&#8217;utente può scrivere altri algoritmi generici *senza* bisogno di doverli specializzare per iteratori di tipo puntatore, sfruttando std::iterator_traits. </p>
+<p>Un classico esempio è count(). Con interator_traits si può scrivere una sola volta:</p>
+<p><code><br />
+template <class In, class T><br />
+typename iterator_traits<in>::difference_type<br />
+   count(In first, In last, const T&amp; val) { /*...*/ }<br />
+</in></class></code><br />
+Si può scrivere, cioè, un&#8217;implementazione valida anche quando l&#8217;iteratore è di tipo T* o const T*,perchè std::iterator_traits è specializzato per iteratori di tipo T* e const T* (quando In deriva da std::iterator appunto).</p>
+<p>Al contrario, se non si usasse iterator_traits (o non si potesse usare perchè il proprio iteratore non è derivato opportunamente, come dicevo prima, da std::iterator), allora si sarebbe costretti a scrivere, per essere &#8220;veramente generici&#8221;, più implementazioni di count(), di cui una una specializzata per T*, per esempio:</p>
+<p><code><br />
+template <class In, class T><br />
+typename In::difference_type count(In first, In last, const T&amp; v);</p>
+<p>template </class><class In, class T> ptrdiff_t count(T* first, T* last, const T&amp; v);<br />
+</class></code></p>
+<p>Se si devono scrivere molti algoritmi generici, si capisce bene il vantaggio della coppia std::iterator e std::iterator_traits.</p>
+<p>Non vorrei aver dato un taglio &#8220;avanzato&#8221; alla discussione, ma direi che il prossimo spunto può essere quello di imparare a conoscere/riconoscere le varie categorie di iteratori per saper approfittare adeguatamente di std::interator e std::iterator_traits.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: Luca Risolia</title>
+		<link>https://www.italiancpp.org/2013/09/23/modern-range-based-iteration/#comment-45</link>
+		<dc:creator><![CDATA[Luca Risolia]]></dc:creator>
+		<pubDate>Mon, 23 Sep 2013 08:32:37 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1201#comment-45</guid>
+		<description><![CDATA[Ciao Marco, si, era i &#060; END. Grazie.]]></description>
+		<content:encoded><![CDATA[<p>Ciao Marco, si, era i &lt; END. Grazie.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: marco</title>
+		<link>https://www.italiancpp.org/2013/09/23/modern-range-based-iteration/#comment-44</link>
+		<dc:creator><![CDATA[marco]]></dc:creator>
+		<pubDate>Mon, 23 Sep 2013 08:29:22 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1201#comment-44</guid>
+		<description><![CDATA[Ciao Luca, grazie a te del commento. Ti riferisci a i &lt; END? Hai ragione e mi era sfuggito (ho corretto). Per il resto ho sempre messo l&#039;operatore != (anche nell&#039;esempio del range_it)!]]></description>
+		<content:encoded><![CDATA[<p>Ciao Luca, grazie a te del commento. Ti riferisci a i < END? Hai ragione e mi era sfuggito (ho corretto). Per il resto ho sempre messo l'operatore != (anche nell'esempio del range_it)!
+</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: Luca Risolia</title>
+		<link>https://www.italiancpp.org/2013/09/23/modern-range-based-iteration/#comment-43</link>
+		<dc:creator><![CDATA[Luca Risolia]]></dc:creator>
+		<pubDate>Mon, 23 Sep 2013 08:24:31 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1201#comment-43</guid>
+		<description><![CDATA[Ciao Marco, grazie per l&#039;articolo.
+
+In realtà, quando parli di idioma spesso usato per scorrere una sequenza mediante un InputIterator, si dovrebbe preferire operator!=() come condizione di terminazione del ciclo, anzichè operator&#060;(). La  nota è sostanziale, proprio perchè gli InputIterator (oggetto del discorso) non devono definire necessariamente un ordinamento.]]></description>
+		<content:encoded><![CDATA[<p>Ciao Marco, grazie per l&#8217;articolo.</p>
+<p>In realtà, quando parli di idioma spesso usato per scorrere una sequenza mediante un InputIterator, si dovrebbe preferire operator!=() come condizione di terminazione del ciclo, anzichè operator&lt;(). La  nota è sostanziale, proprio perchè gli InputIterator (oggetto del discorso) non devono definire necessariamente un ordinamento.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>

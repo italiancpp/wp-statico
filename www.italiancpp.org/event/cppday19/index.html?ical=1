@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20191130T090000
+DTEND;TZID=Europe/Rome:20191130T180000
+DTSTAMP:20200908T150156
+CREATED:20190723T092017Z
+LAST-MODIFIED:20200701T120737Z
+UID:9166-1575104400-1575136800@www.italiancpp.org
+SUMMARY:C++ Day 2019
+DESCRIPTION: \n\nThe C++ Day is a not-for-profit Italian event about C++ development where professionals\, companies and students meet and share experience.\nThe event is subject to the Italian C++ Community Code of Conduct\n \n170 attendees\n Wrap-Up Post\n� \n \nPictures\n� \nThe event is co-organized with:\n \nThe event is hosted at:\n \n\nSchedule (follow the links below for slides and videos)\n\n\ntime\nduration\nroom E\nroom F\n\n\n\n08.30 &#8211; 09.30\n60'\nCheck-in\n\n\n09.30 &#8211; 09.45\n15'\nWelcome MessageMarco Arena\n-\n\n\n09.45 &#8211; 10.15\n30'\nIntroducing Elettric80/Beckhoff/Leica\n-\n\n\n10:20 &#8211; 10.50\n30'\nTBB Dataflow: parallelism through computational graphs(ITA)Nicolò Valigi\nPrinciples of algorithm design in STL(ITA)Francesco Fucci\n\n\n10.50 &#8211; 11.20\n30'\nBreak\n\n\n11:20 &#8211; 11.50\n30'\nQualità del codice nei sistemi embedded(ITA)Gianmichele Verdano\nFlip Model Design Pattern!(ITA)Daniele Pallastrelli \n\n\n11:50 &#8211; 12:20\n30'\nC and C++ as programming languages in automation technology(ITA)Stefano Monti\n\n\n12.25 &#8211; 13.15\n50'\nFrom Iterators To Ranges — The Upcoming Evolution Of the Standard Library(ENG)Valentin Ziegler\nThe (few) joys and (many) sorrows of cross-compilation(ITA)Valter Minute\n\n\n13.15 &#8211; 14.30\n75'\nLunch Break\n\n\n14.30 &#8211; 15.20\n50'\nIdioms: you're doing it right(ITA)Michele Caini\nPython Bindings in C++(ENG)Andrea Pallini\n\n\n15.30 &#8211; 16.20\n50'\nAn introduction to Monte Carlo Tree Search(ITA)Manlio Morini\nMISRA C++: A Subset of C++ for the Development of High-Integrity Systems(ITA)Roberto Bagnara\n\n\n16.20 &#8211; 17.00\n40'\nBreak\n\n\n17.00 &#8211; 17.45\n45'\nPanel: Ask Us EverythingAll Speakers\n\n\n17.45 &#8211; 18.00\n15'\nClosing MessageMarco ArenaElettric80\n-\n\n\n  \n\n\nThe event is patronized by Community Crumbs\, a not-for-profit association:\n \n  \nThe event is realized in collaboration with:\n� \n \n� \n \n \nBecome active part of this conference! \nDrop an email to info [at] italiancpp [dot] org\nThe event is totally not-for-profit. \nMedia partners\n \n \n \n\n   \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/cppday19/
+LOCATION:Parco Area delle Scienze\, 69/A\, Parma\, 43124\, Italia
+CATEGORIES:Conferenza
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

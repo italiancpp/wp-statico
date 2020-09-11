@@ -1,0 +1,22 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20150324
+DTEND;VALUE=DATE:20150327
+DTSTAMP:20200908T151208
+CREATED:20150116T111009Z
+LAST-MODIFIED:20170824T064925Z
+UID:4017-1427155200-1427414399@www.italiancpp.org
+SUMMARY:Community Days 2015
+DESCRIPTION:  \n\n \n� \nAi #CDays15 abbiamo parlato anche di C++!\n� \nWorkshop: C++ dal &#8217;90 a oggi\nMarco Arena & Marco Foco\n \nCasablanca: un&#8217;alternativa &#8220;nativa&#8221; al .NET framework per la programmazione di servizi web\nPaolo Severini\n   \nInteractive storytelling: il C++ nella cassetta degli attrezzi\nOrf Quarenghi\n \nDependency-Injection in C++\nDaniele Pallastrelli\n \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/community-days-2015/
+LOCATION:Via Lombardia\, 2/a\, Peschiera Borromeo\, Milano\, 20068\, Italia
+CATEGORIES:Partecipazione
+END:VEVENT
+END:VCALENDAR

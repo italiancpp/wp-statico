@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Commenti a: Anti-IF idioms in C++</title>
+	<atom:link href="https://www.italiancpp.org/2014/11/23/anti-if-idioms-in-cpp/feed/" rel="self" type="application/rss+xml" />
+	<link>https://www.italiancpp.org/2014/11/23/anti-if-idioms-in-cpp/</link>
+	<description></description>
+	<lastBuildDate>Mon, 20 Mar 2017 21:21:21 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.7.18</generator>
+	<item>
+		<title>Di: marco</title>
+		<link>https://www.italiancpp.org/2014/11/23/anti-if-idioms-in-cpp/#comment-82</link>
+		<dc:creator><![CDATA[marco]]></dc:creator>
+		<pubDate>Mon, 24 Nov 2014 11:34:06 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=3751#comment-82</guid>
+		<description><![CDATA[Happy you&#039;re seeing monads in C++ :) (Bartosz would be proud of you!).]]></description>
+		<content:encoded><![CDATA[<p>Happy you&#8217;re seeing monads in C++ 🙂 (Bartosz would be proud of you!).</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: Nicola</title>
+		<link>https://www.italiancpp.org/2014/11/23/anti-if-idioms-in-cpp/#comment-81</link>
+		<dc:creator><![CDATA[Nicola]]></dc:creator>
+		<pubDate>Mon, 24 Nov 2014 10:47:56 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=3751#comment-81</guid>
+		<description><![CDATA[Yes, let&#039;s play with the code :)
+
+Anyway, just to elaborate on my words about optional: your code too contains an if, but it&#039;s hidden. So if we&#039;re hiding the if away in library code, rather than eliminate it, then you can do it with optional, too, and it&#039;s even better because it&#039;s chainable (and it&#039;s chainable because it&#039;s monadic)
+&lt;code&gt;
+using namespace std::experimental;
+
+template&lt;typename T, typename F&gt;
+auto operator&gt;&gt;=(optional&lt;T&gt; const&amp;opt, F&amp;&amp; f) {
+   if(opt)
+      return std::forward&lt;F&gt;(f)(*opt);
+   else
+      return null_opt;
+}
+&lt;/code&gt;
+
+and you use it like.
+&lt;code&gt;
+myopt &gt;&gt;= [](T1 *arg) { return ....; } &gt;&gt;= [](T2 *arg) { return ...; }
+&lt;/code&gt;
+
+The next version of the Foundamentals TS will for sure add a member function to optional to do exactly that, so it will be still easier.
+
+Anyway, the point of your post is true: you can adapt C# code to C++ quite easily with modern features :)]]></description>
+		<content:encoded><![CDATA[<p>Yes, let&#8217;s play with the code 🙂</p>
+<p>Anyway, just to elaborate on my words about optional: your code too contains an if, but it&#8217;s hidden. So if we&#8217;re hiding the if away in library code, rather than eliminate it, then you can do it with optional, too, and it&#8217;s even better because it&#8217;s chainable (and it&#8217;s chainable because it&#8217;s monadic)<br />
+<code><br />
+using namespace std::experimental;</p>
+<p>template<typename T, typename F><br />
+auto operator>>=(optional<t> const&#038;opt, F&#038;& f) {<br />
+   if(opt)<br />
+      return std::forward<f>(f)(*opt);<br />
+   else<br />
+      return null_opt;<br />
+}<br />
+</f></t></typename></code></p>
+<p>and you use it like.<br />
+<code><br />
+myopt >>= [](T1 *arg) { return ....; } >>= [](T2 *arg) { return ...; }<br />
+</code></p>
+<p>The next version of the Foundamentals TS will for sure add a member function to optional to do exactly that, so it will be still easier.</p>
+<p>Anyway, the point of your post is true: you can adapt C# code to C++ quite easily with modern features 🙂</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: marco</title>
+		<link>https://www.italiancpp.org/2014/11/23/anti-if-idioms-in-cpp/#comment-80</link>
+		<dc:creator><![CDATA[marco]]></dc:creator>
+		<pubDate>Mon, 24 Nov 2014 08:59:20 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=3751#comment-80</guid>
+		<description><![CDATA[PS the real reason for not using the static here is that you want a new Foo instance for each factory object:
+
+Factory factory;
+factory.Get(); // new instance
+factory.Get(); // reuse
+// ...
+Factory factory2;
+factory2.Get(); // new instance
+factory2.Get(); // reuse]]></description>
+		<content:encoded><![CDATA[<p>PS the real reason for not using the static here is that you want a new Foo instance for each factory object:</p>
+<p>Factory factory;<br />
+factory.Get(); // new instance<br />
+factory.Get(); // reuse<br />
+// &#8230;<br />
+Factory factory2;<br />
+factory2.Get(); // new instance<br />
+factory2.Get(); // reuse</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: marco</title>
+		<link>https://www.italiancpp.org/2014/11/23/anti-if-idioms-in-cpp/#comment-79</link>
+		<dc:creator><![CDATA[marco]]></dc:creator>
+		<pubDate>Mon, 24 Nov 2014 08:44:51 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=3751#comment-79</guid>
+		<description><![CDATA[As I wrote at the beginning (and as Claudio said during his talk), these are just examples of doing the same thing in another way. Sure, we have specific idioms in our favourite language but I think it&#039;s cool that we are able to reuse code from other languages with almost no effort! This means C++ is open to everyone!
+
+About optional, it requires an IF ( e.g. if (opt.is_valid()) ) :) About the static variable I expressly told not to use a static variable! Because it&#039;s too obvious! Let&#039;s play with the code :)]]></description>
+		<content:encoded><![CDATA[<p>As I wrote at the beginning (and as Claudio said during his talk), these are just examples of doing the same thing in another way. Sure, we have specific idioms in our favourite language but I think it&#8217;s cool that we are able to reuse code from other languages with almost no effort! This means C++ is open to everyone!</p>
+<p>About optional, it requires an IF ( e.g. if (opt.is_valid()) ) 🙂 About the static variable I expressly told not to use a static variable! Because it&#8217;s too obvious! Let&#8217;s play with the code 🙂</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: Nicola</title>
+		<link>https://www.italiancpp.org/2014/11/23/anti-if-idioms-in-cpp/#comment-78</link>
+		<dc:creator><![CDATA[Nicola]]></dc:creator>
+		<pubDate>Mon, 24 Nov 2014 08:30:42 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=3751#comment-78</guid>
+		<description><![CDATA[Great post!
+
+I know Bartosz Milewski is just going to say that the first examples are istances of the Maybe monad! Anyway, the fact that the code directly translates from C# doesn&#039;t mean it is necessarily a good thing to do. In this case for example, object-oriented runtime polymorphism is useless. I think it can be done directly with optional instead of rolling your own IPerformer interface etc...
+
+Regarding the singleton factory: just use a static variable inside the factory function and return it by reference. Statics are thread-safe in C++11, while your example is not, and you don&#039;t have any &quot;if&quot; because is what statics are meant for. 
+
+To summarize: if there&#039;s a more &quot;C++-ish&quot; way of doing things, when porting code, I prefer to exploit it :)]]></description>
+		<content:encoded><![CDATA[<p>Great post!</p>
+<p>I know Bartosz Milewski is just going to say that the first examples are istances of the Maybe monad! Anyway, the fact that the code directly translates from C# doesn&#8217;t mean it is necessarily a good thing to do. In this case for example, object-oriented runtime polymorphism is useless. I think it can be done directly with optional instead of rolling your own IPerformer interface etc&#8230;</p>
+<p>Regarding the singleton factory: just use a static variable inside the factory function and return it by reference. Statics are thread-safe in C++11, while your example is not, and you don&#8217;t have any &#8220;if&#8221; because is what statics are meant for. </p>
+<p>To summarize: if there&#8217;s a more &#8220;C++-ish&#8221; way of doing things, when porting code, I prefer to exploit it 🙂</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>

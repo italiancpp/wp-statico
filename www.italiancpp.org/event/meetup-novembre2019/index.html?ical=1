@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20191107T200000
+DTEND;TZID=Europe/Rome:20191107T223000
+DTSTAMP:20200908T150139
+CREATED:20191024T110442Z
+LAST-MODIFIED:20191108T171421Z
+UID:9246-1573156800-1573165800@www.italiancpp.org
+SUMMARY:Meetup Novembre / Modena - Unreal Engine 4: delegati\, async e subsystems
+DESCRIPTION: \nUnreal Engine 4: delegati\, async e subsystems\nMichele Mischitelli\n\nUn nuovo appuntamento a Modena dedicato al C++ organizzato in collaborazione con l&#8217;associazione ConoscereLinux. \n  \n20:00 \nArrivo e saluti iniziali &#8211; Marco Arena \n20:05 \nUnreal Engine 4: delegati\, async e subsystems &#8211; Michele Mischitelli \nDopo aver visto cosa sono gli UObject\, attori e componenti\, continuiamo il nostro viaggio nell&#8217;universo di Unreal Engine 4. Questa volta vedremo come si creano eventi e delegati e di come questi concetti vengano solitamente sfruttati. Vedremo anche brevemente come eseguire codice asincrono sfruttando le facility di Unreal. E per rimanere aggiornati con le ultime novità\, vedremo cosa sono i Subsystem introdotti in UE4.22. \n22:00 \nPizza e networking \nIscrizioni \n\nChiuse\n\nMateriale \n\nSlides\nVideo\n\n\nCome sono strutturati i nostri meetup serali: \n\npresentazione tecnica con formato a scelta dello speaker (talk frontale\, workshop\, live coding\, ecc)\nspazio fare domande e confrontarsi\nuna pizza tutti insieme per fare networking e\, perché no\, parlare d&#8217;altro\n\nIn regalo a tutti i partecipanti i nostri mitici stickers 🙂 \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-novembre2019/
+LOCATION:Via Strada Barchetta\, 77\, Modena\, 41123\, Italia
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

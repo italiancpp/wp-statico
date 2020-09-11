@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>range &#8211; Italian C++ Community</title>
+	<atom:link href="https://www.italiancpp.org/tag/range/feed/" rel="self" type="application/rss+xml" />
+	<link>https://www.italiancpp.org</link>
+	<description></description>
+	<lastBuildDate>Mon, 24 Aug 2020 13:03:53 +0000</lastBuildDate>
+	<language>it-IT</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.7.18</generator>
+<site xmlns="com-wordpress:feed-additions:1">106700034</site>	<item>
+		<title>Modern range-based iteration</title>
+		<link>https://www.italiancpp.org/2013/09/23/modern-range-based-iteration/</link>
+		<comments>https://www.italiancpp.org/2013/09/23/modern-range-based-iteration/#comments</comments>
+		<pubDate>Mon, 23 Sep 2013 07:29:47 +0000</pubDate>
+		<dc:creator><![CDATA[marco]]></dc:creator>
+				<category><![CDATA[Hands-on]]></category>
+		<category><![CDATA[basic]]></category>
+		<category><![CDATA[input iterator]]></category>
+		<category><![CDATA[iterazione]]></category>
+		<category><![CDATA[range]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1201</guid>
+		<description><![CDATA[La libreria standard è basata sul concetto di iteratore,  ovvero un oggetto che &#8220;punta&#8221; ad un elemento di un range e che consente di &#8220;spostarsi&#8221; (iterare) attraverso gli altri elementi, imitando per quanto possibile la sintassi usata con i puntatori. Tutti gli iteratori sono classificati in base ad alcune categorie, all&#8217;incirca a seconda che permettano [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p style="text-align: justify;">La libreria standard è basata sul concetto di <strong>iteratore</strong>,  ovvero un oggetto che &#8220;punta&#8221; ad un elemento di un range e che consente di &#8220;spostarsi&#8221; (iterare) attraverso gli altri elementi, imitando per quanto possibile la sintassi usata con i puntatori. Tutti gli iteratori sono classificati in base ad alcune categorie, all&#8217;incirca a seconda che permettano lettura e/o scrittura, e a seconda di che tipi di spostamento supportano (questa spiegazione va oltre lo scopo dell&#8217;articolo &#8211; <em>basic &#8211;</em> ma per saperne di più è possibile partire da <a href="http://www.cplusplus.com/reference/iterator/">qui</a>). In particolare, un vero <strong>puntatore</strong> è un caso particolare di iteratore:</p>
+<p><code lang="cpp" escaped="true">int arr[] = {1,2,3,4};<br />
+int* ptr = &amp;arr[1]; // ptr punta a 2<br />
+++ptr; // ptr punta a 3<br />
+*ptr = 10;<br />
+// arr è ora {1,2,10,4}</code></p>
+<p style="text-align: justify;">Questo articolo tratta alcune <strong>linee guida</strong> a proposito di <strong>iterazione su range</strong>. Un range è inteso come due <strong>iteratori </strong>che rappresentano l&#8217;inzio e la fine dell&#8217;intervallo di elementi sui quali iterare. Non si tratta, però, di iteratori qualsiasi bensì di quelli che lo standard definisce come <a href="http://www.cplusplus.com/reference/iterator/InputIterator/" target="_blank">InputIterator</a>. Questo categoria di iteratori è la più semplice e consente di scorrere serialmente gli elementi in &#8220;sola lettura&#8221; (solo input &#8211; a &#8220;scrivere&#8221; sono gli <strong>OutputIterator</strong>). Per essere più rigorosi (ma non troppo), un <strong>InputIterator</strong> è un qualsiasi tipo di oggetto che supporta almeno queste operazioni:</p>
+<ul>
+<li><span style="line-height: 12px;"><strong>value-semantics</strong> (ha un costruttore di copia, un operator= e un distruttore pubblici)</span></li>
+<li>si può testare<strong> l&#8217;uguaglianza</strong> (operator==, operator!=)</li>
+<li>può essere <strong>dereferenziato</strong> (*it, it-&gt;member), ma il risultato va trattato come se fosse di sola lettura (si può scrivere <em>auto x = *it</em>; ma non <em>*it = 10</em> come sopra)</li>
+<li>può essere <strong>incrementato di 1</strong> (con operator++)</li>
+</ul>
+<p style="text-align: justify;">Altre operazioni sono implicate (ad esempio,  la funzione <strong><em>swap</em></strong>) o supportate con certe limitazioni (il costruttore di default). Si noti però che non si parla mai della sequenza di oggetti &#8220;puntati&#8221;, che infatti potrebbe addirittura&#8230; non esistere! Un InputIterator potrebbe &#8220;fingere&#8221; di iterare su elementi che vengono creati al volo nell&#8217;istante in cui si de-referenzia (si vedrà un esempio più avanti). Secondo lo standard, de-referenziando due copie dello stesso iteratore non necessariamente si ottiene lo stesso valore!</p>
+<p style="text-align: justify;">Comunque, l&#8217;idea fondamentale è che <em>è necessario definire alcune funzioni anziché ereditare da una classe base</em>. Qualsiasi classe che &#8220;si comporta&#8221; come un InputIterator è allora considerata un InputIterator. Si tratta del classico approccio della <strong>generic programming</strong>, meglio formalizzato nei <a href="http://en.wikipedia.org/wiki/Concepts_(C%2B%2B)" target="_blank">Concepts</a>.</p>
+<p style="text-align: justify;">Spesso ci troviamo a scrivere cicli su strutture dati, ad esempio su vettori o liste. La libreria standard fornisce diversi algoritmi che internamente operano come dei cicli. Il più semplice è il <em>for_each</em>, che dati due InputIterator Begin/End esegue una certa funzione per ogni elemento nel range <strong>[Begin, End)</strong>.</p>
+<p>Un container può essere &#8220;descritto&#8221; da un range <strong>[Begin, End) </strong>e per questo definisce le quattro funzioni:</p>
+<ul>
+<li><strong>begin()</strong>, <strong>cbegin()</strong> (ovvero const-begin, che produce un iteratore di sola lettura)</li>
+<li><strong>end()</strong>, <strong>cend()</strong> (ovvero const-end)</li>
+</ul>
+<p style="text-align: justify;"><strong>begin()</strong> è, chiaramente, un InputIterator che punta al primo elemento del container, <strong>end()</strong>, invece, punta subito fuori dal range (<em>one-past-the-last-element</em>). Ci sono diverse motivazioni per questa scelta architetturale, ma (semplificando) è possibile pensare che questa sia in linea col classico pattern:</p>
+<p><code lang="cpp" escaped="true">for (int i=0; i!=END; ++i) // END escluso<br />
+...</code></p>
+<p style="text-align: justify;">con i = END il ciclo si arresta, quindi l&#8217;ultima iterazione è proprio con i = END &#8211; 1.</p>
+<p style="text-align: justify;"><span style="text-decoration: underline;">Nota</span>: gli iteratori ritornati dalle funzioni begin/end di un container sono generalmente più avanzati di un InputIterator (ad esempio possono supportare contemporaneamente input e output), ma tutti comunque ne supportano le specifiche.</p>
+<p><span style="text-align: justify;">Supponiamo, ora, di avere una classe </span><strong style="text-align: justify;">Plot</strong><span style="text-align: justify;"> che supporta un </span><strong style="text-align: justify;">replot</strong><span style="text-align: justify;">:</span><br />
+<code lang="cpp" escaped="true">class Plot<br />
+{<br />
+public:<br />
+   ...<br />
+   void replot();<br />
+   ...<br />
+};</code><br />
+dato un vector di Plot potremmo ridisegnare ogni plot con un banale ciclo, sfruttando le funzioni sopra citate:<br />
+<code lang="cpp" escaped="true">vector&lt;Plot&gt; plots;<br />
+for (auto it = plots.begin(); it != plots.end(); ++it)<br />
+{<br />
+   i-&gt;replot();<br />
+}</code><br />
+Ma potremmo usare anche un for_each:<br />
+<code lang="cpp" escaped="true">for_each(plots.begin(), plots.end(), [](Plot&amp; plot)<br />
+{<br />
+   plot.replot();<br />
+});</code><br />
+Cosa scegliere e perché? Ci sono almeno quattro buone ragioni per le quali scegliere un algoritmo invece di scrivere un ciclo:</p>
+<p><strong>1) Efficienza:</strong> un algoritmo è potenzialmente vincente perché:</p>
+<ul>
+<li style="text-align: justify;"><span style="line-height: 12px;">evita di ripetere alcune chiamate (e.g. <strong>plots.end()</strong>), mantenendo il codice compatto,</span></li>
+<li style="text-align: justify;">gli implementatori delle STL possono specializzare particolari algoritmi in base al container, massimizzando le performance,</li>
+<li style="text-align: justify;">(generalmente) gli algoritmi sono sofisticati e implementati rispettando lo stato dell&#8217;arte (e.g. sort). anche algoritmi apparentemente banali, come potrebbe essere &#8220;visitare tutti gli elementi&#8221; possono essere ottimizzati e nascondere  gradi di sofisticazione insospettabili!</li>
+</ul>
+<p style="text-align: justify;"><strong>2) Correttezza:</strong> scrivere un ciclo a mano è error-prone, richiede di controllare la validità del range in cui si itera e potenzialmente fa perdere più tempo a scrivere controlli che non a implementare il core del proprio algoritmo.</p>
+<p style="text-align: justify;"><strong>3)</strong> <strong>Manutenibilità</strong>: è più facile mettere mano su un codice che usa algoritmi standard, documentati e provati, oppure su listati completamente scritti a mano (e più verbosi)? Generalmente è molto più semplice leggere e comprendere un codice che utilizza algoritmi standard ed uno dei motivi principali è che questi ultimi sono ben documentati (e <em>i loro nomi hanno un significato che esprime <span style="text-decoration: underline;">l&#8217;intento</span> del programmatore</em>). Essi rappresentano un vero e proprio &#8220;vocabolario&#8221; con cui comunicare (ad esempio nel proprio team) e dal quale attingere funzionalità già pronte.</p>
+<p style="text-align: justify;"><strong>4) Astrazione</strong>: non sempre occorre avere a che fare con gli iteratori. Con un ciclo scritto a mano è necessario utilizzarli, dereferenziarli, &#8230; Con un algoritmo, invece, è possibile utilizzare direttamente l&#8217;oggetto &#8220;puntato&#8221;, come nell&#8217;esempio sopra, dove accediamo ad un&#8217;istanza di business, <strong>Plot</strong>, e non ad un iteratore.</p>
+<p style="text-align: justify;">Primo <span style="text-decoration: underline;"><strong><em>DO</em></strong></span> della giornata: <span style="color: #2945a4;"><strong>ove possibile,</strong> <strong>preferire l&#8217;utilizzo degli algoritmi ai cicli scritti a mano</strong>.</span></p>
+<p style="text-align: justify;">Questo primo DO è generale, non da applicarsi sol al C++. Veniamo al nocciolo di questo post. <strong>Iterare</strong> <strong>su un range: </strong><strong>quali sono le nuove linee guida</strong>?</p>
+<p style="text-align: justify;">All&#8217;inizio abbiamo detto che ogni container può essere descritto da un range <strong>(Begin. End]</strong>. Abbiamo anche fatto vedere come utilizzare le funzioni begin/end per iterare su un container. Il range <strong>(Begin, End]</strong> è del tipo:</p>
+<p><code lang="cpp" escaped="true">vector&lt;int&gt; vec {1,2,3,4,5};<br />
+auto first = vec.begin();<br />
+auto one_past_last = vec.end();<br />
+// [first, one_past_last) "descrive" vec</code></p>
+<p style="text-align: justify;">L&#8217;unico problema è che questo approccio non è abbastanza generico. Ad esempio non può essere applicato agli <strong>array C-style</strong> (e.g. int arr[]). Come rimediare? Il <strong>C++11</strong> introduce le <strong>funzioni non-membro</strong> begin/end, con un overload per gli array C-style. Oltre a supportare gli array, queste due funzioni danno uniformità e coerenza, promuovendo l&#8217;estensibilità (è possibile creare delle specializzazioni per i propri container) e incrementando l&#8217;incapsulamento. Le non-member functions begin/end sono fatte così:</p>
+<p><code lang="cpp" escaped="true">// C++11<br />
+template&lt; class C &gt;<br />
+auto begin( C&amp; c ) -&gt; decltype(c.begin());</p>
+<p>// C++11<br />
+template&lt; class C &gt;<br />
+auto begin( const C&amp; c ) -&gt; decltype(c.begin());</p>
+<p>// C++11 - overload per gli array C<br />
+template&lt; class T, size_t N &gt;<br />
+T* begin( T (&amp;array)[N] );</code></p>
+<p style="text-align: justify;"><span style="text-decoration: underline;"><em><strong>DO</strong></em></span>: <span style="color: #2945a4;"><strong>Utilizzare le funzioni non-membro begin(x) e end(x) invece di x.begin() e x.end().</strong></span></p>
+<p><code lang="cpp" escaped="true">for_each( begin(vec), end(vec), ... ) // C++11</code><br />
+E se avessimo bisogno di <strong>cbegin()</strong> e <strong>cend()</strong> ? Il <strong>C++14</strong> introduce anche queste due funzioni non-membro, sfuggite al C++11:<br />
+<code lang="cpp" escaped="true">// C++14<br />
+template&lt; class C &gt;<br />
+auto cbegin( const C&amp; c ) -&gt; decltype(std::begin(c));</p>
+<p>// C++14<br />
+template&lt; class C &gt;<br />
+auto cend( const C&amp; c ) -&gt; decltype(std::end(c));</code><br />
+<span style="text-decoration: underline;"><em><strong>DO</strong></em></span>: <span style="color: #2945a4;"><strong>[C++14] Utilizzare le funzioni non-membro cbegin(x) e cend(x) invece di x.cbegin() e x.cend().</strong></span></p>
+<p style="text-align: justify;">Concludiamo questo primo articolo a proposito di iterazione su range con una seconda novità del C++11: il <strong>range-based for loop (RBFL)</strong>. Questo costrutto equivale ad utilizzare un <strong><em>for_each</em></strong> su un container. Stesse garanzie di performance ma più compattezza:</p>
+<p><code lang="cpp" escaped="true">// C++11<br />
+for (const auto&amp; elem : vec)<br />
+{<br />
+   cout &lt;&lt; elem &lt;&lt; " ";<br />
+}</p>
+<p>// quando vec è una variabile locale, è come scrivere<br />
+for_each(begin(vec), end(vec), [](const T&amp; elem)<br />
+{<br />
+   cout &lt;&lt; elem &lt;&lt; " ";<br />
+});</code><br />
+La sintassi è semplice e probabilmente già vista in altri linguaggi. Da notare la possibilità di usare <strong>auto</strong>. Chiaramente, anche qui, il concetto di iteratore è celato e si opera direttamente sugli oggetti contenuti nel vettore.</p>
+<p style="text-align: justify;"><strong><span style="text-decoration: underline;"><em>DO</em></span></strong>: <span style="color: #2945a4;"><strong>Utilizzare il range-based for loop al posto del for_each, è più semplice e compatto.</strong></span></p>
+<p style="text-align: justify;">Il RBFL opera su strutture x che supportino il concetto di <strong>iterazione</strong>, ovvero:</p>
+<ul>
+<li><span style="line-height: 12px;">abbiano le funzioni<strong> membro</strong> x.<strong>begin() </strong>e<strong> </strong>x.<strong>end()</strong>, <em>oppure,</em></span></li>
+<li>abbiano le funzioni <strong>non-membro</strong> <strong>begin(x)</strong> e <strong>end(x)</strong> (trovate con ADL &#8211; Argument Dependent Lookup), <em>oppure,</em></li>
+<li>per le quali esistono le specializzazioni di <strong>std::begin(x)</strong> e <strong>std::end(x)</strong>.</li>
+</ul>
+<p>Le funzioni devono ritornare degli <strong>InputIterator </strong>(in realtà il requisito è più &#8220;leggero&#8221;, come vedremo nel prossimo esempio. Maggiori dettagli <a href="http://en.cppreference.com/w/cpp/language/range-for" target="_blank">qui</a>).</p>
+<h3>Bonus track</h3>
+<p style="text-align: justify;">Il RBFL permette di iterare su una qualsiasi struttura &#8220;iterabile&#8221;. Abbiamo detto poco fa cosa vuol dire, ma vogliamo vederne un esempio pratico?</p>
+<p style="text-align: justify;">Supponiamo di voler iterare su tutti gli interi entro un certo intervallo, qualcosa del tipo:</p>
+<p><code lang="cpp" escaped="true">for (int i=0; i&lt;100; ++i)<br />
+...</code></p>
+<p style="text-align: justify;">Possiamo usare il RBFL senza creare una sequenza intermedia? Sì, per farlo abbiamo proprio bisogno di scrivere una struttura iterabile e un InputIterator che ne abiliti l&#8217;iterazione. Per il nostro scopo, in realtà, dobbiamo solo implementare un wrapper ad un finto container che simuli una lista crescente di numeri ed un suo iteratore.</p>
+<p style="text-align: justify;">Per ricapitolare, vogliamo qualcosa del genere:</p>
+<p><code lang="cpp" escaped="true">for (auto i : range{0,10})<br />
+{<br />
+   cout &lt;&lt; i &lt;&lt; " ";<br />
+}<br />
+// 0 1 2 3 4 5 6 7 8 9</code><br />
+Ribadisco che questo è solo un esempio, molto probabilmente non efficiente quanto un for da 0 a N!</p>
+<p>Iniziamo da questo &#8220;finto container&#8221;. Abbiamo detto che per usare il RBFL è sufficiente implementare una delle tre opzioni:</p>
+<ul>
+<li>funzioni<strong> membro</strong> x.<strong>begin() </strong>e<strong> </strong>x.<strong>end()</strong>, <em>oppure</em></li>
+<li>funzioni <strong>non-membro</strong> <strong>begin(x)</strong> e <strong>end(x)</strong> (trovate con ADL &#8211; Argument Dependent Lookup), <em>oppure</em></li>
+<li>specializzazioni <strong>std::begin(x)</strong> e <strong>std::end(x)</strong></li>
+</ul>
+<p>Scegliamo la prima e supponiamo, per un attimo, di aver già pensato al nostro InputIterator ad-hoc:<br />
+<code lang="cpp" escaped="true">class range_t<br />
+{<br />
+public:<br />
+   class range_it<br />
+   {<br />
+   // lo vediamo dopo<br />
+   }</p>
+<p>   range_t(int s, int e)<br />
+      : start_it{s}, end_it{e}<br />
+   {<br />
+   }</p>
+<p>   range_it begin()<br />
+   {<br />
+      return start_it;<br />
+   }</p>
+<p>   range_it end()<br />
+   {<br />
+      return end_it;<br />
+   }</p>
+<p>private:<br />
+   range_it start_it;<br />
+   range_it end_it;<br />
+};</code><br />
+La nostra classe <strong>range_t</strong> mantiene due iteratori che rappresentano inizio e fine range. Ora vediamo una possibile implementazione di <strong>range_it</strong>:<br />
+<code lang="cpp" escaped="true">class range_it<br />
+{<br />
+public:<br />
+   range_it(int val)<br />
+      : value{val}<br />
+   {<br />
+   }</p>
+<p>   int operator*() const<br />
+   {<br />
+      return value;<br />
+   }</p>
+<p>   bool operator!=(const range_it&amp; o) const<br />
+   {<br />
+      return value != o.value;<br />
+   }</p>
+<p>   range_it&amp; operator++()<br />
+   {<br />
+      ++value;<br />
+      return *this;<br />
+   }</p>
+<p>private:<br />
+   int value;<br />
+};</code></p>
+<p style="text-align: justify;">L&#8217;idea (banale) è di wrappare un valore del range in questo iteratore range_it. Le operazioni su un range_it sono in realtà operazioni sul valore che wrappa.</p>
+<p style="text-align: justify;">Non siamo totalmente conformi alle <a href="http://www.cplusplus.com/reference/iterator/InputIterator/">specifiche di un InputIterator</a> ma siamo dentro ai requisiti del RBFL (perché questo ha bisogno solo degli operatori che abbiamo implementato):</p>
+<p><code lang="cpp" escaped="true">for (auto i : range_t{0, 10})<br />
+{<br />
+   cout &lt;&lt; i &lt;&lt; " ";<br />
+}<br />
+// 0 1 2 3 4 5 6 7 8 9</code></p>
+<p style="text-align: justify;">L&#8217;esempio è volutamente semplice. Restano aperte alcune questioni (anch&#8217;esse non complicate da affrontare) che lasciamo ai lettori, come ad esempio:</p>
+<ul>
+<li><span style="line-height: 12px;">generalizzare il range per qualsiasi tipo numerico (attenzione all&#8217;operator!= su float e double&#8230;),</span></li>
+<li>completare range_it in modo che implementi tutte le specifiche di un InputIterator,</li>
+<li>personalizzare lo step (e.g. {0, 10} a step di 0.1).</li>
+</ul>
+]]></content:encoded>
+			<wfw:commentRss>https://www.italiancpp.org/2013/09/23/modern-range-based-iteration/feed/</wfw:commentRss>
+		<slash:comments>5</slash:comments>
+	<post-id xmlns="com-wordpress:feed-additions:1">1201</post-id>	</item>
+	</channel>
+</rss>

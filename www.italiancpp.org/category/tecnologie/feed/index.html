@@ -1,0 +1,908 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Tecnologie &#8211; Italian C++ Community</title>
+	<atom:link href="https://www.italiancpp.org/category/tecnologie/feed/" rel="self" type="application/rss+xml" />
+	<link>https://www.italiancpp.org</link>
+	<description></description>
+	<lastBuildDate>Mon, 24 Aug 2020 13:03:53 +0000</lastBuildDate>
+	<language>it-IT</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.7.18</generator>
+<site xmlns="com-wordpress:feed-additions:1">106700034</site>	<item>
+		<title>Primi passi con Boost.Python</title>
+		<link>https://www.italiancpp.org/2015/12/02/primi-passi-con-boost-python/</link>
+		<comments>https://www.italiancpp.org/2015/12/02/primi-passi-con-boost-python/#comments</comments>
+		<pubDate>Wed, 02 Dec 2015 18:12:00 +0000</pubDate>
+		<dc:creator><![CDATA[stefano]]></dc:creator>
+				<category><![CDATA[Tecnologie]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=5411</guid>
+		<description><![CDATA[&#8220;Finalmente un linguaggio più moderno e funzionale&#8221; Chi fra noi non vorrebbe programmare in un linguaggio multiparadigma, altamente espressivo, in piena evoluzione e con una vastissima libreria standard? Stiamo parlando, ovviamente, di&#8230; Python. Ci sono casi in cui il nostro solito campione (C++11), non è la scelta migliore. Per un prototipo da sviluppare in fretta, [&#8230;]]]></description>
+				<content:encoded><![CDATA[<h3>&#8220;Finalmente un linguaggio più moderno e funzionale&#8221;</h3>
+<p>Chi fra noi non vorrebbe programmare in un linguaggio multiparadigma, altamente espressivo, in piena evoluzione e con una vastissima libreria standard? Stiamo parlando, ovviamente, di&#8230; Python.</p>
+<p>Ci sono casi in cui il nostro solito campione (C++11), non è la scelta migliore. Per un prototipo da sviluppare in fretta, uno script “usa e getta”, il server di un&#8217;applicazione web, del codice di ricerca&#8230; la complessità del C++ è più un peso che un vantaggio.</p>
+<p>Come possiamo continuare a sfruttare l&#8217;efficienza del C++ o riutilizzare codice già esistente senza passare per cavernicoli fuori moda?</p>
+<p>L&#8217;interprete Python può caricare moduli scritti in C, compilati in librerie dinamiche. Boost.Python ci aiuta, enormemente, a prepararli. Uniamo la potenza di Boost e C++ alla semplicità di Python.</p>
+<p>Attenzione: anche se tutti gli esempi compilano, girano e passano i test questa non è la guida definiva su Boost.Python. Il codice è illustrativo, riflette solo la nostra (scarsa) esperienza con Boost.Python. Non esitate a segnalarci errori.</p>
+<h4>Un problema di velocità</h4>
+<p>Vediamo un caso (non troppo) pratico. Ci sono numeri uguali alla somma dei loro divisori (6 = 3 + 2 + 1; <a href="https://it.wikipedia.org/wiki/Numero_perfetto">numeri perfetti</a>). Il reparto marketing ha fiutato l&#8217;affare, ma è fondamentale calcolarne il più possibile prima della concorrenza. La velocità di sviluppo di Python è l&#8217;arma vincente, dopo 5 minuti rilasciamo Pefect 1.0<span style="font-family: Liberation Serif,serif;">®:</span></p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet class='ace_coliru_editor'></p>
+<pre>def trova_divisori(numero):
+	divisori = []
+	for i in range(1, numero):
+		if numero % i == 0:
+			divisori.append(i)
+	return divisori
+
+
+def perfetto(numero):
+	divisori = trova_divisori(numero)
+	return numero == sum(divisori)
+
+
+def trova_perfetti(quanti_ne_vuoi):
+	trovati = 0
+	numero_da_provare = 1
+	while (trovati &lt; quanti_ne_vuoi):
+		if perfetto(numero_da_provare):
+			print numero_da_provare
+			trovati += 1
+		numero_da_provare += 1
+
+
+if __name__ == "__main__":
+	trova_perfetti(4) # Cercatene di più a vostro rischio e pericolo.
+                        # L'attesa sarà lunga...
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet');</script>
+</DIV>
+<p>Questo codice non è perfettamente “pythonico” (<a href="https://www.python.org/dev/peps/pep-0008/">https://www.python.org/dev/peps/pep-0008/</a>), ma è stato veramente creato, testato e debuggato nel tempo che di solito spendiamo a leggere un&#8217;errore di compilazione<a class="sdfootnoteanc" href="#sdfootnote1sym" name="sdfootnote1anc"><sup>1</sup></a>.</p>
+<p>Peccato che il tempo di esecuzione sia paragonabile: 6,5 secondi sulla mia macchina di prova (che non è la vostra, non è il server di produzione, non è il PC del Python-boy che a lui gira tutto in un picosecondo&#8230; è un esempio!).</p>
+<p>Da bravi ingegneri cerchiamo il collo di bottiglia con il profiler:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet1 class='ace_coliru_editor'></p>
+<pre>import cProfile
+
+... stesso codice di prima ...
+
+if __name__ == "__main__":
+	cProfile.run('trova_perfetti(4)')
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet1');</script>
+</DIV>
+<p>Ed ecco il risultato:</p>
+<pre>   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    7.420    7.420 &lt;string&gt;:1()
+     8128    0.709    0.000    7.326    0.001 purePython-profiler.py:15(perfetto)
+        1    0.095    0.095    7.420    7.420 purePython-profiler.py:19(trova_perfetti)
+     8128    5.190    0.001    6.523    0.001 purePython-profiler.py:8(trova_divisori)
+    66318    0.819    0.000    0.819    0.000 {method 'append' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+     8128    0.514    0.000    0.514    0.000 {range}
+     8128    0.094    0.000    0.094    0.000 {sum}
+</pre>
+<p>trova_divisori &#8220;ruba&#8221; quasi tutti i 6,5 secondi!</p>
+<h4>boost::python</h4>
+<p>Nessuno nega che si possa scrivere codice efficiente in Python (Java, VisualQualcosa, il linguaggio funzionale di questa settimana&#8230;), ma ottimizzare l&#8217;algoritmo di trova_divisori è fuori discussione: vogliamo mostrare Boost.Python, non fare una lezione di Algebra.</p>
+<p>Per prima cosa, ci procuriamo Boost.Python. Su una macchina Linux è semplice quanto usare:</p>
+<pre>sudo apt-get install libboost-all-dev</pre>
+<p>Potreste dover installare anche i package “dev” di Python. Non è difficile trovare su internet istruzioni per tutte le piattaforme, ma installare (e compilare) può essere la parte più difficile. Non scoraggiatevi.</p>
+<p>Questo è il codice C++:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet2 class='ace_coliru_editor'></p>
+<pre>#include "boost/python.hpp"  // (1)
+
+boost::python::list trovaDivisori(uint64_t numero) // (2)
+{
+	boost::python::list divisori;
+	for (uint64_t i = 1; i &lt; numero; ++i)  // (3)
+		if (numero % i == 0)
+			divisori.append(i);
+	return divisori;
+}
+
+BOOST_PYTHON_MODULE(divisori)
+{
+    using namespace boost::python;
+    def("trova_divisori", trovaDivisori);  // (4)
+}
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet2');</script>
+</DIV></p>
+<ol>
+<li>Includiamo Boost.Python. Deve essere incluso prima di ogni altro eventuale header per evitare warning alla compilazione.</li>
+<li>La funzione equivalente a quella che vogliamo sostituire in Python. Manteniamo la stessa segnatura (prende un intero, ritorna una lista) dell&#8217;originale in Python per rendere la sostituzione &#8220;trasparente&#8221;.</li>
+<li>Anche l&#8217;algoritmo è esattamente lo stesso. Cambia solo la sintassi, e neanche di molto. In questo caso tutta la differenza la fa, probabilmente, il runtime C++.</li>
+<li>Dichiariamo la funzione nel modulo python con “def” (&#8230;come in Python).</li>
+</ol>
+<p>La guida (<a href="http://www.boost.org/doc/libs/1_59_0/libs/python/doc/">http://www.boost.org/doc/libs/1_59_0/libs/python/doc/</a>) spiega molto chiaramente tutti dettagli.</p>
+<p>La compilazione, purtroppo, non è esattamente elementare, dovrete probabilmente adattarla caso per caso. Vediamo l&#8217;esempio un passo alla volta (si tratta di una sola riga di comando, naturalmente):</p>
+<pre>g++ divisori.cpp			    compilo un file C++, qui tutto normale
+ -o divisori.so  			    nome del file: Python esige sia lo stesso del modulo
+-I /usr/include/python2.7/	            includo gli header di Python (ho Boost già nel path)
+-l python2.7 -lboost_python -lboost_system  includo Python, Boost
+-shared -fPIC -Wl,-export-dynamic           chiedo di creare una libreria dinamica
+</pre>
+<p>stackoverflow.com farà il resto. Notare che, per “par condicio”, non stiamo usando le opzioni di ottimizzazione di g++.</p>
+<p>Una volta che la nostra libreria è nel path di sistema (altrimenti Python non la trova) possiamo includerla nel codice Python:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet3 class='ace_coliru_editor'></p>
+<pre>from divisori import trova_divisori
+
+def perfetto(numero):
+	divisori = trova_divisori(int(numero)) # Adesso chiama quella in C++
+	return numero == sum(divisori)
+
+… stesso codice di prima …
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet3');</script>
+</DIV></p>
+<p>Tempo di esecuzione: poco meno di un secondo. Siamo testimoni del classico “l&#8217;80% del tempo si spreca nel 20% del codice”. Lo stesso algoritmo è 6 volte più veloce, ma l&#8217;unica parte su cui abbiamo perso tempo con la programmazione a basso livello (dopotutto, è ancora C++98!) è una sola funzione. Per tutto il resto possiamo ancora approfittare della praticità di Python.</p>
+<h4>Qualche possibilità in più</h4>
+<p>Boost.Python non si limita a convertire i tipi primitivi e a incapsulare le liste di Python in un adapter C++. Ecco una selezione dei casi “tipici” per chi programma nel “C con classi”:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet4 class='ace_coliru_editor'></p>
+<pre>class RiutilizzabileInPython 
+{
+	public:
+		RiutilizzabileInPython() {};
+		RiutilizzabileInPython(int x, const std::string&amp; y) {};
+		int variabileIstanza;
+		static void metodoStatico() {};
+		void metodo() {}
+};
+
+BOOST_PYTHON_MODULE(oop)
+{
+    using namespace boost::python;
+    class_&lt;RiutilizzabileInPython&gt;("implementata_in_CPP")	//(1)
+	.def(init&lt;int, std::string&gt;())				//(2)
+	.def_readwrite("variabile_istanza", &amp;RiutilizzabileInPython::variabileIstanza)//(3)
+	.def("metodo_statico", &amp;RiutilizzabileInPython::metodoStatico).staticmethod("metodo_statico") //(4)
+	.def("metodo", &amp;RiutilizzabileInPython::metodo)		// (5)
+    ;
+}
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet4');</script>
+</DIV></p>
+<ol>
+<li>&gt;Apriamo la dichiarazione della classe, passando la stringa con il nome Python.</li>
+<li>Traduzione del costruttore in Python (&#8230;init, ricorda niente?).</li>
+<li>La “tradizione” Python non disdegna le variabili di oggetto pubbliche. Eccone una.</li>
+<li>Solo una ripetizione del nome Python per esporre un metodo statico.</li>
+<li>Il classico, semplice metodo d&#8217;istanza.</li>
+</ol>
+<p>Una volta compilato (&#8230;tra il dire e il fare&#8230;) possiamo usare la classe C++ in Python:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet5 class='ace_coliru_editor'></p>
+<pre>from oop import implementata_in_CPP
+
+x = implementata_in_CPP()
+y = implementata_in_CPP(3, "ciao")
+x.variabil_istanza = 23
+implementata_in_CPP.metodo_statico()
+x.metodo()
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet5');</script>
+</DIV>
+<p>Boost si preoccupa di convertire parametri, tipi di ritorno eccetera. Ci sono opzioni per l&#8217;“esportazione” diretta delle classi della STL (e se non ci sono è possibile definirle) e per le policy dei tipi ritornati (per reference, per copia&#8230;). Le possibilità sono moltissime, affidatevi alla guida ufficiale.</p>
+<p>Quando il gioco si fa duro, Boost continua a giocare. Un assaggio:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet6 class='ace_coliru_editor'></p>
+<pre>class Problems
+{
+	public:
+		void stampa() {
+			std::cout &lt;&lt; "cout continua a funzionare" &lt;&lt; std::endl;
+		}
+
+		void eccezione() {
+			throw std::runtime_error("Oh, no!!!");
+		}
+
+		void coreDump() {
+			int * nullPointer = 0;
+			*nullPointer = 24;
+		}
+};
+
+BOOST_PYTHON_MODULE(oop)
+{
+    using namespace boost::python;
+
+     class_&lt;Problems&gt;("Problems")
+	.def("stampa", &amp;Problems::stampa)
+	.def("eccezione", &amp;Problems::eccezione)
+	.def("coreDump", &amp;Problems::coreDump)
+    ;
+}
+
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet6');</script>
+</DIV>
+<p>Il “test-driver” in Python, con un esempio di output:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet7 class='ace_coliru_editor'></p>
+<pre>from oop import Problems
+p = Problems()
+p.stampa()
+try:
+	p.eccezione()
+except RuntimeError as e:
+	print "Il codice C++ non ha funzionato: " + str(e);
+p.coreDump()
+
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet7');</script>
+</DIV></p>
+<pre>cout continua a funzionare				(1)
+Il codice C++ non ha funzionato: Oh, no!!!	        (2)
+Segmentation fault (core dumped)			(3)
+</pre>
+<ol>
+<li>Debuggare a colpi di std::cout non è una buona pratica&#8230; ma funziona!</li>
+<li>Le eccezioni sono perfettamente “inoltrate” al runtime Python.</li>
+<li>&#8230;pensavate di salvarvi, eh?</li>
+</ol>
+<h4>Multithreading</h4>
+<p>Boost.Python non è l&#8217;unica arma per affrontare problemi che richiedono efficienza. Il codice multi thread è un modo comune di aumentare le prestazioni, tanto per per trovare divisori che per minare Bitcoin o craccare password. Ecco una classe C++ che sta per saltare in un thread Python.</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet8 class='ace_coliru_editor'></p>
+<pre>class JobTrovaDivisori {
+
+	public:
+		JobTrovaDivisori(uint64_t numero, uint64_t begin, uint64_t end) :
+			numero(numero), begin(begin), end(end) {}
+		
+		boost::python::list trovaDivisori()
+		{
+			std::cout &lt;&lt; "Start" &lt;&lt; std::endl;
+
+			boost::python::list divisori;
+			for (uint64_t i = begin; i &lt; end; ++i)
+				 if (numero % i == 0)
+					divisori.append(i);
+
+			std::cout &lt;&lt; "end" &lt;&lt; std::endl;
+			return divisori;
+		}
+
+	private:
+		uint64_t numero;
+		uint64_t begin;
+ 		uint64_t end;
+};
+
+BOOST_PYTHON_MODULE(fattorizzare)
+{
+    using namespace boost::python;
+    class_&lt;JobTrovaDivisori&gt;("JobTrovaDivisori", init&lt;uint64_t, uint64_t, uint64_t&gt;())
+	.def("trova_divisori", &amp;JobTrovaDivisori::trovaDivisori)
+    ;
+}
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet8');</script>
+</DIV>
+<p>L&#8217;oggetto “JobTrovaDivisori” controlla se i numeri tra “begin” e “end” sono divisori di “numero”. Parallelizziamo il problema di trovare tutti i divisori in più “job” usando ogni oggetto su un intervallo diverso. Non ci sono dati condivisi, non abbiamo alcun problema di concorrenza. Questa è l&#8217;unica nota positiva di questa soluzione, ma ancora una volta tralasciamo la matematica (e l&#8217;ingegneria del software).</p>
+<p>La chiamata in Python:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet9 class='ace_coliru_editor'></p>
+<pre>from threading import Thread
+from fattorizzare import JobTrovaDivisori
+
+class Job():							# (1)
+	def __init__(self, numero, begin, end):
+		self.cppJob = JobTrovaDivisori(numero, begin, end)
+		self.divisori = []
+	
+	def __call__(self):
+		self.divisori = self.cppJob.trova_divisori()
+
+		
+def trova_divisori_parallelo(numero):			# (2)
+	limite = numero / 2
+
+	job1 = Job(numero, 1, limite)
+	job2 = Job(numero, limite, numero)
+
+	t1 = Thread(None, job1)
+	t2 = Thread(None, job2)
+	
+	t1.start()
+	t2.start()
+	t1.join()
+	t2.join()
+
+	return [job1.divisori, job2.divisori]
+
+
+if __name__ == "__main__":
+	print trova_divisori_parallelo(223339244);	#(3)
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet9');</script>
+</DIV></p>
+<ol>
+<li>Incapsuliamo il Job C++ per “non complicarci la vita” cercando di esportare un callable C++.</li>
+<li>Questo metodo crea 2 job, esegue il “fork e join” (o, come dicono oggi, &#8220;map e reduce&#8221;), poi stampa il risultato.</li>
+<li>Fattorizziamo un numero qualunque.</li>
+</ol>
+<p>Ecco l&#8217;output: ricordate le stampe di “Start” e “end” nella classe C++? Dopo circa 8 secondi e mezzo il calcolo termina, senza nessun parallelismo:</p>
+<pre>Start
+end
+Start
+end
+[[1L, 2L, 4L, 53L, 106L, 212L, 1053487L, 2106974L, 4213948L, 55834811L], [111669622L]]
+</pre>
+<p>Non è un caso. Gli oggetti Python sono protetti dal Global Interpreter Lock (GIL). Spetta al programmatore di ciascun thread rilasciarlo per dare il “via libera” agli altri thread. L&#8217;accortezza è di non chiamare codice puramente Python quando non si possiede il lock.</p>
+<p>Come al solito in C++ controlliamo le risorse col metodo RAII. L&#8217;idioma per il GIL è (<a href="https://wiki.python.org/moin/boost.python/HowTo#Multithreading_Support_for_my_function">https://wiki.python.org/moin/boost.python/HowTo#Multithreading_Support_for_my_function</a>):<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet10 class='ace_coliru_editor'></p>
+<pre>class ScopedGILRelease
+{
+public:
+    inline ScopedGILRelease(){
+        m_thread_state = PyEval_SaveThread();
+    }
+    inline ~ScopedGILRelease()    
+        PyEval_RestoreThread(m_thread_state);
+        m_thread_state = NULL;
+    }
+private:
+    PyThreadState * m_thread_state;
+};
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet10');</script>
+</DIV></p>
+<p>Rilasciamo il lock nella classe C++:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet11 class='ace_coliru_editor'></p>
+<pre>boost::python::list trovaDivisori() {
+	ScopedGILRelease noGil = ScopedGILRelease(); // (1)
+	std::cout &lt;&lt; "Start" &lt;&lt; std::endl;
+		
+	boost::python::list divisori;
+	for (uint64_t i = begin; i &lt; end; ++i)
+		 if (numero % i == 0)  
+			divisori.append(i); // (2) Possibile Core Dump!
+	std::cout &lt;&lt; "end" &lt;&lt; std::endl;
+	return divisori;
+}
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet11');</script>
+</DIV></p>
+<ol>
+<li>Quando questa variabile esce dallo scope, il lock è ri-acquisito, come se fosse uno smart pointer &#8220;al contrario&#8221;.</li>
+<li>Qui è dove prenderemo il core dump. Ma solo in produzione.</li>
+</ol>
+<p>Ricordate la clausola <em>“l&#8217;accortezza è di non chiamare codice puramente Python quando non si possiede il lock”</em>? La riga (2) potrebbe fare esattamente quello. Provate a far crescere la lista a dismisura (ad esempio, elimiate la “if (numero&#8230;” e salvate tutti i numeri nella lista). Credo che, probabilmente (affidatevi alle guide ufficiali per conoscere la vera risposta!) l&#8217;interprete Python deve allocare una lista più grossa, ma non avendo il lock qualcosa si corrompe.</p>
+<p>Racchiudiamo la sezione parallelizzabile in uno scope a parte, salvando i numeri in una variabile non condivisa con Python:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet12 class='ace_coliru_editor'></p>
+<pre>boost::python::list trovaDivisori() {
+	std::cout &lt;&lt; "Start" &lt;&lt; std::endl;
+	std::vector&lt;uint64_t&gt; divisoriTemp;
+	{
+	ScopedGILRelease noGil = ScopedGILRelease();
+		for (uint64_t i = begin; i &lt; end; ++i)
+			 if (numero % i == 0) 
+				divisoriTemp.push_back(i);
+		std::cout &lt;&lt; "end" &lt;&lt; std::endl;
+	} // noGil esce dallo scope. Riprendiamo il lock.
+	boost::python::list divisori;
+	BOOST_FOREACH(uint64_t n, divisoriTemp) {
+		divisori.append(n);
+	}
+	return divisori;
+}
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet12');</script>
+</DIV><br />
+Dopo 6 secondi e mezzo (-2 rispetto alla versione “accidentalmente sequenziale”) otteniamo l&#8217;interleaving previsto (Start Start &#8211; end end). Quei 2 secondi possiamo spenderli per pensare a una soluzione meno rimediata.</p>
+<p>Questo conclude l&#8217;introduzione a Boost.Python. Ora conosciamo un modo per “incastrare” moduli C++ nelle applicazioni Python, sia per riutilizzarli che per ragioni di efficienza. Boost.Python connette i due mondi senza sacrificare la semplicità di Python e senza limitare le possibilità in C++, pur se è necessaria qualche accortezza. <em>Soprattutto, d&#8217;ora in avanti avremo l&#8217;ultima parola nel classico flame “Python vs C++” su tutti i forum del mondo!</em></p>
+<div id="sdfootnote1">
+<p class="sdfootnote"><a class="sdfootnotesym" href="#sdfootnote1anc" name="sdfootnote1sym">1</a>E&#8217; vero che si fa prima a fare un programma in Python che aggiustare un solo bug C++.</p>
+<p>Fate la prova. Pronti, partenza, via: </p>
+<pre>
+/usr/include/c++/4.8/bits/stl_map.h:646:7: note: no known conversion for argument 1 from 
+‘int’ to ‘std::map&lt;int, std::map&lt;std::basic_string&lt;char&gt;, std::basic_string&lt
+;char&gt; &gt; &gt;::iterator {aka std::_Rb_tree_iterator&lt;std::pair&lt;const int, std::map&lt;std::basic_string&lt;char&gt;, std::basic_string&lt;char&gt; &gt; &gt; &gt;}’
+<p class="sdfootnote">/usr/include/c++/4.8/bits/stl_map.h:670:9: note: template&lt;class 
+_InputIterator&gt; void std::map&lt;_Key, _Tp, _Compare, _Alloc&gt;::insert(_InputIterator, 
+_InputIterator) [with _InputIterator = _InputIterator; _Key = int; _Tp = 
+std::map&lt;std::basic_string&lt;char&gt;, std::basic_string&lt;char&gt; &gt;; _Compare 
+= std::less&lt;int&gt;; _Alloc = std::allocator&lt;std::pair&lt;const int, std::map&lt;std::basic_string&lt;char&gt;, std::basic_string&lt;char&gt; &gt; &gt; &gt;
+</pre>
+</div>
+]]></content:encoded>
+			<wfw:commentRss>https://www.italiancpp.org/2015/12/02/primi-passi-con-boost-python/feed/</wfw:commentRss>
+		<slash:comments>2</slash:comments>
+	<post-id xmlns="com-wordpress:feed-additions:1">5411</post-id>	</item>
+		<item>
+		<title>First steps with Boost.Python</title>
+		<link>https://www.italiancpp.org/2015/12/02/first-steps-with-boost-python/</link>
+		<pubDate>Wed, 02 Dec 2015 18:11:41 +0000</pubDate>
+		<dc:creator><![CDATA[stefano]]></dc:creator>
+				<category><![CDATA[Tecnologie]]></category>
+		<category><![CDATA[boost]]></category>
+		<category><![CDATA[python]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=5479</guid>
+		<description><![CDATA[&#8220;Finally a modern, pragmatic language.&#8221; Who among us wants to work with a multi-paradigm, highly-expressive, fast-evolving language with a huge standard library? We are talking, as usual, about&#8230; Python. There are scenarios where our trusty champion (C++11) doesn&#8217;t cut it. For a prototype to rush out in a hurry, a &#8220;single use&#8221; script, the server [&#8230;]]]></description>
+				<content:encoded><![CDATA[<h3>&#8220;Finally a modern, pragmatic language.&#8221;</h3>
+<p>Who among us wants to work with a multi-paradigm, highly-expressive, fast-evolving language with a huge standard library? We are talking, as usual, about&#8230; Python.</p>
+<p>There are scenarios where our trusty champion (C++11) doesn&#8217;t cut it. For a prototype to rush out in a hurry, a &#8220;single use&#8221; script, the server side of a web application, research code&#8230; the complexity of C++ is more a problem than an asset.</p>
+<p>How can we continue to take advantage of C++ efficiency or re-use some already available code without looking like old-fashioned cavemen?</p>
+<p>The Python interpreter can load modules written in C, compiled as dynamic libraries. Boost.Python helps, a lot, to prepare them. It joins the power of Boost and C++ with the ease of use of Python.</p>
+<p>Danger: even if all the examples compile, run and pass the tests this is not the ultimate guide about Boost.Python. The code is meant to be an example, it mirrors our (minimal) experience with Boost.Python. Do not hesitate to report any error we made.</p>
+<h4>A speed problem</h4>
+<p>Let&#8217;s see a (not too) practical use case. There are numbers which are equal to the sum of their divisors (6 = 3 + 2 + 1; <a href="https://en.wikipedia.org/wiki/Perfect_number">perfect numbers</a>). The marketing department believes it is something hot, but we must compute as many perfect numbers as possible and release them before our competitors. The development speed enabled by Python is key, after 5 minutes we release Pefect 1.0<span style="font-family: Liberation Serif,serif;">®:</span></p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet13 class='ace_coliru_editor'></p>
+<pre>def find_divisors(number):
+	divisors = []
+	for i in range(1, number):
+		if number % i == 0:
+			divisors.append(i)
+	return divisors
+
+
+def perfect(number):
+	divisors = find_divisors(number)
+	return number == sum(divisors)
+
+
+def find_perfect_numbers(how_many):
+	found = 0
+	number_to_try = 1
+	while (found &lt; how_many):
+		if perfect(number_to_try):
+			print number_to_try
+			found += 1
+		number_to_try += 1
+
+
+if __name__ == "__main__":
+	find_perfect_numbers(4)  # Look for more at your own risk.
+							 # And prepare for a long wait.
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet13');</script>
+</DIV>
+<p>This code is not really &#8220;pythonic&#8221; (<a href="https://www.python.org/dev/peps/pep-0008/">https://www.python.org/dev/peps/pep-0008/</a>), but it really was created, tested and debugged in less time that it takes to read a C++ compilation error.<a class="sdfootnoteanc" href="#sdfootnote1sym" name="sdfootnote1anc"><sup>1</sup></a>.</p>
+<p>Unfortunately the execution time is similar: 6.5 seconds on my test machine (which is not your test machine, nor the production server, nor the Python fanboy&#8217;s PC which can run everything in a picosecond&#8230; it&#8217;s an example!).</p>
+<p>Let&#8217;s look for the bottleneck with the profiler, like the savvy engineers we are.</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet14 class='ace_coliru_editor'></p>
+<pre>import cProfile
+
+... same code as before ...
+
+if __name__ == "__main__":
+	cProfile.run("find_perfect_numbers(4)")
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet14');</script>
+</DIV>
+<p>Here is the outcome:</p>
+<pre>   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    5.657    5.657 &lt;string&gt;:1()
+     8128    0.283    0.000    5.582    0.001 purePython.py:16(perfect)
+        1    0.075    0.075    5.657    5.657 purePython.py:21(find_perfect_numbers)
+     8128    4.294    0.001    5.229    0.001 purePython.py:8(find_divisors)
+    66318    0.528    0.000    0.528    0.000 {method 'append' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+     8128    0.406    0.000    0.406    0.000 {range}
+     8128    0.070    0.000    0.070    0.000 {sum}
+</pre>
+<p>find_divisors &#8220;steals&#8221; almost all of the 5.6 seconds it took to run this test!</p>
+<h4>boost::python</h4>
+<p>No-one denies that it is possible to write efficient code in Python (Java, VisualWhatever, this week&#8217;s functional language&#8230;), but optimize the algorithm of find_divisors is out of the question: we are here to show off Boost.Python, not to give an Algebra lesson.</p>
+<p>First of all, we get our hands on Boost.Python. On a Linux box this is as easy as typing:</p>
+<pre>sudo apt-get install libboost-all-dev</pre>
+<p>You may need to install Python&#8217;s &#8220;dev&#8221; packages. It is easy to find instructions for any platform over the web, but installing (and compiling) the library may be the most difficult step. Do not lose heart.</p>
+<p>This is the C++ code:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet15 class='ace_coliru_editor'></p>
+<pre>#include "boost/python.hpp"  // (1)
+
+boost::python::list findDivisors(uint64_t number) // (2)
+{
+	boost::python::list divisors;
+	for (uint64_t i = 1; i &lt; number; ++i)  // (3)
+		if (number % i == 0)
+			divisors.append(i);
+	return divisors;
+}
+
+BOOST_PYTHON_MODULE(divisors)
+{
+    using namespace boost::python;
+    def("find_divisors", findDivisors);  // (4)
+}
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet15');</script>
+</DIV></p>
+<ol>
+<li>Include Boost.Python. It must be included before any other header to avoid compilation warning.</li>
+<li>The function corresponding to the one we want to replace in Python. It keeps the same signature (takes an integer, returns a list) as the Python original to achieve a &#8220;transparent&#8221; replacement.</li>
+<li>Even the logic is exactly the same. Just a few syntax differences. The C++ runtime should make the difference in this case.</li>
+<li>Declare the function with “def” (&#8230;hey, it&#8217;s just like Python).</li>
+</ol>
+<p>The guide (<a href="http://www.boost.org/doc/libs/1_59_0/libs/python/doc/">http://www.boost.org/doc/libs/1_59_0/libs/python/doc/</a>) has a clear explanation with all the details.</p>
+<p>Compiling, sadly, is not so easy, we will have to adapt to your case. Let&#8217;s check a step-by-step example (naturally, this is a single line on the console):</p>
+<pre>g++ divisors.cpp			    compile a C++ file, as usual
+ -o divisors.so  			    file name: Python demands it is the same as the module name
+-I /usr/include/python2.7/	            to include Python's headers (I already set boost in the path)
+-l python2.7 -lboost_python -lboost_system  include python, boost
+-shared -fPIC -Wl,-export-dynamic           request to create a dynamic library
+</pre>
+<p>stackoverflow.com will cover the rest. Notice that &#8220;to level the play field&#8221;, I do not use optimization options in g++.</p>
+<p>Once our library is in the system path (some place where Python can find it) we can include it in Python:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet16 class='ace_coliru_editor'></p>
+<pre>from divisors import find_divisors
+
+def perfect(number):
+	divisors = find_divisors(int(number))  # Calls the C++ implementation
+	return number == sum(divisors)
+
+… same code as before …
+
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet16');</script>
+</DIV></p>
+<p>Run time: a bit less than a second. We are witnessing the classic &#8220;80% of time is wasted by 20% of the code&#8221;. The same algorithm is 6 times faster, but the part where we had to deal with low level programming (yes, still C++98!) is just one function. Everywhere else we can still take advantage of Python&#8217;s practicality.</p>
+<h4>Some more opportunities</h4>
+<p>Boost.Python is not limited to primitive types conversion or adapters to pass Python lists in C++. Here is a selection of &#8220;common&#8221; cases often met when doing “C with classes&#8221;:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet17 class='ace_coliru_editor'></p>
+<pre>class ReuseInPython 
+{
+	public:
+		ReuseInPython() {};
+		ReuseInPython(int x, const std::string&amp; y) {};
+		int instanceVariable;
+		static void staticMethod() {};
+		void method() {}
+};
+
+BOOST_PYTHON_MODULE(oop)
+{
+    using namespace boost::python;
+    class_&lt;ReuseInPython&gt;("implemented_in_CPP")		// (1)
+	.def(init&lt;int, std::string&gt;())  // (2)
+	.def_readwrite("instance_variable", &amp;ReuseInPython::instanceVariable)  // (3)
+	.def("static_method", &amp;ReuseInPython::staticMethod).staticmethod("static_method")  // (4)        
+	.def("method", &amp;ReuseInPython::method)  // (5)
+    ;
+}
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet17');</script>
+</DIV></p>
+<ol>
+<li>Open a class declaration, passing a string with its alias in Python.</li>
+<li>Translate the constructor in Python (&#8230;init, does that ring a bell?).</li>
+<li>The Python &#8220;translation&#8221; won&#8217;t balk at public instance variables. Here is one.</li>
+<li>Only repeat the Python name to expose a static method.</li>
+<li>The run-of-the mill, basic instance method.</li>
+</ol>
+<p>Once it is compiled (&#8230;sounds easy, but&#8230;) we can use the C++ class in Python:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet18 class='ace_coliru_editor'></p>
+<pre>from oop import implemented_in_CPP
+
+x = implemented_in_CPP()
+y = implemented_in_CPP(3, "hello")
+x.instance_variable = 23
+implemented_in_CPP.static_method()
+x.method()
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet18');</script>
+</DIV>
+<p>Boost takes care of converting parameters, return types etcetera. There are options to &#8220;export&#8221; directly STL classes (and more can be defined if something is missing) and for the return type policy (by reference, by copy&#8230;). There are really many options, trust the official guide.</p>
+<p>When the going gets tough, Boost keeps going. A sample:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet19 class='ace_coliru_editor'></p>
+<pre>class Problems
+{
+	public:
+		void print() {
+			std::cout &lt;&lt; "cout still works" &lt;&lt; std::endl;
+		}
+
+		void exception() {
+			throw std::runtime_error("Oh, no!!!");
+		}
+
+		void coreDump()	{
+			int * nullPointer = 0;
+			*nullPointer = 24;
+		}
+};
+
+BOOST_PYTHON_MODULE(oop)
+{
+    using namespace boost::python;
+
+    class_&lt;Problems&gt;("Problems")
+	.def("print_something", &amp;Problems::print  // Print is a Python keyword.    
+	.def("exception", &amp;Problems::exception)
+	.def("coreDump", &amp;Problems::coreDump)
+    ;
+}
+
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet19');</script>
+</DIV>
+<p>The Python &#8220;test-driver&#8221;, with an example of the output:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet20 class='ace_coliru_editor'></p>
+<pre>from oop import Problems
+p = Problems()
+p.print_something()
+try:
+	p.exception()
+except RuntimeError as e:
+	print "The C++ code bombed: " + str(e);
+p.coreDump()
+
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet20');</script>
+</DIV></p>
+<pre>cout still works	(1)
+The C++ code bombed: Oh, no!!!	(2)
+Segmentation fault (core dumped)	(3)
+</pre>
+<ol>
+<li>Debugging with std::cout is not a recommended practice&#8230; but it works!</li>
+<li>Exception are perfectly &#8220;thrown&#8221; to the Python runtime.</li>
+<li>&#8230;well, what did you expect?</li>
+</ol>
+<h4>Multithreading</h4>
+<p>Boost.Python is not the only weapon to tackle problems that demand efficiency.. Multithreading is a common way to improve performance, as good when computing divisors as to mine bitcoins or crack passwords. Here is a C++ class which is about to jump in a Python thread:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet21 class='ace_coliru_editor'></p>
+<pre>class JobFindDivisors {
+
+	public:
+		JobFindDivisors(uint64_t number, uint64_t begin, uint64_t end) :
+			number(number), begin(begin), end(end) {}
+		
+		boost::python::list findDivisors()
+		{
+			std::cout &lt;&lt; "Start" &lt;&lt; std::endl;
+
+			boost::python::list divisors;
+			for (uint64_t i = begin; i &lt; end; ++i)
+				 if (number % i == 0)
+					divisors.append(i);
+
+			std::cout &lt;&lt; "end" &lt;&lt; std::endl;
+			return divisors;
+		}
+
+	private:
+		uint64_t number;
+		uint64_t begin;
+ 		uint64_t end;
+};
+
+BOOST_PYTHON_MODULE(factor)
+{
+    using namespace boost::python;
+    class_&lt;JobFindDivisors&gt;("JobFindDivisors", init&lt;uint64_t, uint64_t, uint64_t&gt;())
+	.def("find_divisors", &amp;JobFindDivisors::findDivisors)
+    ;
+}
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet21');</script>
+</DIV>
+<p>The &#8220;JobFindDivisors&#8221; object checks if the numbers between &#8220;begin&#8221; and &#8220;end&#8221; are divisors of &#8220;number&#8221;. We parallelize the problem of finding all the divisors in many “jobs”, dedicating each object to a different interval. No data is shared between jobs, there are no concurrency problems. This is the only advantage of such a solution, but once again let&#8217;s forget about math (and proper software engineering).</p>
+<p>The Python call:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet22 class='ace_coliru_editor'></p>
+<pre>from threading import Thread
+from factor import JobFindDivisors
+
+class Job():									# (1)
+	def __init__(self, number, begin, end):
+		self.cppJob = JobFindDivisors(number, begin, end)
+		self.divisors = []
+	
+	def __call__(self):
+		self.divisors = self.cppJob.find_divisors()
+
+		
+def find_divisors_in_parallel(number):			# (2)
+	limit = number / 2
+
+	job1 = Job(number, 1, limit)
+	job2 = Job(number, limit, number)
+
+	t1 = Thread(None, job1)
+	t2 = Thread(None, job2)
+	
+	t1.start()
+	t2.start()
+	t1.join()
+	t2.join()
+
+	return [job1.divisors, job2.divisors]
+
+
+if __name__ == "__main__":
+	print  find_divisors_in_parallel(223339244); # (3)
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet22');</script>
+</DIV></p>
+<ol>
+<li>Encapsulate the C++ Job to &#8220;keep it simple&#8221;, without exporting a C++ callable.</li>
+<li>This method creates 2 jobs, does &#8220;fork and join&#8221; (or, as they say nowadays, &#8220;map and reduce&#8221;), then prints the results.</li>
+<li>Factoring any number would do.</li>
+</ol>
+<p>The output: do you remember the &#8220;Start&#8221; and &#8220;end&#8221; printouts in the C++ class? After around 8 seconds the computation terminates, with no parallelism whatsoever:</p>
+<pre>Start
+end
+Start
+end
+[[1L, 2L, 4L, 53L, 106L, 212L, 1053487L, 2106974L, 4213948L, 55834811L], [111669622L]]
+</pre>
+<p>Working as designed. Python&#8217;s objects are protected by the Global Interpreter Lock (GIL). It is up to the programmer to release it in each thread to &#8220;give way&#8221; to the other threads. The trick is to call pure Python code only when holding the lock.</p>
+<p>As usual in C++ we control resources with RAII. The idiom for the GIL is (<a href="https://wiki.python.org/moin/boost.python/HowTo#Multithreading_Support_for_my_function">https://wiki.python.org/moin/boost.python/HowTo#Multithreading_Support_for_my_function</a>):<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet23 class='ace_coliru_editor'></p>
+<pre>class ScopedGILRelease
+{
+public:
+    inline ScopedGILRelease(){
+        m_thread_state = PyEval_SaveThread();
+    }
+    inline ~ScopedGILRelease()    
+        PyEval_RestoreThread(m_thread_state);
+        m_thread_state = NULL;
+    }
+private:
+    PyThreadState * m_thread_state;
+};
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet23');</script>
+</DIV></p>
+<p>Release the lock in the C++ class:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet24 class='ace_coliru_editor'></p>
+<pre>boost::python::list findDivisors() {
+	ScopedGILRelease noGil = ScopedGILRelease();  // (1)
+	std::cout &lt;&lt; "Start" &lt;&lt; std::endl;
+
+	boost::python::list divisors;
+	for (uint64_t i = begin; i &lt; end; ++i)
+		 if (number % i == 0)
+			divisors.append(i);  // (2) Possible core dump!
+
+	std::cout &lt;&lt; "end" &lt;&lt; std::endl;
+	return divisors;
+}
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet24');</script>
+</DIV></p>
+<ol>
+<li>When this variable goes out of scope, the lock is taken again. Like a &#8220;reversed&#8221; smart pointer.</li>
+<li>Here is where we will certainly take a core dump. But only in production.</li>
+</ol>
+<p>Do you remember that <em>&#8220;the trick is to call pure Python code only when holding the lock&#8221;</em>? Line (2) may do just that, without the lock. You can try to massively grow the list (say erase the “if (number&#8230;” and save all the number in the list). I believe that, maybe (please read the official documents for the real answer!) the Python interpreter must allocate a bigger list, but without the lock all it gets is corrupted memory.</p>
+<p>Let&#8217;s encapsulate the parallelizable section in a dedicated scope, saving the numbers in a variable which we do not share with Python:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet25 class='ace_coliru_editor'></p>
+<pre>boost::python::list findDivisors()
+{
+	std::cout &lt;&lt; "Start" &lt;&lt; std::endl;
+	std::vector divisorsTemp;
+	boost::python::list divisors;
+	{
+		ScopedGILRelease noGil = ScopedGILRelease();
+		for (uint64_t i = begin; i &lt; end; ++i)
+			if (number % i == 0)
+				divisorsTemp.push_back(i);
+	} // noGil goes out of scope, we take the lock again.
+	BOOST_FOREACH(uint64_t n, divisorsTemp) {
+		divisors.append(n);
+	}
+	std::cout &lt;&lt; "end" &lt;&lt; std::endl;
+	return divisors;
+}
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet25');</script>
+</DIV><br />
+After six and a half seconds (-2 compared with the &#8220;accidentally sequential&#8221; version) we get the expected interleaving (Start Start &#8211; end end). We can invest those 2 seconds to think to a less duck-tape-and-chewing-gum-oriented solution.</p>
+<p>This completes the introduction to Boost.Python. Now we know how to &#8220;push&#8221; C++ modules in Python applications either to re-use, either for efficiency reasons. Boost.Python connects the two worlds without sacrificing Python&#8217;s simplicity and without adding constraints to C++, even if some spots do need care. <em>Above all, from now on we are going to always have the last word in the unavoidable &#8220;Python vs C++&#8221; flame in every forum of the world.</em></p>
+<div id="sdfootnote1">
+<p class="sdfootnote"><a class="sdfootnotesym" href="#sdfootnote1anc" name="sdfootnote1sym">1</a>It is true: it takes less time to create a whole program in Python than to fix a single bug in C++.</p>
+<p>Try it. Ready, steady, go:</p>
+<pre>/usr/include/c++/4.8/bits/stl_map.h:646:7: note: no known conversion for argument 1 from 
+‘int’ to ‘std::map&lt;int, std::map&lt;std::basic_string&lt;char&gt;, std::basic_string&amp;lt
+;char&gt; &gt; &gt;::iterator {aka std::_Rb_tree_iterator&lt;std::pair&lt;const int, std::map&lt;std::basic_string&lt;char&gt;, std::basic_string&lt;char&gt; &gt; &gt; &gt;}’
+</pre>
+<p class="sdfootnote">/usr/include/c++/4.8/bits/stl_map.h:670:9: note: template&lt;class _InputIterator&gt; void std::map&lt;_Key, _Tp, _Compare, _Alloc&gt;::insert(_InputIterator, _InputIterator) [with _InputIterator = _InputIterator; _Key = int; _Tp = std::map&lt;std::basic_string&lt;char&gt;, std::basic_string&lt;char&gt; &gt;; _Compare = std::less&lt;int&gt;; _Alloc = std::allocator&lt;std::pair&lt;const int, std::map&lt;std::basic_string&lt;char&gt;, std::basic_string&lt;char&gt; &gt; &gt; &gt;</p>
+</div>
+]]></content:encoded>
+		<post-id xmlns="com-wordpress:feed-additions:1">5479</post-id>	</item>
+		<item>
+		<title>Cat: a C++14 functional library</title>
+		<link>https://www.italiancpp.org/2015/04/29/cat-a-c14-functional-library/</link>
+		<comments>https://www.italiancpp.org/2015/04/29/cat-a-c14-functional-library/#comments</comments>
+		<pubDate>Wed, 29 Apr 2015 14:20:36 +0000</pubDate>
+		<dc:creator><![CDATA[Nicola Bonelli]]></dc:creator>
+				<category><![CDATA[Tecnologie]]></category>
+		<category><![CDATA[C++14]]></category>
+		<category><![CDATA[Functional Programming]]></category>
+		<category><![CDATA[Library]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=4682</guid>
+		<description><![CDATA[The rise of functional programming has affected many programming languages, and C++ could not escape from it. The need of paradigms like partial application (via currying) and functional composition are now a reality also in C++, and the spread of libraries like FIT and FTL is an evidence. Cat is a C++14 library, inspired by Haskell. Cat aims at pushing the [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p><img data-attachment-id="4688" data-permalink="https://www.italiancpp.org/2015/04/29/cat-a-c14-functional-library/haskell-logo/" data-orig-file="https://i2.wp.com/www.italiancpp.org/wp-content/uploads/2015/04/haskell-logo.png?fit=200%2C141&amp;ssl=1" data-orig-size="200,141" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="haskell-logo" data-image-description="" data-medium-file="https://i2.wp.com/www.italiancpp.org/wp-content/uploads/2015/04/haskell-logo.png?fit=200%2C141&amp;ssl=1" data-large-file="https://i1.wp.com/www.italiancpp.org/wp-content/uploads/2015/04/haskell-logo.png?fit=200%2C141&amp;ssl=1" class="aligncenter wp-image-4688" src="https://i0.wp.com/www.italiancpp.org/wp-content/uploads/2015/04/haskell-logo.png?resize=163%2C115" alt="haskell-logo" data-recalc-dims="1" /></p>
+<p style="text-align: justify;">The rise of functional programming has affected many programming languages, and C++ could not escape from it. The need of paradigms like partial <em>application</em> (via <em>currying</em>) and functional <em>composition</em> are now a reality also in C++, and the spread of libraries like <a title="FIT Library" href="https://github.com/pfultz2/Fit" target="_blank">FIT </a>and <a title="FLT Library" href="https://github.com/beark/ftl" target="_blank">FTL i</a>s an evidence.</p>
+<p style="text-align: justify;"><a href="http://cat.github.io/" target="_blank"><strong>Cat</strong> </a>is a <strong>C++14</strong> library, inspired by <em>Haskell. Cat </em>aims at pushing the functional programming approach in C++ to another level.</p>
+<p style="text-align: justify;"><strong>The added value of Cat is twofold.</strong> On one hand it works for filling the gap in the language with respect to functional programming. For this purpose, some <strong>utility functions</strong> and <strong>classes</strong> are provided (callable wrappers with partial application, sections, utilities for tuples, extended type traits, alternative forwarding functions, etc).</p>
+<p style="text-align: justify;">On the other hand <strong>Cat</strong> promotes the use of<strong> generic programming</strong> <strong>with type classes, </strong>inspired by <em>Category Theory</em>. A framework for building type-classes along with a dozen of them (<em>Functor</em>, <em>Applicative</em>, <em>Monoids</em>, <em>Monads</em>, <em>Read</em>, <em>Show</em>, to mention just a few) and the related instances dropped in the context of C++ are included in the library.</p>
+<h6 style="text-align: justify;"><strong>Cat</strong> is distributed under the <strong>MIT license</strong> and it’s available for download at the address <a href="http://cat.github.io/" target="_blank">https://cat.github.io</a>.</h6>
+]]></content:encoded>
+			<wfw:commentRss>https://www.italiancpp.org/2015/04/29/cat-a-c14-functional-library/feed/</wfw:commentRss>
+		<slash:comments>2</slash:comments>
+	<post-id xmlns="com-wordpress:feed-additions:1">4682</post-id>	</item>
+		<item>
+		<title>I compilatori e lo standard ISO: tabella comparativa</title>
+		<link>https://www.italiancpp.org/2014/03/02/tabella-compilatori/</link>
+		<pubDate>Sun, 02 Mar 2014 21:52:12 +0000</pubDate>
+		<dc:creator><![CDATA[Raffaele Rialdi]]></dc:creator>
+				<category><![CDATA[Tecnologie]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=2850</guid>
+		<description><![CDATA[Tutti i produttori di compilatori hanno preso molto sul serio la necessità di essere aderenti allo standard ISO. Con le specifiche C++11 e l&#8217;ormai imminente C++14 ogni sviluppatore ha la possibilità di &#8220;mettere in cassaforte&#8221; i sorgenti garantendogli lunga vita e sopravvivenza al compilatore utilizzato. Non è quindi una rincorsa alle mode ma un vero [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p style="text-align: justify;">Tutti i produttori di compilatori hanno preso molto sul serio la necessità di essere aderenti allo standard ISO.<br />
+Con le specifiche C++11 e l&#8217;ormai imminente C++14 ogni sviluppatore ha la possibilità di &#8220;mettere in cassaforte&#8221; i sorgenti garantendogli lunga vita e sopravvivenza al compilatore utilizzato.<br />
+Non è quindi una rincorsa alle mode ma un vero e proprio investimento che garantisce una migliore gestione del ciclo di vita del software.</p>
+<p style="text-align: justify;">Come mostra il file allegato, i due compilatori che hanno già raggiunto lo scopo sono Clang e GCC, con sole poche mancanze.<br />
+Sul lato Intel, che tradizionalmente ha molto a cuore le librerie di calcolo e il supporto al parallelismo, ho avuto modo di parlare direttamente con un responsabile del compilatore il quale mi ha confermato la volontà di Intel di raggiungere la piena conformità di C++11 e C++14.<br />
+Per quanto riguarda Microsoft, la recente CTP del compilatore ha già aggiunto molti tasselli mancanti ma Alessandro Contenti, speciale ospite alla nostra track C++ dei recenti <a title="Community Days 2014" href="http://www.communitydays.it/events/2014/" target="_blank">Community Days 2014</a>, ci ha raccontato il lavoro in corso sul compilatore che presto porterà alla copertura degli standard.</p>
+<p style="text-align: justify;"><a href="http://www.italiancpp.org/wp-content/uploads/2014/03/CppISO-Feb2014-r1.pdf">CppISO-Feb2014-r1</a></p>
+<p style="text-align: justify;">La tabella è stata creata dal sottoscritto e potrebbe contenere errori. Se ne trovaste uno sarò ben lieto di aggiornarla.</p>
+<p style="text-align: justify;">Enjoy,<br />
+Raffaele</p>
+]]></content:encoded>
+		<post-id xmlns="com-wordpress:feed-additions:1">2850</post-id>	</item>
+	</channel>
+</rss>

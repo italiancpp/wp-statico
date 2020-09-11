@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20141108T090000
+DTEND;TZID=Europe/Rome:20141108T180000
+DTSTAMP:20200908T151316
+CREATED:20140912T092200Z
+LAST-MODIFIED:20170824T064823Z
+UID:3476-1415437200-1415469600@www.italiancpp.org
+SUMMARY:Meetup a Bologna
+DESCRIPTION: \nTutte le foto\n� \nLeggi il post sul meetup\n� \nQuesto meetup è piaciuto?\n� \nSabato 8 Novembre a Bologna si parlava C++!\n \n50+ partecipanti.\n \n \n \nSala Consiliare &#8220;Quartiere Porto&#8221;\, a meno di 2 km dalla Stazione Centrale!\n \n\nProgramma della giornata (collegamenti a dettagli e slides):\n  \n\n\norario\ncosa\nspeaker\n\n\n\n9.00 &#8211; 9.30\nRegistrazione\n-\n\n\n9.30 &#8211; 10.00\nPresentazione della giornata\nMarco Arena\n\n\n10.15 &#8211; 11.15\nConvincetemi ad usare il C++14\nRoberto Bettazzoni\n\n\n11.15 &#8211; 11.30\nPausa\n-\n\n\n11.30 &#8211; 13.00\nSeeing monads in C++\nBartosz Milewski\n\n\n13.00 &#8211; 14.00\nPranzo Insieme\n-\n\n\n14.00 &#8211; 14.30\nMeet the Rule of Zero\nMarco Arena\n\n\n14.40 &#8211; 15.40\nGoing native with less coupling: Dependency Injection in C++\nDaniele Pallastrelli\n\n\n15.40 &#8211; 15.50\nPausa\n-\n\n\n15.50 &#8211; 16.20\nSviluppo di un framework di unit-test C++\nGianfranco Zuliani\n\n\n16.30 &#8211; 17.15\nAsk Us Everything\nTutti\n\n\n17.15 &#8211; 17.30\nSaluti e Fine Evento\nMarco Arena\n\n\n\n\n\n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-bologna-2014/
+LOCATION:via dello Scalo\, 21\, Bologna\, Italia
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

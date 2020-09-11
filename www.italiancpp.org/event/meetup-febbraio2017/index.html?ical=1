@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20170222T200000
+DTEND;TZID=Europe/Rome:20170222T223000
+DTSTAMP:20200908T151014
+CREATED:20170123T091209Z
+LAST-MODIFIED:20170824T065124Z
+UID:7413-1487793600-1487802600@www.italiancpp.org
+SUMMARY:Mini-Meetup Serale / Modena
+DESCRIPTION: \nMarco Arena\, fondatore e presidente dell&#8217;Italian C++ Community nonché assiduo moderatore di Coding Dojo\, ha presentato le novità del C++17 “for the daily job”\, mostrando esempi sulle ultime versioni dei maggiori compilatori esistenti – GCC\, Visual Studio 2017\, Clang – per capire chi supporta cosa. \nLa serata si è trasformata in una discussione interattiva\, un momento di incontro\, tra le persone interessate la C++ nel Modenese. 16 partecipanti. \nIl meetup si è concluso in pizzeria con chi è potuto rimanere. \n\n                                             \n� \n� \n \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-febbraio2017/
+LOCATION:Via Strada Barchetta\, 77\, Modena\, 41123\, Italia
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

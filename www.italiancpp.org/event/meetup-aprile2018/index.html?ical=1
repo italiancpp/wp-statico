@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20180419T200000
+DTEND;TZID=Europe/Rome:20180419T223000
+DTSTAMP:20200908T154600
+CREATED:20180318T142839Z
+LAST-MODIFIED:20180420T071958Z
+UID:8513-1524168000-1524177000@www.italiancpp.org
+SUMMARY:Meetup Aprile / Modena
+DESCRIPTION: \nMocking & Testing con Google Mock\nSpeaker: Yuri Valentini\nUn nuovo appuntamento a Modena dedicato al C++ organizzato in collaborazione con l&#8217;associazione ConoscereLinux. \n  \nIn questa serata avremo il piacere di ospitare Yuri Valentini: \n20:00 \nArrivo e saluti iniziali &#8211; Marco Arena \n20:10 \nMocking & Testing con Google Mock &#8211; Yuri Valentini \nSeconda parte dell&#8217;incontro del 15/3. Proseguiremo il viaggio nel mondo del testing affrontando l&#8217;argomento dei mock e del BDD. Mostreremo come usare Google Mock e scriveremo un Kata per esemplificare tutto quello che abbiamo visto nelle due serate. \n22:00 \nPizza e networking \n  \nMateriale della serata:\n\nSlides\nRepository col code Kata fatto insieme\n\nQualche foto della serata (tutte le foto sulla nostra pagina Facebook): \n\n                        \n\n\nCome sono strutturati i nostri meetup serali: \n\npresentazione tecnica con formato a scelta dello speaker (talk frontale\, workshop\, live coding\, ecc)\nspazio fare domande e confrontarsi\nuna pizza tutti insieme per fare networking e\, perché no\, parlare d&#8217;altro\n\nIn regalo a tutti i partecipanti i nostri mitici stickers 🙂 \n \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-aprile2018/
+LOCATION:Via Strada Barchetta\, 77\, Modena\, 41123\, Italia
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

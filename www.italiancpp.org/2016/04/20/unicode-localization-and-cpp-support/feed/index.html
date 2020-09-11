@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Commenti a: Unicode, localization and C++ support</title>
+	<atom:link href="https://www.italiancpp.org/2016/04/20/unicode-localization-and-cpp-support/feed/" rel="self" type="application/rss+xml" />
+	<link>https://www.italiancpp.org/2016/04/20/unicode-localization-and-cpp-support/</link>
+	<description></description>
+	<lastBuildDate>Mon, 20 Mar 2017 21:21:21 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.7.18</generator>
+	<item>
+		<title>Di: Elvis</title>
+		<link>https://www.italiancpp.org/2016/04/20/unicode-localization-and-cpp-support/#comment-227</link>
+		<dc:creator><![CDATA[Elvis]]></dc:creator>
+		<pubDate>Wed, 18 May 2016 08:09:13 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=5941#comment-227</guid>
+		<description><![CDATA[Why I need to call ios_base::sync_with_stdio(false)?]]></description>
+		<content:encoded><![CDATA[<p>Why I need to call ios_base::sync_with_stdio(false)?</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: Thiago</title>
+		<link>https://www.italiancpp.org/2016/04/20/unicode-localization-and-cpp-support/#comment-105</link>
+		<dc:creator><![CDATA[Thiago]]></dc:creator>
+		<pubDate>Fri, 22 Apr 2016 13:29:47 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=5941#comment-105</guid>
+		<description><![CDATA[Just an update: Since Visual Studio 2015 Update 2 (released 30/03/2016), there are new compiler switches to manage both source and execution character sets:
+
+    /source-charset:&#124;.NNNN
+    /execution-charset:&#124;.NNNN
+    /utf-8
+
+The later being a synonym for both &quot;/source-charset:utf-8&quot; and &quot;/execution-charset:utf-8&quot;.
+
+More details on the following Visual C++ Team Blog post:
+https://blogs.msdn.microsoft.com/vcblog/2016/02/22/new-options-for-managing-character-sets-in-the-microsoft-cc-compiler/]]></description>
+		<content:encoded><![CDATA[<p>Just an update: Since Visual Studio 2015 Update 2 (released 30/03/2016), there are new compiler switches to manage both source and execution character sets:</p>
+<p>    /source-charset:|.NNNN<br />
+    /execution-charset:|.NNNN<br />
+    /utf-8</p>
+<p>The later being a synonym for both &#8220;/source-charset:utf-8&#8221; and &#8220;/execution-charset:utf-8&#8221;.</p>
+<p>More details on the following Visual C++ Team Blog post:<br />
+<a href="https://blogs.msdn.microsoft.com/vcblog/2016/02/22/new-options-for-managing-character-sets-in-the-microsoft-cc-compiler/" rel="nofollow">https://blogs.msdn.microsoft.com/vcblog/2016/02/22/new-options-for-managing-character-sets-in-the-microsoft-cc-compiler/</a></p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: Sergey</title>
+		<link>https://www.italiancpp.org/2016/04/20/unicode-localization-and-cpp-support/#comment-104</link>
+		<dc:creator><![CDATA[Sergey]]></dc:creator>
+		<pubDate>Thu, 21 Apr 2016 18:14:50 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=5941#comment-104</guid>
+		<description><![CDATA[I think one of the most important things to explain in an article like this is that actually you should not use wchar_t and std::wstring if you want to get a code that can correctly work with all Unicode symbols.
+
+There is a very brief mention of the problems that riddle the wchar_t approach (more specifically the fact that on Windows wchar_t is actually 16 bit which clearly can&#039;t hold all Unicode code points). There is a good post about most of the problems at StackOverflow - http://stackoverflow.com/a/11107667/3375765
+
+But it does not end there, oh no. Writing code that works as expected with any valid Unicode string will most definitely force you into a situation when you will want to iterate over every code point in a string, convert between lower case and upper case, case insensitive algorithms like hashing, searching, collation (comparison) and so on. Perhaps you will work with UTF8 strings and will want to do all of this in a lazy manner without full string conversion to a UTF32 string! Standard library gives you very little on that front (&quot;almost nothing&quot; may be closer to the truth). Additionally I found the process of setting up locales through standard C++ ways very confusing (docs are very sparse on that front). 
+
+All in all, based on my experience, if you are serious about Unicode support in you product you should either do your custom implementation of the Unicode rule set (which seems insane) or use a specialized library. Luckily for us there is an excellent ICU library for all these needs. I&#039;m not sure that there is something better in the C++ area. And it&#039;s free! Most of its API relies on custom string class - UnicodeString - but it is relatively easy to implement your own ICU-like wrappers around the parts of its API that work with raw strings to make it work with your custom string class (if you have one).]]></description>
+		<content:encoded><![CDATA[<p>I think one of the most important things to explain in an article like this is that actually you should not use wchar_t and std::wstring if you want to get a code that can correctly work with all Unicode symbols.</p>
+<p>There is a very brief mention of the problems that riddle the wchar_t approach (more specifically the fact that on Windows wchar_t is actually 16 bit which clearly can&#8217;t hold all Unicode code points). There is a good post about most of the problems at StackOverflow &#8211; <a href="http://stackoverflow.com/a/11107667/3375765" rel="nofollow">http://stackoverflow.com/a/11107667/3375765</a></p>
+<p>But it does not end there, oh no. Writing code that works as expected with any valid Unicode string will most definitely force you into a situation when you will want to iterate over every code point in a string, convert between lower case and upper case, case insensitive algorithms like hashing, searching, collation (comparison) and so on. Perhaps you will work with UTF8 strings and will want to do all of this in a lazy manner without full string conversion to a UTF32 string! Standard library gives you very little on that front (&#8220;almost nothing&#8221; may be closer to the truth). Additionally I found the process of setting up locales through standard C++ ways very confusing (docs are very sparse on that front). </p>
+<p>All in all, based on my experience, if you are serious about Unicode support in you product you should either do your custom implementation of the Unicode rule set (which seems insane) or use a specialized library. Luckily for us there is an excellent ICU library for all these needs. I&#8217;m not sure that there is something better in the C++ area. And it&#8217;s free! Most of its API relies on custom string class &#8211; UnicodeString &#8211; but it is relatively easy to implement your own ICU-like wrappers around the parts of its API that work with raw strings to make it work with your custom string class (if you have one).</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: Marco Alesiani</title>
+		<link>https://www.italiancpp.org/2016/04/20/unicode-localization-and-cpp-support/#comment-103</link>
+		<dc:creator><![CDATA[Marco Alesiani]]></dc:creator>
+		<pubDate>Thu, 21 Apr 2016 09:05:59 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=5941#comment-103</guid>
+		<description><![CDATA[Hi Mikhail, thanks for the comment. I thought it could be less confusing for explanation&#039;s sake, anyway I&#039;ve edited the snippet to just reuse the same object.]]></description>
+		<content:encoded><![CDATA[<p>Hi Mikhail, thanks for the comment. I thought it could be less confusing for explanation&#8217;s sake, anyway I&#8217;ve edited the snippet to just reuse the same object.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: Mikhail</title>
+		<link>https://www.italiancpp.org/2016/04/20/unicode-localization-and-cpp-support/#comment-102</link>
+		<dc:creator><![CDATA[Mikhail]]></dc:creator>
+		<pubDate>Thu, 21 Apr 2016 08:41:09 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=5941#comment-102</guid>
+		<description><![CDATA[Why converter_UTF8_wchar and converter_UTF8_char16 variables are declared with exactly the same type?]]></description>
+		<content:encoded><![CDATA[<p>Why converter_UTF8_wchar and converter_UTF8_char16 variables are declared with exactly the same type?</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>

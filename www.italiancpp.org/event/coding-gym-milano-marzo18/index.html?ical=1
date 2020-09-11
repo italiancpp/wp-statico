@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20180312T190000
+DTEND;TZID=Europe/Rome:20180312T210000
+DTSTAMP:20200908T153108
+CREATED:20180221T204440Z
+LAST-MODIFIED:20180221T204555Z
+UID:8484-1520881200-1520888400@www.italiancpp.org
+SUMMARY:Coding Gym Marzo / Milano
+DESCRIPTION:Vai all&#8217;evento\n\n    window.location = "http://coding-gym-mi0318.eventbrite.it";\n \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/coding-gym-milano-marzo18/
+LOCATION:Via Giulio e Corrado Venini\, 42\, Milano\, MI\, 20127\, Italia
+CATEGORIES:Coding Gym
+ORGANIZER;CN="Coding%20Gym":MAILTO:staff@coding-gym.org
+END:VEVENT
+END:VCALENDAR

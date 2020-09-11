@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20161029T083000
+DTEND;TZID=Europe/Rome:20161029T180000
+DTSTAMP:20200908T151036
+CREATED:20160726T090733Z
+LAST-MODIFIED:20171210T104920Z
+UID:6326-1477729800-1477764000@www.italiancpp.org
+SUMMARY:C++ Day 2016
+DESCRIPTION:\n  \n\n\nTutte le foto\n� \nSegui i link in agenda per slides/demo delle sessioni\n� \n� \nL&#8217;Italian C++ Community & Develer hanno presentato:\n\nUna giornata gratuita\, 100% made in Italy\, completamente dedicata al C++!\nSessioni frontali\, un Workshop\, un Coding Dojo\, un&#8217;Unconference\, un Panel Q/A e 1/3 dell&#8217;evento dedicato al networking!\n80+ partecipanti.\n \nAscolta un podcast su questo evento \n\n\n  \nProgramma della giornata (collegamenti a materiale e video):\n\n\nquando\nquanto\ntrack 1\ntrack 2\n\n\n\n8.30 &#8211; 9.00\n30'\nRegistrazione\n\n\n9.00 &#8211; 9.45\n45'\nPresentazione della giornataMarco Arena\n-\n\n\n10.00 &#8211; 11.00\n60'\nC++17 per tutti i giorniMarco Arena\nLo stack grafico di QtLuca Ottaviano\n\n\n11.00 &#8211; 11.45\n45'\nCoffee Break\n\n\n11.45 &#8211; 12.45\n60'\nC++ e KafkaGian Lorenzo Meocci\nC++ Coding Dojo\n\n\n12.45- 14.00\n75'\nPranzo\n\n\n14.00 &#8211; 15.00\n60'\nIntroduzione a Modern C++Raffaele Rialdi\nData Oriented Design: alte performance in C++Daniele Maccioni\n\n\n15.15 &#8211; 16.15\n60'\nLe API e il mieleMarco Foco\nC++ Unconference\n\n\n16.15 &#8211; 16.45\n30'\nCoffee Break\n\n\n16.45 &#8211; 17.30\n45'\nAsk Us Everything\n-\n\n\n17.30 &#8211; 18.00\n30'\nSalutiMarco Arena\n-\n\n\nDalle 14 alle 16.15 è stato possibile partecipare al workshop gratuito: \nIntroduzione al C++ Template Metaprogramming \nFacilitato da Eugenio Bargiacchi. \n  \nL&#8217;evento è stato supportato da:\n \n \nL&#8217;evento è stato sponsorizzato da:\n \n\nL&#8217;evento è stato co-organizzato con:\n \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/cppday16/
+LOCATION:Via Iacopo da Diacceto\, 16/20\, Firenze\, Italia
+CATEGORIES:Conferenza
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

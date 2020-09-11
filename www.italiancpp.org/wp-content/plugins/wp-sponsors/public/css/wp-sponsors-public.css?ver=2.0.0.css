@@ -1,0 +1,72 @@
+/*
+ * All of the CSS for your public-facing functionality should be
+ * included in this file.
+ */
+
+.widget_sponsors_widget ul {
+    list-style: none;
+    margin-bottom: 15px;
+}
+.widget_sponsors_widget ul li {list-style-type: none;}
+.widget_sponsors_widget ul.horizontal li {
+    display: inline;
+    list-style-type: none;
+    padding-right: 20px;
+}
+
+.widget_sponsors_widget ul.horizontal {
+    margin: 10px;
+}
+.widget_sponsors_widget ul.horizontal li.sponsors-item a img {
+    max-height: 100px;
+    padding-bottom: 15px;
+}
+.sponsors-item {
+    padding-bottom: 15px;
+}
+
+p.sponsor-desc {
+    margin-top: 5px;
+}
+
+/*
+ * Styling the for the linear shortcode option
+ */
+div#wp-sponsors { margin-bottom: 50px; display: flex; flex-wrap: wrap; }
+div#wp-sponsors ul li { list-style: none;}
+#wp-sponsors div.sponsor-item {margin: 0 20px 20px 0; }
+#wp-sponsors div.sponsor-item.debug {border: solid 1px red;}
+
+#wp-sponsors div.sponsor-item.default {max-width: 40%; width: 40%; }
+#wp-sponsors div.sponsor-item.small {max-width: 15%; width: 15%; }
+#wp-sponsors div.sponsor-item.medium {max-width: 30%; width: 30%; }
+#wp-sponsors div.sponsor-item.large {max-width: 45%; width: 45%; }
+#wp-sponsors div.sponsor-item.full {max-width: 100%; width: 100%; }
+#wp-sponsors div.sponsor-item a img { width: 100%; }
+
+#wp-sponsors div.sponsor-item.default p, #wp-sponsors div.sponsor-item.default a img {width:100%;}
+#wp-sponsors div.sponsor-item.default p, #wp-sponsors div.sponsor-item.default a img {width:100%;}
+#wp-sponsors div.sponsor-item.default p, #wp-sponsors div.sponsor-item.default a img {width:100%;}
+#wp-sponsors div.sponsor-item.default p, #wp-sponsors div.sponsor-item.default a img {width:100%;}
+#wp-sponsors div.sponsor-item.default p, #wp-sponsors div.sponsor-item.default a img {width:100%;}
+
+/*
+ * Other styling
+ */
+
+.clearfix:after {
+   content: ".";
+   visibility: hidden;
+   display: block;
+   height: 0;
+   clear: both;
+}
+
+
+@media only screen and (max-width: 900px) {
+    #wp-sponsors div.sponsor-item.small {max-width: 40%; width: 40%; }
+    #wp-sponsors div.sponsor-item.medium {max-width: 40%; width: 40%; }
+    #wp-sponsors div.sponsor-item.large {max-width: 100%; width: 100%; }
+
+
+}

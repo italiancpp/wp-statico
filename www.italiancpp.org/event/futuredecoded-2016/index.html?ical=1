@@ -1,0 +1,22 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20161006
+DTEND;VALUE=DATE:20161008
+DTSTAMP:20200908T153550
+CREATED:20160623T083952Z
+LAST-MODIFIED:20170824T064948Z
+UID:6230-1475712000-1475884799@www.italiancpp.org
+SUMMARY:FutureDecoded 2016
+DESCRIPTION:  \n\n \n  \nI CommunityDays si uniscono a FutureDecoded per dare vita all&#8217;evento Microsoft Italia più importante dell&#8217;anno!\n \nSpecial Guest: Scott Guthrie\n� \nMarco Arena rappresenterà la nostra community e aprirà un dialogo sulle C++ Core Guidelines e sulla GSL\, mostrando i recenti sviluppi in casa Microsoft:\nCambiamo il C++ con Microsoft GSL & Guidelines Checkers\n� \nAgenda completa\n\n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/futuredecoded-2016/
+LOCATION:Via Lombardia\, 2/a\, Peschiera Borromeo\, Milano\, 20068\, Italia
+CATEGORIES:Partecipazione
+END:VEVENT
+END:VCALENDAR

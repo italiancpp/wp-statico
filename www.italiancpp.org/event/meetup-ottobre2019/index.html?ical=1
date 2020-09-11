@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20191010T200000
+DTEND;TZID=Europe/Rome:20191010T223000
+DTSTAMP:20200908T152719
+CREATED:20190913T065611Z
+LAST-MODIFIED:20191024T110522Z
+UID:9186-1570737600-1570746600@www.italiancpp.org
+SUMMARY:Meetup Ottobre / Modena - Cos'è Unreal Engine 4 e perché dovrebbe incuriosirti
+DESCRIPTION: \nCos&#8217;è Unreal Engine 4 e perché dovrebbe incuriosirti\nMichele Mischitelli\n\nUn nuovo appuntamento a Modena dedicato al C++ organizzato in collaborazione con l&#8217;associazione ConoscereLinux. \n  \n20:00 \nArrivo e saluti iniziali &#8211; Marco Arena \n20:05 \nCos&#8217;è Unreal Engine 4 e perché dovrebbe incuriosirti &#8211; Michele Mischitelli \nVedremo prima cos&#8217;è un game engine e perché non vengono usati esclusivamente nel settore videoludico. Dopodiché analizzeremo più nel dettaglio Unreal Engine realizzando un semplice Hello World. Per finire\, vedremo le componenti fondamentali di questo framework\, cosa rappresentano e come comunicano tra loro per permettere a chiunque di realizzare il proprio gioco. \n22:00 \nPizza e networking \nMateriale \n\nSlides\nVideo\n\n\nCome sono strutturati i nostri meetup serali: \n\npresentazione tecnica con formato a scelta dello speaker (talk frontale\, workshop\, live coding\, ecc)\nspazio fare domande e confrontarsi\nuna pizza tutti insieme per fare networking e\, perché no\, parlare d&#8217;altro\n\nIn regalo a tutti i partecipanti i nostri mitici stickers 🙂 \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-ottobre2019/
+LOCATION:Via Strada Barchetta\, 77\, Modena\, 41123\, Italia
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

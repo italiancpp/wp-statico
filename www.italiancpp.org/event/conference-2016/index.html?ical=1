@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20160514T083000
+DTEND;TZID=Europe/Rome:20160514T180000
+DTSTAMP:20200908T151106
+CREATED:20160314T105806Z
+LAST-MODIFIED:20170824T064945Z
+UID:5775-1463214600-1463248800@www.italiancpp.org
+SUMMARY:Italian C++ Conference 2016
+DESCRIPTION:\nTutte le foto\n\n  \nVideo delle sessioni\n  \nQuesto evento è piaciuto?\n  \nLeggi il post sull&#8217;evento\n� \nLa prima conferenza italiana completamente dedicata al C++\n100+ partecipanti\n \nSabato 14 Maggio all&#8217;Università Bicocca di Milano\n  \n\nCon la partecipazione straordinaria di James McNellis\,\ndal Visual C++ Team di Redmond!\n \n� \nAscolta un breve podcast sull&#8217;evento! \n� \nProgramma della giornata (collegamenti a slides e video):  \n\n\nquando\nquanto\ncosa\nchi\n\n\n\n8.30 &#8211; 9.00\n30'\nRegistrazione\n-\n\n\n9.00 &#8211; 9.15\n15'\nPresentazione della giornata\nMarco Arena\n\n\n9.30 &#8211; 10.30\n60'\nAn Introduction to C++ Coroutines\nJames McNellis\n\n\n10.40 &#8211; 11.40\n60'\nDa un grande C++ derivano grandi responsabilità\nMarco Arena\n\n\n11.40 &#8211; 12.00\n20'\nCoffee Break\n-\n\n\n12.00 &#8211; 13.00\n60'\nREST e Websocket in C++ diventano semplici e produttivi con il REST SDK\nRaffaele Rialdi\n\n\n13.00 &#8211; 13.30\n30'\nPranzo\n-\n\n\n13.30 &#8211; 14.00\n30'\nQuestione di Codice: Come possiamo rendere più semplice la scritturail test e il deploy di codice C++ complesso?\nRogueWave Software\n\n\n14.15 &#8211; 15.15\n60'\nNo More Pointers!New ideas for teaching and learning modern C++\nMarco Foco\n\n\n15.30 &#8211; 16.30\n60'\nAdventures in a Legacy Codebase\nJames McNellis\n\n\n16.30 &#8211; 16.50\n20'\nBreak\n-\n\n\n16.50 &#8211; 17.30\n40'\nAsk Us Everything\nTutti gli speakers\n\n\n17.45 &#8211; 18.00\n15'\nSaluti\nMarco Arena\n\n\nSponsorizzato da:\n\n  \n \nSupportato da:\n \n \n \n \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/conference-2016/
+LOCATION:piazza dell'Ateneo Nuovo\, 1\, Milano\, Italia
+CATEGORIES:Conferenza
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

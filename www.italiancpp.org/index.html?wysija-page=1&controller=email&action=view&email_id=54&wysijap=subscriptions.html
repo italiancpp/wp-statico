@@ -1,0 +1,1322 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"  >
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>C++: il meglio di Marzo '16</title>
+    <style type="text/css">body {
+        width:100% !important;
+        -webkit-text-size-adjust:100%;
+        -ms-text-size-adjust:100%;
+        margin:0;
+        padding:0;
+    }
+
+    body,table,td,p,a,li,blockquote{
+        -ms-text-size-adjust:100%;
+        -webkit-text-size-adjust:100%;
+    }
+
+    .ReadMsgBody{
+        width:100%;
+    }.ExternalClass {width:100%;}.ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {line-height: 100%;}#backgroundTable {margin:0; padding:0; width:100% !important; line-height: 100% !important; background:#2c2c2c;}img {
+        outline:none;
+        text-decoration:none;
+        -ms-interpolation-mode: bicubic;
+    }
+    a img {border:none;}
+    .image_fix {display:block;}p {
+        font-family: "Tahoma";
+        font-size: 14px;
+        line-height: 150%;
+        margin: 1em 0;
+        padding: 0;
+    }h1,h2,h3,h4,h5,h6{
+        margin:0;
+        padding:0;
+    }h1 {
+        color:#2945a4 !important;
+        display:block;
+        font-family:Tahoma;
+        font-size:30px;
+        font-style:normal;
+        font-weight:normal;
+        line-height:125%;
+        letter-spacing:normal;
+        margin:0;
+        
+        text-align:left;
+    }h2 {
+        color:#0a0a0a !important;
+        display:block;
+        font-family:Tahoma;
+        font-size:22px;
+        font-style:normal;
+        font-weight:normal;
+        line-height:125%;
+        letter-spacing:normal;
+        margin:0;
+        
+        text-align:left;
+    }h3 {
+        color:#2c2c2c !important;
+        display:block;
+        font-family:Tahoma;
+        font-size:18px;
+        font-style:normal;
+        font-weight:normal;
+        line-height:125%;
+        letter-spacing:normal;
+        margin:0;
+        
+        text-align:left;
+    }table td {border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt;}table { border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; }a {
+        color:#2945a4;
+        word-wrap:break-word;
+    }
+    #outlook a {padding:0;}
+    .yshortcuts { color:#2945a4; }
+
+    #wysija_wrapper {
+        background:#2c2c2c;
+        color:#363737;
+        font-family:"Tahoma";
+        font-size:14px;
+        -webkit-text-size-adjust:100%;
+        -ms-text-size-adjust:100%;
+        
+    }
+
+    .wysija_header_container {
+        mso-border-right-alt: 0;
+        mso-border-left-alt: 0;
+        mso-border-top-alt: 0;
+        mso-border-bottom-alt: 0;
+        
+    }
+
+    .wysija_block {
+        mso-border-right-alt: 0;
+        mso-border-left-alt: 0;
+        mso-border-top-alt: 0;
+        mso-border-bottom-alt: 0;
+        background:#ffffff;
+    }
+
+    .wysija_footer_container {
+        mso-border-right-alt: 0;
+        mso-border-left-alt: 0;
+        mso-border-top-alt: 0;
+        mso-border-bottom-alt: 0;
+        
+    }
+
+    .wysija_viewbrowser_container, .wysija_viewbrowser_container a {
+        font-family: "Arial" !important;
+        font-size: 11px !important;
+        color: #FFFFFF !important;
+    }
+    .wysija_unsubscribe_container, .wysija_unsubscribe_container a {
+        text-align:center;
+        color: #ffffff !important;
+        font-size:12px;
+    }
+    .wysija_viewbrowser_container a, .wysija_unsubscribe_container a {
+        text-decoration:underline;
+    }
+    .wysija_list_item {
+        margin:0;
+    }@media only screen and (max-device-width: 480px), screen and (max-width: 480px) {a[href^="tel"], a[href^="sms"] {
+            text-decoration: none;
+            color: #2945a4;pointer-events: none;
+            cursor: default;
+        }
+
+        .mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {
+            text-decoration: default;
+            color: #2945a4 !important;
+            pointer-events: auto;
+            cursor: default;
+        }body, table, td, p, a, li, blockquote { -webkit-text-size-adjust:none !important; }body{ width:100% !important; min-width:100% !important; }
+    }@media only screen and (min-device-width: 768px) and (max-device-width: 1024px), screen and (min-width: 768px) and (max-width: 1024px) {a[href^="tel"],
+        a[href^="sms"] {
+            text-decoration: none;
+            color: #2945a4;pointer-events: none;
+            cursor: default;
+        }
+
+        .mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {
+            text-decoration: default;
+            color: #2945a4 !important;
+            pointer-events: auto;
+            cursor: default;
+        }
+    }
+
+    @media only screen and (-webkit-min-device-pixel-ratio: 2) {
+    }@media only screen and (-webkit-device-pixel-ratio:.75){}
+    @media only screen and (-webkit-device-pixel-ratio:1){}
+    @media only screen and (-webkit-device-pixel-ratio:1.5){}</style><!--[if IEMobile 7]>
+<style type="text/css">
+
+</style>
+<![endif]--><!--[if gte mso 9]>
+<style type="text/css">.wysija_image_container {
+        padding-top:0 !important;
+    }
+    .wysija_image_placeholder {
+        mso-text-raise:0;
+        mso-table-lspace:0;
+        mso-table-rspace:0;
+        margin-bottom: 0 !important;
+    }
+    .wysija_block .wysija_image_placeholder {
+        margin:2px 1px 0 1px !important;
+    }
+    p {
+        line-height: 110% !important;
+    }
+    h1, h2, h3 {
+        line-height: 110% !important;
+        margin:0 !important;
+        padding: 0 !important;
+    }
+</style>
+<![endif]-->
+
+<!--[if gte mso 15]>
+<style type="text/css">table { font-size:1px; mso-line-height-alt:0; line-height:0; mso-margin-top-alt:0; }
+    tr { font-size:1px; mso-line-height-alt:0; mso-margin-top-alt:1px; }
+</style>
+<![endif]-->
+
+</head>
+<body bgcolor="#2c2c2c" yahoo="fix">
+    <span style="margin-bottom:0;margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;display:block;background:#2c2c2c;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" id="wysija_wrapper">
+        <tr>
+            <td valign="top" align="center">
+                <table width="600" cellpadding="0" cellspacing="0" border="0" align="center">
+                    
+                    <tr>
+                        <td width="600" style="min-width:600px;" valign="top" align="center"   >
+                            
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td width="600" style="min-width:600px;" valign="top" align="center">
+                            
+<table class="wysija_header" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+ <tr>
+ <td height="1" align="center" class="wysija_header_container" style="font-size:1px;line-height:1%;mso-line-height-rule:exactly;border: 0;min-width: 100%;border: 0;" >
+ 
+ <img width="600" height="25" src="wp-content/uploads/wysija/themes/bluearray/images/header.png" border="0" alt="Testata" class="image_fix" style="width:600px; height:25px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" />
+ </td>
+ </tr>
+</table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="600" style="min-width:600px;" valign="top" align="left">
+                            
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><p class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;border: 0;text-align: center;" >Newsletter Numero 33 - Marzo 2016</p></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ 
+ <table class="wysija_image_table center" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;text-align: center;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;" width="128" height="127" cellspacing="0" cellpadding="0" border="0" align="center">
+ <tr style="font-size:1px; mso-line-height-alt:0; mso-margin-top-alt:1px;">
+ <td class="wysija_image_container center" style="border: 0;border-collapse: collapse;border: 1px solid #ffffff;text-align: left;display: block;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;" width="128" height="127" valign="top" align="center">
+ <div class="wysija_image_placeholder center" align="center" style="height:127px;width:128px;">
+ 
+ 
+ <img width="128" height="127" src="http://www.italiancpp.org/wp-content/uploads/2013/05/logo.png" border="0" alt="" class="image_fix" style="width:128px; height:127px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" />
+ </div>
+ </td>
+ </tr>
+ </table>
+
+ <div class="wysija_text_container"><h1 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 30px;color: #2945a4;color: #2945a4 !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><span style="color: #ffffff;"></span><span style="color: #2945a4; line-height: 1.1em;">Italian C++ Community</span></h1></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr style="font-size:1px; mso-line-height-alt:0; mso-margin-top-alt:1px;">
+ <td width="100%" valign="middle" class="wysija_divider_container" style="height:5px;background-color: #ffffff;border: 0;padding-top: 15px;padding-right: 17px;padding-bottom: 15px;padding-left: 17px;" align="left">
+ <div align="center">
+ <img src="wp-content/uploads/wysija/themes/bluearray/images/divider.png" border="0" width="564" height="5" alt="---" class="image_fix" style="width:564px; height:5px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" />
+ </div>
+ </td>
+ </tr>
+</table>
+
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" >Ciao&nbsp;C++-ista!</h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr style="font-size:1px; mso-line-height-alt:0; mso-margin-top-alt:1px;">
+ <td width="100%" valign="middle" class="wysija_divider_container" style="height:5px;background-color: #ffffff;border: 0;padding-top: 15px;padding-right: 17px;padding-bottom: 15px;padding-left: 17px;" align="left">
+ <div align="center">
+ <img src="wp-content/uploads/wysija/themes/bluearray/images/divider.png" border="0" width="564" height="5" alt="---" class="image_fix" style="width:564px; height:5px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" />
+ </div>
+ </td>
+ </tr>
+</table>
+
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" >Non mancare al nostro prossimo evento:<br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h1 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 30px;color: #2945a4;color: #2945a4 !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" >Italian C++ Conference</h1></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ <td class="wysija_content_container" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left">
+ <table class="wysija_gallery_table center" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;text-align: center;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;" width="360" cellspacing="0" cellpadding="0" border="0" align="center">
+ <tr>
+ <td class="wysija_cell_container" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 1px solid #ffffff;" width="360" height="193" valign="top">
+ <img width="360" height="193" src="http://www.italiancpp.org/wp-content/uploads/2013/06/logo-cpp.jpg" border="0" alt="" class="image_fix" style="width:360px; height:193px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" />
+ </td>
+ </tr>
+ </table>
+ </td>
+ 
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" >Sabato 14 Maggio all'Università Bicocca di Milano</h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ></h2><h1 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 30px;color: #2945a4;color: #2945a4 !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://italiancpp-conf-2016.eventbrite.it" target="_blank">Registrati gratuitamente</a></h1><p style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;">&nbsp;</p></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" >Speaker d'eccezione:</h2><h1 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 30px;color: #2945a4;color: #2945a4 !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" >James McNellis</h1><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ></h2><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" >Direttamente dal Visual C++ Team di Redmond!</h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ <td class="wysija_content_container" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left">
+ <table class="wysija_gallery_table center" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;text-align: center;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;" width="190" cellspacing="0" cellpadding="0" border="0" align="center">
+ <tr>
+ <td class="wysija_cell_container" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 1px solid #ffffff;" width="190" height="190" valign="top">
+ <a href="http://jamesmcnellis.com" class="wysija_image_link" style="height:190px;width:190px;outline: 0;border: 0;display: block;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;" ><img width="190" height="190" src="wp-content/uploads/2016/03/james-mc-nellis.jpg" border="0" alt="" class="image_fix" style="width:190px; height:190px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" /></a>
+ </td>
+ </tr>
+ </table>
+ </td>
+ 
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ></h2><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" >Al più presto agenda e ulteriori dettagli</h2><p style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;">&nbsp;</p></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ 
+ <table class="wysija_image_table center" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;text-align: center;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;" width="242" height="60" cellspacing="0" cellpadding="0" border="0" align="center">
+ <tr style="font-size:1px; mso-line-height-alt:0; mso-margin-top-alt:1px;">
+ <td class="wysija_image_container center" style="border: 0;border-collapse: collapse;border: 1px solid #ffffff;text-align: left;display: block;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;" width="242" height="60" valign="top" align="center">
+ <div class="wysija_image_placeholder center" align="center" style="height:60px;width:242px;">
+ 
+ 
+ <a href="http://www.roguewave.com/" class="wysija_image_link" style="height:60px;width:242px;outline: 0;border: 0;display: block;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;" ><img width="242" height="60" src="http://www.italiancpp.org/wp-content/uploads/2013/06/rogue-wave.png" border="0" alt="" class="image_fix" style="width:242px; height:60px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" /></a>
+ </div>
+ </td>
+ </tr>
+ </table>
+
+ <div class="wysija_text_container"><h3 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 18px;color: #2c2c2c;color: #2c2c2c !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" >L'evento è sponsorizzato da <a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://www.roguewave.com/" target="_blank">Rogue Wave</a></h3></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr style="font-size:1px; mso-line-height-alt:0; mso-margin-top-alt:1px;">
+ <td width="100%" valign="middle" class="wysija_divider_container" style="height:5px;background-color: #ffffff;border: 0;padding-top: 15px;padding-right: 17px;padding-bottom: 15px;padding-left: 17px;" align="left">
+ <div align="center">
+ <img src="wp-content/uploads/wysija/themes/bluearray/images/divider.png" border="0" width="564" height="5" alt="---" class="image_fix" style="width:564px; height:5px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" />
+ </div>
+ </td>
+ </tr>
+</table>
+
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h1 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 30px;color: #2945a4;color: #2945a4 !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" >Eventi dai nostri media partners<br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></h1></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ <td class="wysija_content_container" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left">
+ <table class="wysija_gallery_table center" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;text-align: center;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;" width="314" cellspacing="0" cellpadding="0" border="0" align="center">
+ <tr>
+ <td class="wysija_cell_container" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 1px solid #ffffff;" width="314" height="198" valign="top">
+ <a href="http://www.qtday.it/" class="wysija_image_link" style="height:198px;width:314px;outline: 0;border: 0;display: block;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;" ><img width="314" height="198" src="http://www.italiancpp.org/wp-content/uploads/2013/06/qtday2016.png" border="0" alt="" class="image_fix" style="width:314px; height:198px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" /></a>
+ </td>
+ </tr>
+ </table>
+ </td>
+ 
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h1 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 30px;color: #2945a4;color: #2945a4 !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://www.qtday.it/">QtDay 2016</a></h1><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" >(29/30 Aprile 2016, Firenze)</h2><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ></h2><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://www.qtday.it/schedule/arena" target="_blank">Faremo una sessione anche noi!</a></h2><p style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;">&nbsp;</p></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ 
+ <table class="wysija_image_table center" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;text-align: center;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;" width="442" height="195" cellspacing="0" cellpadding="0" border="0" align="center">
+ <tr style="font-size:1px; mso-line-height-alt:0; mso-margin-top-alt:1px;">
+ <td class="wysija_image_container center" style="border: 0;border-collapse: collapse;border: 1px solid #ffffff;text-align: left;display: block;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;" width="442" height="195" valign="top" align="center">
+ <div class="wysija_image_placeholder center" align="center" style="height:195px;width:442px;">
+ 
+ 
+ <img width="442" height="195" src="http://www.italiancpp.org/wp-content/uploads/2013/06/ms-cloud-rs.png" border="0" alt="" class="image_fix" style="width:442px; height:195px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" />
+ </div>
+ </td>
+ </tr>
+ </table>
+
+ <div class="wysija_text_container"><h1 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 30px;color: #2945a4;color: #2945a4 !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="https://microsoftcloudroadshow.com/milan/auth/login#/" target="_blank">Microsoft Cloud RoadShow</a></h1><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" >(23/24 Maggio, Milano)</h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr style="font-size:1px; mso-line-height-alt:0; mso-margin-top-alt:1px;">
+ <td width="100%" valign="middle" class="wysija_divider_container" style="height:5px;background-color: #ffffff;border: 0;padding-top: 15px;padding-right: 17px;padding-bottom: 15px;padding-left: 17px;" align="left">
+ <div align="center">
+ <img src="wp-content/uploads/wysija/themes/bluearray/images/divider.png" border="0" width="564" height="5" alt="---" class="image_fix" style="width:564px; height:5px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" />
+ </div>
+ </td>
+ </tr>
+</table>
+
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h1 style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 30px;color: #2945a4;color: #2945a4 !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;">User Group Program<br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></h1></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ 
+ <table class="wysija_image_table center" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;text-align: center;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;" width="463" height="98" cellspacing="0" cellpadding="0" border="0" align="center">
+ <tr style="font-size:1px; mso-line-height-alt:0; mso-margin-top-alt:1px;">
+ <td class="wysija_image_container center" style="border: 0;border-collapse: collapse;border: 1px solid #ffffff;text-align: left;display: block;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;" width="463" height="98" valign="top" align="center">
+ <div class="wysija_image_placeholder center" align="center" style="height:98px;width:463px;">
+ 
+ 
+ <a href="http://shop.oreilly.com/" class="wysija_image_link" style="height:98px;width:463px;outline: 0;border: 0;display: block;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;" ><img width="463" height="98" src="wp-content/uploads/2015/03/oreilly-logo.gif" border="0" alt="" class="image_fix" style="width:463px; height:98px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" /></a>
+ </div>
+ </td>
+ </tr>
+ </table>
+
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" >Codice sconto attivo:<br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><span style="color: #2945a4; font-size: 30px; line-height: 37.5px;">PCBW</span></h2><p class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;border: 0;text-align: center;" ></p></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ 
+ <table class="wysija_image_table center" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;text-align: center;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;" width="506" height="66" cellspacing="0" cellpadding="0" border="0" align="center">
+ <tr style="font-size:1px; mso-line-height-alt:0; mso-margin-top-alt:1px;">
+ <td class="wysija_image_container center" style="border: 0;border-collapse: collapse;border: 1px solid #ffffff;text-align: left;display: block;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;" width="506" height="66" valign="top" align="center">
+ <div class="wysija_image_placeholder center" align="center" style="height:66px;width:506px;">
+ 
+ 
+ <a href="http://www.manning.com/" class="wysija_image_link" style="height:66px;width:506px;outline: 0;border: 0;display: block;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;" ><img width="506" height="66" src="wp-content/uploads/2015/01/manning_logo.jpg" border="0" alt="" class="image_fix" style="width:506px; height:66px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" /></a>
+ </div>
+ </td>
+ </tr>
+ </table>
+
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" >Codice sconto attivo:</h2><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><span style="color: #2945a4; font-size: 30px; line-height: 37.5px;">cplusromeug</span></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr style="font-size:1px; mso-line-height-alt:0; mso-margin-top-alt:1px;">
+ <td width="100%" valign="middle" class="wysija_divider_container" style="height:5px;background-color: #ffffff;border: 0;padding-top: 15px;padding-right: 17px;padding-bottom: 15px;padding-left: 17px;" align="left">
+ <div align="center">
+ <img src="wp-content/uploads/wysija/themes/bluearray/images/divider.png" border="0" width="564" height="5" alt="---" class="image_fix" style="width:564px; height:5px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" />
+ </div>
+ </td>
+ </tr>
+</table>
+
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h1 style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 30px;color: #2945a4;color: #2945a4 !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;">News dal mondo C++<span style="color: #363737; line-height: 1.5em; font-size: 14px;">&nbsp;</span></h1><p style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;">&nbsp;</p><h3 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 18px;color: #2c2c2c;color: #2c2c2c !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" >Dai un'occhiata a <a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://www.italiancpp.org/gruppi/news/forum/" title="News" target="_blank">tutte le news segnalate dai nostri utenti</a>!</h3><p style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;">&nbsp;</p></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ <td class="wysija_content_container" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left">
+ <table class="wysija_gallery_table center" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;text-align: center;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;" width="360" cellspacing="0" cellpadding="0" border="0" align="center">
+ <tr>
+ <td class="wysija_cell_container" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 1px solid #ffffff;" width="360" height="193" valign="top">
+ <a href="https://github.com/isocpp/CppCoreGuidelines" class="wysija_image_link" style="height:193px;width:360px;outline: 0;border: 0;display: block;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;" ><img width="360" height="193" src="http://www.italiancpp.org/wp-content/uploads/2013/06/logo-cpp.jpg" border="0" alt="" class="image_fix" style="width:360px; height:193px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" /></a>
+ </td>
+ </tr>
+ </table>
+ </td>
+ 
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h1 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 30px;color: #2945a4;color: #2945a4 !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="https://github.com/isocpp/CppCoreGuidelines" target="_blank">C++ Core Guidelines<br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></a></h1><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" >Un respository moderato dalla ISO C++ Foundation</h2><p style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;">&nbsp;</p></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><strong>C++17: <br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;">cos'è successo a Jacksonville?</strong></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="https://isocpp.org/blog/2016/03/jacksonville-approved-papers-and-issues" target="_blank">Papers approvati</a></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://herbsutter.com/2016/03/11/trip-report-winter-iso-c-standards-meeting/" target="_blank">Report di Herb Sutter</a></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://usingstdcpp.org/2016/03/05/trip-report-c-meeting-at-jacksonville/" target="_blank">Report di Daniel Garcia</a></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://jfbastien.github.io/papers/2016-02.html" target="_blank">Report di JF Bastien</a></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://www.infoworld.com/article/3044727/application-development/qa-bjarne-stroustrup-previews-c-17.html" target="_blank">Intervista a Bjarne Stroustrup sul C++17</a></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" >&nbsp;&nbsp;</h2><p style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;">&nbsp;</p><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><strong><span style="color: #000000;">Tecnologie e Prodotti</span></strong></h2><p style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;">&nbsp;</p></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ 
+ <table class="wysija_image_table center" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;text-align: center;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;" width="224" height="224" cellspacing="0" cellpadding="0" border="0" align="center">
+ <tr style="font-size:1px; mso-line-height-alt:0; mso-margin-top-alt:1px;">
+ <td class="wysija_image_container center" style="border: 0;border-collapse: collapse;border: 1px solid #ffffff;text-align: left;display: block;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;" width="224" height="224" valign="top" align="center">
+ <div class="wysija_image_placeholder center" align="center" style="height:224px;width:224px;">
+ 
+ 
+ <a href="https://blog.qt.io/blog/2016/03/16/qt-5-6-released/" class="wysija_image_link" style="height:224px;width:224px;outline: 0;border: 0;display: block;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;" ><img width="224" height="224" src="http://www.italiancpp.org/wp-content/uploads/2013/06/qt-logo.jpg" border="0" alt="" class="image_fix" style="width:224px; height:224px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" /></a>
+ </div>
+ </td>
+ </tr>
+ </table>
+
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="https://blog.qt.io/blog/2016/03/16/qt-5-6-released/" target="_blank">Rilasciate Qt 5.6</a><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ 
+ <table class="wysija_image_table center" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;text-align: center;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;" width="331" height="219" cellspacing="0" cellpadding="0" border="0" align="center">
+ <tr style="font-size:1px; mso-line-height-alt:0; mso-margin-top-alt:1px;">
+ <td class="wysija_image_container center" style="border: 0;border-collapse: collapse;border: 1px solid #ffffff;text-align: left;display: block;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;" width="331" height="219" valign="top" align="center">
+ <div class="wysija_image_placeholder center" align="center" style="height:219px;width:331px;">
+ 
+ 
+ <a href="https://isocpp.org/blog/2016/03/vs-2015-update-2-rc-is-available" class="wysija_image_link" style="height:219px;width:331px;outline: 0;border: 0;display: block;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;" ><img width="331" height="219" src="http://www.italiancpp.org/wp-content/uploads/2013/06/vs20131.jpg" border="0" alt="" class="image_fix" style="width:331px; height:219px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" /></a>
+ </div>
+ </td>
+ </tr>
+ </table>
+
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="https://isocpp.org/blog/2016/03/vs-2015-update-2-rc-is-available" target="_blank">Visual Studio 2015: Update 2 RC<br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></a></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ 
+ <table class="wysija_image_table center" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;text-align: center;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;" width="332" height="114" cellspacing="0" cellpadding="0" border="0" align="center">
+ <tr style="font-size:1px; mso-line-height-alt:0; mso-margin-top-alt:1px;">
+ <td class="wysija_image_container center" style="border: 0;border-collapse: collapse;border: 1px solid #ffffff;text-align: left;display: block;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;" width="332" height="114" valign="top" align="center">
+ <div class="wysija_image_placeholder center" align="center" style="height:114px;width:332px;">
+ 
+ 
+ <img width="332" height="114" src="wp-content/uploads/2013/06/clion-600x206.png" border="0" alt="" class="image_fix" style="width:332px; height:114px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" />
+ </div>
+ </td>
+ </tr>
+ </table>
+
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://blog.jetbrains.com/clion/2016/03/clion-2016-1-released-better-language-support-and-new-dev-tools/" target="_blank">Rilasciato CLion 2016.1</a><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ <td class="wysija_content_container" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left">
+ <table class="wysija_gallery_table center" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;text-align: center;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;" width="279" cellspacing="0" cellpadding="0" border="0" align="center">
+ <tr>
+ <td class="wysija_cell_container" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 1px solid #ffffff;" width="279" height="279" valign="top">
+ <a href="http://llvm.org/releases/3.8.0/tools/clang/docs/ReleaseNotes.html" class="wysija_image_link" style="height:279px;width:279px;outline: 0;border: 0;display: block;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;" ><img width="279" height="279" src="http://www.italiancpp.org/wp-content/uploads/2013/06/llvm.png" border="0" alt="" class="image_fix" style="width:279px; height:279px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" /></a>
+ </td>
+ </tr>
+ </table>
+ </td>
+ 
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://llvm.org/releases/3.8.0/tools/clang/docs/ReleaseNotes.html" target="_blank">Rilasciato Clang 3.8<br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></a></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><strong class="wysija_title_2_strong">Prossimi eventi con posti disponibili</strong></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ 
+ <table class="wysija_image_table center" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;text-align: center;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;" width="271" height="165" cellspacing="0" cellpadding="0" border="0" align="center">
+ <tr style="font-size:1px; mso-line-height-alt:0; mso-margin-top-alt:1px;">
+ <td class="wysija_image_container center" style="border: 0;border-collapse: collapse;border: 1px solid #ffffff;text-align: left;display: block;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;" width="271" height="165" valign="top" align="center">
+ <div class="wysija_image_placeholder center" align="center" style="height:165px;width:271px;">
+ 
+ 
+ <img width="271" height="165" src="http://www.italiancpp.org/wp-content/uploads/2013/06/cppnow1.png" border="0" alt="" class="image_fix" style="width:271px; height:165px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" />
+ </div>
+ </td>
+ </tr>
+ </table>
+
+ <div class="wysija_text_container"><h1 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 30px;color: #2945a4;color: #2945a4 !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://cppnow.org/" target="_blank">C++ Now 2016</a></h1><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" >(9-14 Maggio, Aspen)</h2><p style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;">&nbsp;</p></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><strong>Libs/Projects Open Source da tenere d'occhio<br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></strong></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://cat.github.io/" target="_blank">Cat - C++14 Functional Library</a></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="https://github.com/Microsoft/ChakraCore/wiki/Building-ChakraCore" target="_blank">ChakraCore - Portable Javascript JIT Compilation</a></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://cpphints.com/" target="_blank">C++ Hints - Errori comuni e come correggerli</a></h2><p style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;">&nbsp;</p></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr style="font-size:1px; mso-line-height-alt:0; mso-margin-top-alt:1px;">
+ <td width="100%" valign="middle" class="wysija_divider_container" style="height:5px;background-color: #ffffff;border: 0;padding-top: 15px;padding-right: 17px;padding-bottom: 15px;padding-left: 17px;" align="left">
+ <div align="center">
+ <img src="wp-content/uploads/wysija/themes/bluearray/images/divider.png" border="0" width="564" height="5" alt="---" class="image_fix" style="width:564px; height:5px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" />
+ </div>
+ </td>
+ </tr>
+</table>
+
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h1 style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 30px;color: #2945a4;color: #2945a4 !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;">Il meglio del mese su ++it</h1></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><span style="color: #363737; font-size: 14px; line-height: 1.5em;">&nbsp;</span></h2><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><strong>Le&nbsp;discussioni&nbsp;più seguite:</strong><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><span style="color: #363737; font-size: 14px; line-height: 1.5em;">&nbsp;</span>&nbsp;</h2><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://www.italiancpp.org/gruppi/neofiti/forum/topic/info-su-stdbegin-e-stdend-su-array/" target="_blank"></a></h2><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://www.italiancpp.org/gruppi/neofiti/forum/" target="_blank">Diverse domande nel gruppo "Neofiti"</a><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://www.italiancpp.org/gruppi/linguaggio/forum/topic/parliamo-di-moduli/" target="_blank"><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></a></h2><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><span style="color: #363737; font-size: 14px; line-height: 1.5em;">&nbsp;</span><span style="color: #ffffff; line-height: 1.5em;">&nbsp;</span><span style="color: #ffffff; line-height: 1.5em;">&nbsp;</span></h2><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><strong>Gli ultimi articoli<br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></strong></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h1 class="align-right" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 30px;color: #2945a4;color: #2945a4 !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: right;" >First steps with Boost.Python<a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="2015/12/02/first-steps-with-boost-python/index.html" target="_blank"></a></h1><p style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;">"Finally a modern, pragmatic language." Who among us wants to work with a multi-paradigm, highly-expressive, fast-evolving language with a huge standard library? We are talking, as usual, about... Python. There are scenarios where our trusty champion (C++11) doesn't cut it. For a prototype to rush out in a hurry, a "single use" script, the server side of a web application, …</p><p style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;"><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="2015/12/02/first-steps-with-boost-python/index.html" target="_blank">Leggi tutto.</a></p><p style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;"><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="2015/12/02/primi-passi-con-boost-python/index.html" target="_blank">Leggi in italiano.</a></p></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container left" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ 
+ 
+ <table style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;" width="1%" height="176" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr style="font-size:1px; mso-line-height-alt:0; mso-margin-top-alt:1px;">
+ <td class="wysija_image_container left" style="border: 0;border-collapse: collapse;border: 1px solid #ffffff;display: block;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 10px;padding-bottom: 0;padding-left: 0;" width="1%" height="176" valign="top">
+ <div align="left" class="wysija_image_placeholder left" style="height:176px;width:231px;border: 0;display: block;margin-top: 0;margin-right: 10px;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;" >
+ 
+ <a href="2015/10/27/meetup-roma-2015/index.html" class="wysija_image_link" style="height:176px;width:231px;outline: 0;border: 0;display: block;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;" ><img width="231" height="176" src="wp-content/uploads/2015/10/estrazioni-1024x782.jpg" border="0" alt="estrazioni" class="image_fix" style="width:231px; height:176px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" /></a>
+ </div>
+ </td>
+ </tr>
+ </table>
+
+ <div class="wysija_text_container"><h1 class="align-right" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 30px;color: #2945a4;color: #2945a4 !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: right;" >Meetup Roma 2015<a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="2015/10/27/meetup-roma-2015/index.html" target="_blank"></a></h1><p style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;">Sabato 24 Ottobre ci siamo incontrati a Roma, ospitati dal dipartimento di Ingegneria dell'Università degli Studi "Roma Tre". Eravamo circa 30 C++-isti e, nonostante le iscrizioni superassero le 50 persone, lo riteniamo un buon risultato. In genere&nbsp;su eventi medio/piccoli completamente gratuiti si&nbsp;ipotizza un drop di circa il 20%. Fino ad oggi tale&nbsp;previsione si è sempre rivelata corretta. Questa volta invece …</p><p style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;"><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="2015/10/27/meetup-roma-2015/index.html" target="_blank">Leggi tutto.</a></p></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container left" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ 
+ 
+ <table style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;" width="1%" height="173" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr style="font-size:1px; mso-line-height-alt:0; mso-margin-top-alt:1px;">
+ <td class="wysija_image_container left" style="border: 0;border-collapse: collapse;border: 1px solid #ffffff;display: block;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 10px;padding-bottom: 0;padding-left: 0;" width="1%" height="173" valign="top">
+ <div align="left" class="wysija_image_placeholder left" style="height:173px;width:232px;border: 0;display: block;margin-top: 0;margin-right: 10px;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;" >
+ 
+ <a href="2015/06/28/meetup-firenze-2015/index.html" class="wysija_image_link" style="height:173px;width:232px;outline: 0;border: 0;display: block;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;" ><img width="232" height="173" src="wp-content/uploads/2015/03/WP_001479.jpg" border="0" alt="WP_001479" class="image_fix" style="width:232px; height:173px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" /></a>
+ </div>
+ </td>
+ </tr>
+ </table>
+
+ <div class="wysija_text_container"><h1 class="align-right" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 30px;color: #2945a4;color: #2945a4 !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: right;" >Meetup Firenze 2015<a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="2015/06/28/meetup-firenze-2015/index.html" target="_blank"></a></h1><p style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;">Lo scorso 20 Giugno abbiamo avuto un'ennesima dimostrazione della straordinarietà dell'ecosistema C++! Abbiamo&nbsp;fatto tappa nella splendida Firenze, al Grand Hotel Mediterraneo, una suggestiva location che si trova in pieno centro, lungo il fiume Arno. Eravamo circa 50 C++-isti! …</p><p style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;"><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="2015/06/28/meetup-firenze-2015/index.html" target="_blank">Leggi tutto.</a></p></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h1 class="align-right" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 30px;color: #2945a4;color: #2945a4 !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: right;" >Folding Expressions<a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="2015/06/15/folding-expressions/index.html" target="_blank"></a></h1><p style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;">People familiar with the new features C++11 brought to the C++ programming language should know what a variadic template is and why they're important. Variadic templates can have a variable number of parameters of any type: template &lt;typename... Types&gt; class tuple; This not only brings type safety to the code but also ensures that all the variadic arguments handling is …</p><p style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;"><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="2015/06/15/folding-expressions/index.html" target="_blank">Leggi tutto.</a></p></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><strong>Le ultime offerte di lavoro</strong></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://www.italiancpp.org/gruppi/jobs/forum/topic/sviluppatore-software-qt-urgente/" target="_blank">[Develer] Sviluppatore software Qt (Firenze)</a><strong><span style="color: #ff0000;"><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></span></strong></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://www.italiancpp.org/gruppi/jobs/forum/topic/ferrari-f1-software-developer-maranello/" target="_blank">[Ferrari F1] Software Developer (Maranello)</a></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://www.italiancpp.org/gruppi/jobs/forum/topic/developer-c-esperienza-libreria-google-v8-telelavoro/" target="_blank">[Recruiter] Developer C++ V8 Google (telelavoro)</a></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://www.italiancpp.org/gruppi/jobs/forum/topic/dev4side-srl-sviluppatore-c-milano/" target="_blank">[Dev4Side Srl] Sviluppatore C++ Milano</a></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://www.italiancpp.org/gruppi/jobs/forum/topic/sviluppatore-cpython/" target="_blank">[COMELZ] Sviluppatore C++/Python/... (Vigevano)</a></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://www.italiancpp.org/gruppi/jobs/forum/topic/sviluppatori-c-con-esperienza-linux/" class="bbp-topic-permalink">[Develer] Sviluppatori C++ Linux (Firenze)</a></h2></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h3 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 18px;color: #2c2c2c;color: #2c2c2c !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://www.italiancpp.org/gruppi/jobs/forum/" target="_blank">Scoprile tutte</a></h3></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr style="font-size:1px; mso-line-height-alt:0; mso-margin-top-alt:1px;">
+ <td width="100%" valign="middle" class="wysija_divider_container" style="height:5px;background-color: #ffffff;border: 0;padding-top: 15px;padding-right: 17px;padding-bottom: 15px;padding-left: 17px;" align="left">
+ <div align="center">
+ <img src="wp-content/uploads/wysija/themes/bluearray/images/divider.png" border="0" width="564" height="5" alt="---" class="image_fix" style="width:564px; height:5px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" />
+ </div>
+ </td>
+ </tr>
+</table>
+
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h1 style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 30px;color: #2945a4;color: #2945a4 !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;">Letture e risorse consigliate</h1><p style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;">&nbsp;</p><h3 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 18px;color: #2c2c2c;color: #2c2c2c !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><span style="line-height: 1.5em; font-size: 13px;"></span>Dai un'occhiata a <a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://www.italiancpp.org/gruppi/risorse-consigliate/forum/" target="_blank">tutte le risorse suggerite dai nostri utenti</a>!<br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></h3></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="https://www.youtube.com/playlist?list=PLHTh1InhhwT75gykhs7pqcR_uSiG601oh" target="_blank">Video&nbsp;CppCon 2015</a></h2><h3 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 18px;color: #2c2c2c;color: #2c2c2c !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><span style="color: #333333;"><strong>[videos]<br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></strong></span></h3></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="https://github.com/CppCon/CppCon2015" target="_blank">Slides CppCon 2015</a></h2><h3 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 18px;color: #2c2c2c;color: #2c2c2c !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><span><strong>[presentazioni]<br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></strong></span></h3></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="https://www.youtube.com/playlist?list=PLRyNF2Y6sca0UKKZ2PTSwF3WrDjABQdcL" target="_blank">Video Meeting C++ 2015</a><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><strong><span style="color: #333333;"></span></strong></h2><h3 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 18px;color: #2c2c2c;color: #2c2c2c !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><strong><span style="color: #333333;">[videos]</span><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></strong></h3></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://codexpert.ro/blog/2016/03/07/guidelines-support-library-review-spant/" target="_blank">GSL Review: span&lt;T&gt;</a></h2><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><span style="color: #339966; font-size: 18px; line-height: 22.5px;">[basic]</span></h2><h3 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 18px;color: #2c2c2c;color: #2c2c2c !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" >di Marius Bancila<br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></h3></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://eli.thegreenplace.net/2016/returning-multiple-values-from-functions-in-c/" title="Permalink to Returning multiple values from functions in C++" target="_blank">Returning multiple values from functions in C++</a></h2><h3 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 18px;color: #2c2c2c;color: #2c2c2c !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><span style="color: #339966;">[basic]</span><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;">di&nbsp;Eli Bendersky<br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></h3></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="https://www.justsoftwaresolutions.co.uk/cplusplus/core-c++-lvalues-and-rvalues.html" target="_blank">Core C++: lvalues and rvalues<br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></a></h2><h3 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 18px;color: #2c2c2c;color: #2c2c2c !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><span style="color: #0000ff;">[intermediate]</span></h3><h3 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 18px;color: #2c2c2c;color: #2c2c2c !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" >di Anthony Williams<br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></h3></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="https://marcoarena.wordpress.com/2016/03/13/cpp-competitive-programming-io/" target="_blank">C++ in Competitive Programming: I/O<br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></a></h2><h3 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 18px;color: #2c2c2c;color: #2c2c2c !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><span style="color: #0000ff;">[intermediate]</span></h3><h3 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 18px;color: #2c2c2c;color: #2c2c2c !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" >di&nbsp;Marco Arena<br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></h3></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="entry-title align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://www.murrayc.com/permalink/2016/02/28/playing-with-c-variadic-templates-and-dynamic-programming/" target="_blank">Playing with C++ Variadic Templates and Dynamic Programming</a></h2><h3 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 18px;color: #2c2c2c;color: #2c2c2c !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><span style="color: #ff6600;">[advanced]</span><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;">di&nbsp;<span>Murray Cumming</span><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"><br style="border: 0;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;"></h3></div>
+ </td>
+ 
+ </tr>
+</table>
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr style="font-size:1px; mso-line-height-alt:0; mso-margin-top-alt:1px;">
+ <td width="100%" valign="middle" class="wysija_divider_container" style="height:5px;background-color: #ffffff;border: 0;padding-top: 15px;padding-right: 17px;padding-bottom: 15px;padding-left: 17px;" align="left">
+ <div align="center">
+ <img src="wp-content/uploads/wysija/themes/bluearray/images/divider.png" border="0" width="564" height="5" alt="---" class="image_fix" style="width:564px; height:5px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" />
+ </div>
+ </td>
+ </tr>
+</table>
+
+
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ 
+ 
+ <td class="wysija_content_container center" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" align="left" >
+ 
+ <div class="wysija_text_container"><h2 class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 22px;color: #0a0a0a;color: #0a0a0a !important;background-color: #ffffff;border: 0;font-weight: normal;font-style: normal;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 125%;margin-top: 0;margin-right: 0;margin-bottom: 0;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;border: 0;text-align: center;" ><span style="color: #2945a4;">Italian C++ Community</span></h2><p class="align-center" style="font-family: Tahoma, Verdana, Segoe, sans-serif;font-size: 14px;color: #363737;color: #363737 !important;background-color: #ffffff;border: 0;letter-spacing: normal;mso-line-height-rule: exactly;-mso-line-height-rule: exactly;line-height: 150%;margin-top: 1em;margin-right: 0;margin-bottom: 1em;margin-left: 0;padding-top: 0;padding-right: 0;padding-bottom: 0;padding-left: 0;vertical-align: top;word-wrap: break-word;border: 0;text-align: center;" ><a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://italiancpp.org" target="_blank">http://italiancpp.org</a></p></div>
+ </td>
+ 
+ </tr>
+</table>
+<table class="wysija_block" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+ <tr>
+ <td class="wysija_gallery_container" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 0;padding-top: 10px;padding-right: 17px;padding-bottom: 10px;padding-left: 17px;" >
+ <table class="wysija_gallery_table center" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;text-align: center;margin-top: 0;margin-right: auto;margin-bottom: 0;margin-left: auto;" width="116" cellspacing="0" cellpadding="0" border="0" align="center">
+ <tr>
+ 
+ 
+ <td class="wysija_cell_container" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 1px solid #ffffff;" width="38" height="32" valign="top">
+ <div align="center">
+ <a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://www.facebook.com/groups/italiancppcommunity/"><img src="wp-content/uploads/wysija/bookmarks/medium/02/facebook.png" border="0" alt="Facebook" style="width:32px; height:32px;" /></a>
+ </div>
+ </td>
+ 
+ 
+ 
+ <td class="wysija_cell_container" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 1px solid #ffffff;" width="38" height="32" valign="top">
+ <div align="center">
+ <a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://twitter.com/italiancpp"><img src="wp-content/uploads/wysija/bookmarks/medium/02/twitter.png" border="0" alt="Twitter" style="width:32px; height:32px;" /></a>
+ </div>
+ </td>
+ 
+ 
+ 
+ <td class="wysija_cell_container" style="border: 0;border-collapse: collapse;background-color: #ffffff;border: 1px solid #ffffff;" width="38" height="32" valign="top">
+ <div align="center">
+ <a style="color: #2945a4;color: #2945a4 !important;background-color: #ffffff;text-decoration: underline;border: 0;word-wrap: break-word;" href="http://www.linkedin.com/groups?gid=4786874&"><img src="wp-content/uploads/wysija/bookmarks/medium/02/linkedin.png" border="0" alt="Linkedin" style="width:32px; height:32px;" /></a>
+ </div>
+ </td>
+ 
+ 
+ </tr>
+ </table>
+ </td>
+ </tr>
+</table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="600" style="min-width:600px;" valign="top" align="center"   >
+                            
+<table class="wysija_footer" style="border: 0;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt;clear: both;border: 0;min-width: 100%;" width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
+ <tr>
+ <td height="1" align="center" class="wysija_footer_container" style="font-size:1px;line-height:1%;mso-line-height-rule:exactly;border: 0;min-width: 100%;border: 0;" >
+ 
+ <img width="600" height="25" src="wp-content/uploads/wysija/themes/bluearray/images/footer.png" border="0" alt="Testo pi&egrave; di pagina" class="image_fix" style="width:600px; height:25px;text-decoration: none;outline: 0;border: 0;display: block;-ms-interpolation-mode: bicubic;" />
+ </td>
+ </tr>
+</table>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td width="600" style="min-width:600px;" valign="top" align="center"  >
+                            
+                        </td>
+                    </tr>
+                    
+                </table>
+            </td>
+        </tr>
+    </table>
+    </span>
+</body>
+</html>

@@ -1,0 +1,22 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20140226
+DTEND;VALUE=DATE:20140227
+DTSTAMP:20200908T153855
+CREATED:20140520T145948Z
+LAST-MODIFIED:20170824T064755Z
+UID:3190-1393372800-1393459199@www.italiancpp.org
+SUMMARY:Community Days 2014
+DESCRIPTION: \n� \nTutte le foto\n  \n� \n \n� \nAbbiamo curato una track dedicata al C++ per 50+ persone!\n� \nC++11 in azione\nMarco Arena\n \nProduttività\, performance e affidabilità con Visual C++ 2013\nGuido Perderzini\n   \nLe estensioni C++/CX per WinRT\nRaffaele Rialdi\n \nStandard Library: STL e Boost\, la BCL di C++\nAlessio Gogna\n \nGrafica in poche righe con Visual C++\, Cinder e altre librerie open source\nAle Contenti\n \nVC6? No\, grazie. Come migrare a C++11\nAle Contenti & Raffaele Rialdi\n  \nDa sx: Guido Pederzini\, Eva Gjeci\, Raffaele Rialdi\, Ale Contenti\, Marco Arena\, Alessio Gogna \n \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/community-days-2014/
+LOCATION:Via Lombardia\, 2/a\, Peschiera Borromeo\, Milano\, 20068\, Italia
+CATEGORIES:Partecipazione
+END:VEVENT
+END:VCALENDAR

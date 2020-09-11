@@ -1,0 +1,22 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20200213T200000
+DTEND;TZID=Europe/Rome:20200213T223000
+DTSTAMP:20200908T150227
+CREATED:20200110T091755Z
+LAST-MODIFIED:20200226T082302Z
+UID:9330-1581624000-1581633000@www.italiancpp.org
+SUMMARY:Meetup Modena - Aggiungi funzioni di messaggistica istantanea e notifiche ad una applicazione esistente tramite Bot di Telegram
+DESCRIPTION: \nAggiungi funzioni di messaggistica istantanea e notifiche ad una applicazione esistente tramite Bot di Telegram\nAlberto Bignotti\nUn nuovo appuntamento a Modena dedicato al C++ organizzato in collaborazione con l&#8217;associazione ConoscereLinux. \n  \n20:00 \nArrivo e saluti iniziali &#8211; Marco Arena \n20:05 \nAggiungi funzioni di messaggistica istantanea e notifiche ad una applicazione esistente tramite Bot di Telegram &#8211; Alberto Bignotti \nDurante l&#8217;evoluzione di un software ho avuto la necessità di mandare messaggi di notifica a utenti e ricevere messaggi dall&#8217;utente verso l&#8217;app. Ho studiato telegram\, creato un Bot e implementato una libreria C++ che comunica con gli utenti. Alcune particolarità: \n&#8211; Handshake utente locale all&#8217;app\, utente telegram\n&#8211; Mandare notifiche dall&#8217;app verso l&#8217;utente\n&#8211; Ricevere copmandi dall&#8217;utente\n&#8211; Implementazione del Bot in modalità polling\n&#8211; Implementazione del Bot in modalità WebHook\n&#8211; Alcune particolarità (posizione dell&#8217;utente\, immagini&#8230;) \nL&#8217;oggetto della sessione non è come usare la mia libreria\, ma dare gli spunti affinché ciascuno possa creare la propria. \n22:00 \nPizza e networking \nMateriale \n\nSlides\nVideo\n\n\nCome sono strutturati i nostri meetup serali: \n\npresentazione tecnica con formato a scelta dello speaker (talk frontale\, workshop\, live coding\, ecc)\nspazio fare domande e confrontarsi\nuna pizza tutti insieme per fare networking e\, perché no\, parlare d&#8217;altro\n\nIn regalo a tutti i partecipanti i nostri mitici stickers 🙂 \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-0220/
+LOCATION:Via Strada Barchetta\, 77\, Modena\, 41123\, Italia
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,22 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20151111
+DTEND;VALUE=DATE:20151112
+DTSTAMP:20200908T153649
+CREATED:20150809T124820Z
+LAST-MODIFIED:20170824T064936Z
+UID:5156-1447200000-1447286399@www.italiancpp.org
+SUMMARY:Festival ICT 2015
+DESCRIPTION:++it è stata in Arena al Festival ICT 2015!\n\n  \n� \n \n� \n#festivalICT\n \n@festivalICT\n  \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/festival-ict-2015/
+LOCATION: Via Gattamelata\, 5\, Milano
+CATEGORIES:Partecipazione
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20181108T200000
+DTEND;TZID=Europe/Rome:20181108T223000
+DTSTAMP:20200908T153019
+CREATED:20181017T083946Z
+LAST-MODIFIED:20181110T205439Z
+UID:8837-1541707200-1541716200@www.italiancpp.org
+SUMMARY:Meetup Novembre / Modena - PPL e CppRestSDK
+DESCRIPTION: \nProgrammazione asincrona con le librerie ppl e cpprestsdk\nOspite: Yuri Valentini\nUn nuovo appuntamento a Modena dedicato al C++ organizzato in collaborazione con l&#8217;associazione ConoscereLinux. \n  \n20:00 \nArrivo e saluti iniziali &#8211; Marco Arena \n20:05 \nProgrammazione asincrona con le librerie ppl e cpprestsdk &#8211; Yuri Valentini \nL&#8217;astrazione Task della libreria ppl ci permette di ragionare in maniera efficace su come organizzare programmi con operazioni concorrenti. Dopo avere introdotto i concetti alla base della programmazione asincrona\, vedremo come realizzare un paio di semplici programmi che interagiscono con la rete. \n22:00 \nPizza e networking \n� \n� \nMateriale \nPresentazione e demo \n\nCome sono strutturati i nostri meetup serali: \n\npresentazione tecnica con formato a scelta dello speaker (talk frontale\, workshop\, live coding\, ecc)\nspazio fare domande e confrontarsi\nuna pizza tutti insieme per fare networking e\, perché no\, parlare d&#8217;altro\n\nIn regalo a tutti i partecipanti i nostri mitici stickers 🙂 \n \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-novembre2018/
+LOCATION:Via Strada Barchetta\, 77\, Modena\, 41123\, Italia
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,3306 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Hands-on &#8211; Italian C++ Community</title>
+	<atom:link href="https://www.italiancpp.org/category/hands-on/feed/" rel="self" type="application/rss+xml" />
+	<link>https://www.italiancpp.org</link>
+	<description></description>
+	<lastBuildDate>Mon, 24 Aug 2020 13:03:53 +0000</lastBuildDate>
+	<language>it-IT</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.7.18</generator>
+<site xmlns="com-wordpress:feed-additions:1">106700034</site>	<item>
+		<title>Singleton revisited</title>
+		<link>https://www.italiancpp.org/2017/03/19/singleton-revisited-eng/</link>
+		<comments>https://www.italiancpp.org/2017/03/19/singleton-revisited-eng/#comments</comments>
+		<pubDate>Sun, 19 Mar 2017 15:52:43 +0000</pubDate>
+		<dc:creator><![CDATA[Giuseppe]]></dc:creator>
+				<category><![CDATA[Hands-on]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=7740</guid>
+		<description><![CDATA[It happens quite often to deal with those annoying objects, used everywhere in your applications. This may be because of a poorly designed application but, sometime, it is simply an inevitable condition. With this in mind and considering that either a design refactoring to remove the global dependence is, sometimes, not affordable because of business needs or not [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>It happens quite often to deal with those annoying objects, used everywhere in your applications. This may be because of a poorly designed application but, sometime, it is simply an inevitable condition. With this in mind and considering that either a design refactoring to remove the global dependence is, sometimes, not affordable because of business needs or not convenient because it leads to more complex code, I&#8217;ll try to propose a non-canonical solution to the problem.</p>
+<p>The obvious solution is the global scope, but we all know that it is also something which is better to avoid if you don&#8217;t want to run into sneaky problems, easy to cause and way more complicated to solve. We learned to be wary of the use of the global scope, as it is indeed a bad programming practice often causing long debugging sessions. But the problem still remains as it is at least useful (sometime necessary) to have variables valid within our whole program.</p>
+<p>To bring to light the most relevant cons concerning the use of the global scope, we need to consider that its use involves the impossibility to count on data consistency. Furthermore, those variables can be modified at any time without us, as programmers, being really aware of it.</p>
+<p>The global sharing can be a necessity, that&#8217;s why a standard pattern like Singleton exists. Ok, this pattern does something more, enforcing the uniqueness of a given type instances, however, at least as far as my own experience is concerned, the use of Singleton is often justified by the will of being able to easily refer to a unique object from any point effortlessly.</p>
+<p>I&#8217;ll try to describe an alternative which, from my perspective, can work better.</p>
+<h2>A typical case</h2>
+<p>A typical example is the implementation of a <strong>logger </strong>to be used application wide. If you don&#8217;t want to pass that object around, as a parameter in each and every function and constructor, you&#8217;ll probably implement that object as a Singleton.</p>
+<p>At a first glance, it is a good idea, it must be unique and shared. This snippet below is a quite standard implementation:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet class='ace_coliru_editor'>
+<pre>class Logger{
+
+  Logger() = default;
+
+  public:
+
+  static Logger&amp; get(){
+    static Logger instance;
+    return instance;
+  }
+
+  void log(std::string s){
+    std::cout &lt;&lt; s &lt;&lt; std::endl;
+  }
+};
+</div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet');</script>
+</DIV>
+</pre>
+<p>Ok, this is quite nice, it achieves the result and also avoid troubles with resource acquisition and release, which you may have defining the instance as a private class member.</p>
+<p>But the Singleton is a weak choice because it enforces the uniqueness of the object for the whole application life and this is not what we really want.</p>
+<p>Let&#8217;s suppose that we need to log the activity of a really long function, and that we want to log to a different file every time the function is executed. (In the following examples I&#8217;m omitting some details for simplicity).</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet1 class='ace_coliru_editor'>
+<pre>void g(){ 
+   singleton::Logger::get().log("do something");
+}
+
+void f(){
+  singleton::Logger::get().start();
+
+  singleton::Logger::get().log("call g()");
+  g();
+  singleton::Logger::get().end();
+}
+</div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet1');</script>
+</DIV></pre>
+<p><strong>start</strong> and <strong>end</strong> methods are there to open and close a new file to log to. It works decently but it&#8217;s probably not the most beautiful code you&#8217;ve ever seen. Too many things can go wrong once that snippet become part of a much more complex application.</p>
+<p>Let&#8217;s suppose that the functions you need to log the activity are many, for each of them you need to insert that calls to open and close the file to ensure other function are logged the right way. What if you forgot to close the file at the end of one of those functions? The next call would open a new log file leaving the old one open. And what if in the next call you don&#8217;t even open the new file? It will continue to write to the old one causing an unexpected behaviour.</p>
+<p>As programmers our task is to write error-less code and, as it is a hard one, the best way is to design things so that they are not error prone.</p>
+<p>In the example above, the first reference to the Singleton creates it but still does not really initialize it. At that point, even if we have the object, we can&#8217;t use it but after some preliminary action. Moreover, we&#8217;d like not to be able to refer to a resource once it is released, as it happens after the file is closed in the example. Ultimatly, the problem, in that example, is that the Singleton is doing more than what we really want it to do. The logger must not be unique and accessible during the whole application life but only for a part.</p>
+<p>This Singleton&#8217;s limit has become clear to me when I was asked to put such a resource under test. In that case it was not a logger but a global component that, once under test, was to become local to the test. In practice I had a global (an exotic one implemented as a Singleton but still a global) to handle. That led me to try some variation on a theme, till I realized that I was searching for something like dynamic scope.</p>
+<p>C, C++, Java, C# and many other languages, bind names to addresses using the static scope mechanism. That is, statically looking at the code, it is possible to decide which is the definition a variable name is referring.</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet2 class='ace_coliru_editor'></p>
+<pre>int i;
+
+void f(){
+  int i=9;
+  b();
+  // here i refers to the local variable
+}
+
+void b(){
+  // here i refers to the variable in global scope
+   
+}
+
+void a(){
+  // here i refers to the variable in global scope
+  i= 3;
+  b();
+  f();
+}</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet2');</script>
+</DIV>
+<p>Using dynamic binding, instead, the variable a symbol refers to depends on the current call stack. In the example above, the name <em>i </em>refers to the global or the local defined in <em>f()</em> depending on the call stack that lead to the execution of <em>b()</em>.</p>
+<p>If we had something like the dynamic scope, we could define a new object each and every time the need for a new resource arises, share it thereafter as it was a global untill the function which acquired the resource terminates and the resource itself is released</p>
+<p>In the example below things are a little complicated to make it possible to define into dynamic scope any type even if it requires some parameter to be constructed:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet3 class='ace_coliru_editor'>
+<pre>template &lt;typename T&gt;
+struct dynamic_scope {
+  
+  static std::stack&lt;T&gt;&amp; instances(){
+    static typename std::stack&lt;T&gt; m_instances;
+    return m_instances;
+  }
+
+  static T&amp; instance() {
+    return instances().top();
+  }
+                     
+  template &lt;typename... Args&gt;
+  dynamic_scope(Args... args){
+    instances().push(T(args...));
+  }
+
+  ~dynamic_scope(){
+    instances().pop();
+  }
+};
+
+void f2(){
+  dynamic_scope&lt;Console&gt; the_console (Console(40L, 3L));
+  dynamic_scope&lt;Console&gt;::instance() &lt;&lt; "log from f2"; 
+}; 
+
+void f1(){  
+  dynamic_scope&lt;Console&gt;::instance() &lt;&lt; "log from f1"; 
+  f2(); 
+}; 
+
+int _tmain(int argc, _TCHAR* argv[]) { 
+  dynamic_scope&lt;Console&gt; the_console (40L, 3L);
+  dynamic_scope&lt;Console&gt;::instance() &lt;&lt; "log something"; 
+  f1(); 
+  
+  return 0; 
+}
+</div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet3');</script>
+</DIV></pre>
+<p>What I did here is to enforce the uniqueness of a stack of instances. Every instance override previous one once it is defined and untill it is released.</p>
+<p>In the example, main function and f1 log their data in a different Console then the more specific one that f2 uses. Moreover every call to f2 causes the acquisition of a new Console object. Every each time a new dynamic_scope object is created, it is pushed on the static stack. The instance in use is always the one on top of the stack, it will be popped  and destroyed once the corresponding dynamic_scope object comes out of its scope.  At that point, the last overridden instance become the current in use again. The name given to the variable that manages the dynamic scope is not important.</p>
+<p>A little programming puzzle can help clarify even more. What&#8217;s the output of the following program?</p>
+<DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+#include &lt;stack&gt;
+
+template &lt;typename T&gt;
+struct dynamic_scope {
+  
+  static std::stack&lt;T&gt;&amp; instances(){
+    static typename std::stack&lt;T&gt; m_instances;
+    return m_instances;
+  }
+
+  static T&amp; instance() {
+    return instances().top();
+  }
+                     
+  template &lt;typename... Args&gt;
+  dynamic_scope(Args... args){
+    instances().push(T(args...));
+  }
+
+  ~dynamic_scope(){
+    instances().pop();
+  }
+};
+
+void f2(){
+  std::cout &lt;&lt; ++dynamic_scope&lt;long&gt;::instance() &lt;&lt; std::endl;
+};
+
+void f1(){
+  dynamic_scope&lt;long&gt; the_long(10);
+  std::cout &lt;&lt; ++dynamic_scope&lt;long&gt;::instance() &lt;&lt; std::endl;
+
+  f2();
+};
+
+int main(int argc, char* argv[]){
+  dynamic_scope&lt;long&gt; the_long(80);
+
+  std::cout &lt;&lt; dynamic_scope&lt;long&gt;::instance()  &lt;&lt; std::endl;
+  f1();
+  std::cout &lt;&lt; dynamic_scope&lt;long&gt;::instance() &lt;&lt; std::endl;
+  
+  return 0;
+}
+</pre>
+<p></div>
+</DIV>
+	<INPUT id="cecompiler_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler');
+</script>
+</DIV>
+<p>Here I defined a unique instance of and integer on the dynamic scope. When the program enter main function, one instance of the integer is created on the dynamic scope. Its value is 80 and that is the value sent to stdout.</p>
+<p>When the program enter f1(), the integer instance defined in its scope override the previous one becoming the current in use. Its initial value is 10 which is increased by one, so 11, and is sent to the stdout before f2() get called.</p>
+<p>In the scope of f2() function, the integer is accessible and it refers to the last instance defined in f1() therefore a new increment makes its value be 12 which is the value printed in f2().</p>
+<p>When calls are popped from the call stack and the execution return within main function, the integer instance defined in main() itself is restored as the current in use so that the last instruction still print 80.</p>
+<h2>Limits</h2>
+<p>I don&#8217;t think this is really a dynamic scope implemented in C++ because we override variables based on their type not their names. We always refer to the unique active instance of type so we will never refer to two different objects of the same type at the same time if they are managed by the &#8220;dynamic scope&#8221;.</p>
+<p>Hope this notes of mine will be useful for anyone.</p>
+<h2>Write down your idea is a great thing</h2>
+<p>And it is even better if someone review you.</p>
+<p>After I wrote this and asked for a review, the reviewer has pointed out that someone had similar proposal. Bob Smidth, the author of this article published on <a href="https://accu.org/index.php/journals/2085">ACCU-2085</a>, had similar motivations to arrange a design and write his proposal.</p>
+<p>Aside the use of the stack that adds features and try to highlight how the little forgotten  dynamic scope concept can be a good solution for a common problem, the approach I proposed here is very close to the one published by Bob. To me, the difference, is in a different compromise between invasiveness and use friendliness.</p>
+<p>The tool I wrote here is not the most terse (I mean it is too verbose) but, on the plus side, it makes clear that we are accessing variables that do not follow common scope rules.</p>
+<p>I mentioned the invasiveness because I think that the pattern proposed by Bob has the requirement to wrap every interface you want to be a Singleton (or with some modification in the dynamic scope) into a mono_nvi wrapper. This simplify the usage for sure but at the cost of boilerplate.</p>
+<p>Anyway the two solutions are really similar, to switch to something really similar to the one in  <a href="https://accu.org/index.php/journals/2085">ACCU-2085</a>, you need just to write that small piece of boilerplate that define a temporary used to access the instance on top of the global stack. This code try to synthesize both approaches:</p>
+<DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler1 class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+#include &lt;stack&gt;
+
+struct ilogger {
+  virtual void info(const char* msg) const = 0;
+};
+
+struct logger : public ilogger {
+  std::string m_name;
+  
+  logger(std::string logger_name) : m_name(logger_name){}
+  
+  virtual void info(const char* msg) const {
+    std::cout &lt;&lt; m_name.c_str() &lt;&lt; ":  " &lt;&lt;  msg &lt;&lt; std::endl;
+  }
+};
+
+template &lt;typename T&gt;
+struct dynamic_scope {
+
+  static std::stack&lt;T&gt;&amp; instances() {
+    static typename std::stack&lt;T&gt; m_instances;
+    return m_instances;
+  }
+
+  static T&amp; instance() {
+    return instances().top();
+  }
+
+  template &lt;typename... Args&gt;
+  dynamic_scope(Args... args) {
+    instances().push(T(args...));
+  }
+
+  ~dynamic_scope() {
+    instances().pop();
+  }
+
+
+  struct entry {
+    T&amp; m_obj;
+    
+    entry() : m_obj(dynamic_scope::instance()) { }
+
+    void info(const char* msg) const {
+      m_obj.info(msg);
+    }
+  };
+
+};
+
+
+
+void f2() {
+  dynamic_scope&lt;logger&gt;::entry the_logger;
+
+  dynamic_scope&lt;logger&gt;::instance().info("from f2");
+  the_logger.info("from f2 (simpler?");
+}
+
+void f1() {
+  dynamic_scope&lt;logger&gt; dynamic_logger("f1");
+  dynamic_scope&lt;logger&gt;::entry the_logger;
+  
+  dynamic_scope&lt;logger&gt;::instance().info("call f2");
+  the_logger.info("call f2 (simpler?)");
+
+  f2();
+};
+
+int main(int argc, char* argv[]) {
+  dynamic_scope&lt;logger&gt; dynamic_logger("main");
+  dynamic_scope&lt;logger&gt;::entry the_logger;
+
+  dynamic_scope&lt;logger&gt;::instance().info("call f1");
+  the_logger.info("call f1 (simpler?)");
+
+  f1();
+  dynamic_scope&lt;logger&gt;::instance().info("returned from f1");
+  the_logger.info("returned from f1 (simpler?)");
+
+  return 0;
+}
+</pre>
+<p></div>
+</DIV>
+	<INPUT id="cecompiler1_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler1_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler1');
+</script>
+</DIV>
+<h2>What if you are in a multithread world?</h2>
+<p>I don&#8217;t want to try a solution for Singleton in the multithread realm, but want just to warn about the dangers of such a solution applied in a multithreaded application.</p>
+<p>For sure, even if the underlying object is thread safe, you need to synchronize the access to the shared global stack. You can do it using the inner structure <strong>entry: </strong>integrate a <strong>std::lock_guard</strong>  into it and be careful to not keep the temporary alive too long. But is a shared dynamic scope really meaningful? To me it is a stretch.</p>
+]]></content:encoded>
+			<wfw:commentRss>https://www.italiancpp.org/2017/03/19/singleton-revisited-eng/feed/</wfw:commentRss>
+		<slash:comments>4</slash:comments>
+	<post-id xmlns="com-wordpress:feed-additions:1">7740</post-id>	</item>
+		<item>
+		<title>Spiare il consumo di memoria con l&#8217;operatore new</title>
+		<link>https://www.italiancpp.org/2017/01/27/spiare-il-consumo-di-memoria-con-loperatore-new/</link>
+		<pubDate>Fri, 27 Jan 2017 18:42:17 +0000</pubDate>
+		<dc:creator><![CDATA[stefano]]></dc:creator>
+				<category><![CDATA[Hands-on]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=7318</guid>
+		<description><![CDATA[Un grazie speciale a Marco Alesiani per le sue correzioni e suggerimenti. International reader? Read the post in English. Quando diciamo “efficienza”, quasi sempre pensiamo “tempo”. Prima il codice fa il suo lavoro, più è efficiente. E la memoria? Certo, oggi anche un portatile da quattro soldi arriva con “un secchio di RAM“… ma non [&#8230;]]]></description>
+				<content:encoded><![CDATA[<style>
+.inlineNote {border-style: solid; border-radius: 5px; border-color: rgb(39,​ 48,​ 57); border-width: 2px;}
+p {text-align: justify !important;}
+.inlineCode {font-family: "Courier New", Courier, monospace;}
+</style>
+<p><em>Un grazie speciale a </em><strong><em>Marco Alesiani</em></strong> <em>per le sue correzioni e suggerimenti.</em></p>
+<p><em>International reader? Read <a href="http://www.italiancpp.org/?p=7387">the post in English</a>.</em></p>
+<hr />
+<p>Quando diciamo “efficienza”, quasi sempre pensiamo “tempo”. Prima il codice fa il suo lavoro, più è efficiente.</p>
+<p>E la memoria? Certo, oggi anche un portatile da quattro soldi arriva con “un secchio di RAM“… ma non basta mai. Il mio PC “sperpera” 1.4GB solo per restare acceso. Apro un browser, altri 300MB che se ne vanno<a href="javascript:void(0);" data-target="#nota1" data-toggle="collapse">*</a>.</p>
+<div id="nota1" class="collapse inlineNote" data-target="#nota1" data-toggle="collapse">&#8230;e chiediamo scusa per gli errori “Allowed memory size of &#8230; bytes exhausted “ o le pagine bianche che potreste vedere ogni tanto su ++It. Capite perchè il tema “memoria” ci sta a cuore.</div>
+<p>Oltre il danno, la beffa: usare la memoria è anche una delle operazioni più lente sui sistemi attuali<a href="javascript:void(0);" data-target="#nota2" data-toggle="collapse">*</a>.</p>
+<div id="nota2" class="collapse inlineNote" data-target="#nota2" data-toggle="collapse">
+Daniele Maccioni: <a href="http://www.italiancpp.org/sessioni-cppday16/#cpp17">Data Oriented Design: alte performance in C++</a>
+</div>
+<p>Ma non è semplice capire a quale riga del codice dare la colpa. Le new che scriviamo noi stessi? Qualche allocazione nascosta in una libreria? O è colpa di oggetti temporanei?</p>
+<p><em>Come trovare facilemente la parte di codice che usa più memoria?</em></p>
+<p>Questo articolo raccoglie qualche esperimento personale. Tutti gli errori sono &#8220;merito&#8221; dell&#8217;autore.</p>
+<h4>Usiamo un po&#8217; di memoria</h4>
+<p>Il programma-giocattolo di oggi non ha nulla di particolare, se non una gran varietà di allocazioni di memoria con operator new.</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet4 class='ace_coliru_editor'><br />
+/* Programma che alloca memoria a casaccio.<br />
+   Niente delete, questo non e&#8217; un articolo sui memory leak.*/<br />
+#include &lt;string&gt;<br />
+#include &lt;memory&gt;<br />
+#include &lt;boost/shared_ptr.hpp&gt;<br />
+#include &lt;boost/make_shared.hpp&gt;<br />
+#include &quot;UnaClasseDelProgramma.h&quot;</p>
+<p>//<br />
+void h() {<br />
+  UnaClasseDelProgramma * t = new UnaClasseDelProgramma();<br />
+}<br />
+void g() {  h(); }<br />
+void f() {  g(); }<br />
+void CreaUnaClasseDelProgramma() {  f(); }</p>
+<p>//<br />
+int main(int argc, char **argv) {<br />
+    int * numero = new int(89);<br />
+    std::string * test = new std::string(&quot;abc&quot;);<br />
+//<br />
+    UnaClasseDelProgramma * oggetto = new UnaClasseDelProgramma();<br />
+    CreaUnaClasseDelProgramma();<br />
+//<br />
+    boost::shared_ptr&lt;UnaClasseDelProgramma&gt; smartPointer = boost::make_shared&lt;UnaClasseDelProgramma&gt;();<br />
+    std::shared_ptr&lt;UnaClasseDelProgramma&gt; stdSmartPointer = std::make_shared&lt;UnaClasseDelProgramma&gt;();<br />
+    return 0;<br />
+}<br />
+</div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet4');</script>
+</DIV>
+<p>Compila, apri e… circa 42MB (misurati &#8220;alla buona&#8221; con <span class="inlineCode">/usr/bin/time -v</span>).</p>
+<p><em>Chi consuma tutta questa memoria?</em></p>
+<h4>Il modo corretto: memory profiler</h4>
+<p>Il concetto è familiare: il profiler “classico” indica per quanto tempo gira ogni funzione. Il memory profiler invece indica dove, quando e quanta memoria usa il programma.<br />
+Per esempio, ecco una parte di quello che Massif <a href="javascript:void(0);" data-target="#nota3" data-toggle="collapse">*</a> dice del nostro programma.</p>
+<div id="nota3" class="collapse inlineNote" data-target="#nota3" data-toggle="collapse">
+<a href="http://valgrind.org/docs/manual/ms-manual.html">http://valgrind.org/docs/manual/ms-manual.html</a><br />
+Ma se lavorate in Windows: <a href="https://blogs.msdn.microsoft.com/vcblog/2015/10/21/memory-profiling-in-visual-c-2015/">https://blogs.msdn.microsoft.com/vcblog/2015/10/21/memory-profiling-in-visual-c-2015/</a>
+</div>
+<p>Per iniziare, otteniamo (in ASCII art!) come l’uso della memoria cresce nel “tempo” &#8211; in realtà come cresce col numero di istruzioni eseguite:</p>
+<pre>
+    MB
+38.23^                                                           ::::::::::::#
+     |                                                           :           #
+     |                                                           :           #
+     |                                                           :           #
+     |                                                           :           #
+     |                                               :::::::::::::           #
+     |                                               :           :           #
+     |                                               :           :           #
+     |                                               :           :           #
+     |                                               :           :           #
+     |                                   @@@@@@@@@@@@:           :           #
+     |                                   @           :           :           #
+     |                                   @           :           :           #
+     |                                   @           :           :           #
+     |                                   @           :           :           #
+     |                       ::::::::::::@           :           :           #
+     |                       :           @           :           :           #
+     |                       :           @           :           :           #
+     |                       :           @           :           :           #
+     |                       :           @           :           :           #
+   0 +----------------------------------------------------------------------->Mi
+     0                                                                   6.203
+</pre>
+<p>Poi dei resoconti più dettagliati (le annotazioni &#8220;A&#8221;, &#8220;B&#8221; e &#8220;C&#8221; sono nostre):</p>
+<pre>
+--------------------------------------------------------------------------------
+  n        time(i)         total(B)   useful-heap(B) extra-heap(B)    stacks(B)
+--------------------------------------------------------------------------------
+...
+  9      4,313,116       30,080,056       30,072,844         7,212            0
+99.98% (30,072,844B) (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+-&gt;99.73% (30,000,000B) 0x407F68: __gnu_cxx::new_allocator&lt;char&gt;::allocate(unsigned long, void const*) (new_allocator.h:104)
+| -&gt;99.73% (30,000,000B) 0x407EDA: std::allocator_traits&lt;std::allocator&lt;char&gt; &gt;::allocate(std::allocator&lt;char&gt;&, unsigned long) (alloc_traits.h:491)
+|   -&gt;99.73% (30,000,000B) 0x407E80: std::_Vector_base&lt;char, std::allocator&lt;char&gt; &gt;::_M_allocate(unsigned long) (stl_vector.h:170)
+|     -&gt;99.73% (30,000,000B) 0x407DFB: std::_Vector_base&lt;char, std::allocator&lt;char&gt; &gt;::_M_create_storage(unsigned long) (stl_vector.h:185)
+|       -&gt;99.73% (30,000,000B) 0x407D27: std::_Vector_base&lt;char, std::allocator&lt;char&gt; &gt;::_Vector_base(unsigned long, std::allocator&lt;char&gt; const&) (stl_vector.h:136)
+|         -&gt;99.73% (30,000,000B) 0x407CB6: std::vector&lt;char, std::allocator&lt;char&gt; &gt;::vector(unsigned long, std::allocator&lt;char&gt; const&) (stl_vector.h:278)
+|           -&gt;99.73% (30,000,000B) 0x407C45: UnaClasseDelProgramma::UnaClasseDelProgramma() (UnaClasseDelProgramma.cpp:4)
+|   A ===>   -&gt;33.24% (10,000,000B) 0x406611: main (main.cpp:20)
+|             | 
+|   B ===>    -&gt;33.24% (10,000,000B) 0x406541: h() (main.cpp:10)
+|             | -&gt;33.24% (10,000,000B) 0x40656F: g() (main.cpp:12)
+|             |   -&gt;33.24% (10,000,000B) 0x40657B: f() (main.cpp:13)
+|             |     -&gt;33.24% (10,000,000B) 0x406587: CreaUnaClasseDelProgramma() (main.cpp:14)
+|             |       -&gt;33.24% (10,000,000B) 0x40661A: main (main.cpp:21)
+|             |         
+|   C ===>    -&gt;33.24% (10,000,000B) 0x406A72: _ZN5boost11make_sharedI21UnaClasseDelProgrammaIEEENS_6detail15sp_if_not_arrayIT_E4typeEDpOT0_ (make_shared_object.hpp:254)
+|               -&gt;33.24% (10,000,000B) 0x406626: main (main.cpp:23)
+|                 
+->00.24% (72,844B) in 1+ places, all below ms_print's threshold (01.00%)
+</pre>
+<p>Vediamo subito  che un terzo della memoria si spende alla riga 20 del main (A), dove c&#8217;è uno dei nostri new. Un altro 30% (B) lo alloca h() &#8211; che Massif mostra nello stack delle chiamate registrato al momento dell’allocazione. Seguendolo arriviamo alla chiamata a CreaUnaClasseDelProgramma() nel main. Massif cattura anche le allocazioni con shared pointer (C).</p>
+<p>L&#8217;allocazione alla riga 24 non si vede perchè non è stata ancora eseguita e “intercettata” da Massif. Potrebbe comparire in uno snapshot successivo. Le altre allocazioni nel main sono &#8220;piccole&#8221; e aggregate nell&#8217;ultima riga.</p>
+<p>Si vede subto che è il caso di dare un&#8217;occhiata al costruttore di UnaClasseDelProgramma. Che farà mai con uno std::vector che occupa il 99% della memoria?</p>
+<p>Questo è già un ottimo aiuto, con poco sforzo. Volendo, Massif può fare di più. Può misurare la memoria usata &#8220;di nascosto&#8221; dal sistema per gestire l’heap (extra-heap – 7,212 byte nell’esempio), misurare lo stack&#8230;</p>
+<h4>Il metodo fai-da-te: override di operator new</h4>
+<p>In C++ si può sostituire l’operazione di creazione di un oggetto (new) con la propria.<a href="javascript:void(0);" data-target="#nota4" data-toggle="collapse">*</a></p>
+<div id="nota4" class="collapse inlineNote" data-target="#nota4" data-toggle="collapse">
+<a href="http://en.cppreference.com/w/cpp/memory/new/operator_new">http://en.cppreference.com/w/cpp/memory/new/operator_new</a>
+</div>
+<p>Quasi nessuno ha una buona ragione per farlo, ma noi si: <span style="text-decoration: line-through;">non sappiamo usare il profiler</span> intercettare le allocaioni nello heap.</p>
+<p>Semplificando, basta definire la nostra versione di operator new (e dei suoi overload) in qualunque file del programma.</p>
+<p>Se il memory profiler equivale al “time” profiler, questo trucco è paragonabile al classico snippet <span class="inlineCode">cout << tempoFine - tempoInizio;</span>. Non magnificamente dettagliato e accurato, ma semplice e comunque utile.</p>
+<p>Bastano poche righe di codice per avere qualcosa di rozzo, ma utilizzabile. E’ meglio compilare con i simboli di debug. Il codice per scrivere lo stack trace è valido probabilmente solo su Linux<a href="javascript:void(0);" data-target="#nota5" data-toggle="collapse">*</a>.</p>
+<div id="nota5" class="collapse inlineNote"> <!-- No collapse on click, altrimenti non si può cliccare per fare copia e incolla del codice. --><br />
+Non c&#8217;è niente di portabile a così basso livello.</p>
+<p>Per chi lavora nel mondo Microsoft: <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb204633%28v=vs.85%29.aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/bb204633%28v=vs.85%29.aspx</a>.</p>
+<p>Sarebbe a dire:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet5 class='ace_coliru_editor'><br />
+#include &lt;iostream&gt;<br />
+//<br />
+#include &lt;Windows.h&gt;  // Cattura degli stack trace.<br />
+#include &lt;Dbghelp.h&gt;  // Lettura simboli di debug.</p>
+<p>//<br />
+void StackTrace() {<br />
+	/* Cattura lo stack trace vero e proprio. */<br />
+	const ULONG doNotSkipAnyFrame = 0;<br />
+	const ULONG takeTenFrames = 10;<br />
+	const PULONG doNotHash = nullptr;<br />
+	PVOID stackTrace[takeTenFrames];<br />
+	const USHORT framesCaptured = CaptureStackBackTrace(<br />
+								doNotSkipAnyFrame,<br />
+								takeTenFrames,<br />
+								stackTrace,<br />
+								doNotHash<br />
+							);<br />
+//<br />
+	/* Prepara la tabella dei simboli per tradurre da indirizzi a righe di codice. */<br />
+	const HANDLE thisProcess = GetCurrentProcess();<br />
+	SymInitialize(thisProcess, NULL, TRUE);  // Linkare Dbghelp.lib<br />
+//<br />
+	for (ULONG i = 0; i &lt; framesCaptured; i++) {<br />
+		/*Estrae il nome della funzione. */<br />
+		const size_t nameStringSize = 256;<br />
+		SYMBOL_INFO * functionData = (SYMBOL_INFO*)malloc(sizeof(SYMBOL_INFO) + (nameStringSize + 1) * sizeof(char)); // +1 per il \0<br />
+		functionData-&gt;MaxNameLen = nameStringSize;<br />
+		functionData-&gt;SizeOfStruct = sizeof(SYMBOL_INFO);<br />
+		SymFromAddr(thisProcess, (DWORD64)(stackTrace[i]), 0, functionData);<br />
+//<br />
+		/* Va a cercare il file corrispondende alla chiamata.*/<br />
+		DWORD displacementInLine;<br />
+		IMAGEHLP_LINE64 lineOfCode;<br />
+		lineOfCode.SizeOfStruct = sizeof(IMAGEHLP_LINE64);<br />
+		SymGetLineFromAddr64(thisProcess, (DWORD)(stackTrace[i]), &#038;displacementInLine, &#038;lineOfCode);<br />
+//<br />
+		std::cout &lt;&lt; functionData-&gt;Name &lt;&lt; &quot; at &quot;<br />
+			      &lt;&lt; lineOfCode.FileName &lt;&lt; &quot;:&quot; &lt;&lt; lineOfCode.LineNumber &lt;&lt; std::endl;<br />
+	}<br />
+}<br />
+</div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet5');</script>
+</DIV>
+</div>
+<p>.</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet6 class='ace_coliru_editor'><br />
+// Il nostro new deve poter allocare la memoria…<br />
+#include &lt;cstdio&gt;<br />
+#include &lt;cstdlib&gt;<br />
+// &#8230;ma anche ispezionare lo stack e salvarlo in output.<br />
+#include &lt;execinfo.h&gt;<br />
+#include &lt;unistd.h&gt;<br />
+#include &lt;fstream&gt;<br />
+// Contiene std::bad_alloc &#8211; da lanciare in caso di errori.<br />
+#include &lt;new&gt;<br />
+//<br />
+/* Apre (una sola volta) e restituisce il file stream per salvare<br />
+   gli stack. */<br />
+std::ofstream&#038; filePerRisultati() {<br />
+  static std::ofstream memoryProfile;<br />
+  static bool open = false;  // Init on 1st use, classico.<br />
+    if (! open) {<br />
+      memoryProfile.open (&quot;allocations.txt&quot;);<br />
+      open = true;<br />
+    }<br />
+    // Else, gestire gli errori, chiudere il file…<br />
+    // Omettiamo per semplicità.<br />
+   return memoryProfile;<br />
+}<br />
+//<br />
+/* Questa funzione &#8220;fa la magia&#8221; e scrive nel file lo stack trace al momento della chiamata<br />
+   (compreso il suo stesso frame). */<br />
+void segnaLoStackTrace(std::ofstream&#038; memoryProfile) {<br />
+  // Registriamo 15 puntatori agli stack frame (bastano per il programma di prova).<br />
+  const int massimaDimensioneStack = 15;<br />
+  void *callStack[massimaDimensioneStack];<br />
+  size_t frameInUso = backtrace(callStack, massimaDimensioneStack);<br />
+  // A questo punto callStack è pieno di puntatori. Chiediamo i nomi delle<br />
+  // funzioni corrispondenti a ciascun frame.<br />
+  char ** nomiFunzioniMangled = backtrace_symbols(callStack, frameInUso);<br />
+  // Scrive tutte le stringhe con i nomi delle funzioni nello stream per il debug.<br />
+  for (int i = 0; i &lt; frameInUso; ++i)<br />
+    memoryProfile &lt;&lt; nomiFunzioniMangled[i] &lt;&lt; std::endl;<br />
+  // A essere precisi, dovremmo rilasciare nomiFunzioniMangled con free…<br />
+}<br />
+//<br />
+/* Finalmente abbiamo tutti gli elementi per costruire il nostro operator new. */<br />
+void* operator new(std::size_t sz) {<br />
+    // Allochiamo la memoria che serve al chiamante.<br />
+    void * memoriaRichiesta = std::malloc(sz);<br />
+    if (! memoriaRichiesta)<br />
+      throw std::bad_alloc();</p>
+<p>    // Raccontiamo al mondo intero le nostre allocaioni.<br />
+    std::ofstream&#038; memoryProfile = filePerRisultati();<br />
+    memoryProfile &lt;&lt; &quot;Allocation, size = &quot; &lt;&lt; sz &lt;&lt; &quot; at &quot; &lt;&lt; static_cast&lt;void*&gt;(memoriaRichiesta) &lt;&lt; std::endl;<br />
+    segnaLoStackTrace(memoryProfile);<br />
+    memoryProfile &lt;&lt; &quot;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&quot; &lt;&lt; std::endl;  // Separatore dei poveri&#8230;<br />
+    return memoriaRichiesta;<br />
+}<br />
+</div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet6');</script>
+</DIV>
+<p>Aggiungiamo l&#8217;operator new &#8220;taroccato&#8221; al nostro programma di prova. Questo è un esempio del risultato &#8211; riuscite a capire quale riga di codice alloca la memoria?</p>
+<pre>
+Allocation, size = 40 at 0x18705b0
+./overridenew(_Z14dumpStackTraceRSt14basic_ofstreamIcSt11char_traitsIcEE+0x3c) [0x40672c]
+./overridenew(_Znwm+0xaf) [0x406879]
+./overridenew(_ZN9__gnu_cxx13new_allocatorISt23_Sp_counted_ptr_inplaceI9SomeClassSaIS2_ELNS_12_Lock_policyE2EEE8allocateEmPKv+0x4a) [0x405d9e]
+./overridenew(_ZNSt16allocator_traitsISaISt23_Sp_counted_ptr_inplaceI9SomeClassSaIS1_ELN9__gnu_cxx12_Lock_policyE2EEEE8allocateERS6_m+0x28) [0x405bef]
+./overridenew(_ZSt18__allocate_guardedISaISt23_Sp_counted_ptr_inplaceI9SomeClassSaIS1_ELN9__gnu_cxx12_Lock_policyE2EEEESt15__allocated_ptrIT_ERS8_+0x21) [0x4059e2]
+./overridenew(_ZNSt14__shared_countILN9__gnu_cxx12_Lock_policyE2EEC2I9SomeClassSaIS4_EJEEESt19_Sp_make_shared_tagPT_RKT0_DpOT1_+0x59) [0x4057e1]
+./overridenew(_ZNSt12__shared_ptrI9SomeClassLN9__gnu_cxx12_Lock_policyE2EEC2ISaIS0_EJEEESt19_Sp_make_shared_tagRKT_DpOT0_+0x3c) [0x4056ae]
+./overridenew(_ZNSt10shared_ptrI9SomeClassEC2ISaIS0_EJEEESt19_Sp_make_shared_tagRKT_DpOT0_+0x28) [0x40560e]
+./overridenew(_ZSt15allocate_sharedI9SomeClassSaIS0_EIEESt10shared_ptrIT_ERKT0_DpOT1_+0x37) [0x405534]
+./overridenew(_ZSt11make_sharedI9SomeClassJEESt10shared_ptrIT_EDpOT0_+0x3b) [0x405454]
+./overridenew(main+0x9c) [0x4052e8]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xf0) [0x7f83fe991830]
+./overridenew(_start+0x29) [0x405079]
+-----------
+Allocation, size = 10000000 at 0x7f83fc9c3010
+./overridenew(_Z14dumpStackTraceRSt14basic_ofstreamIcSt11char_traitsIcEE+0x3c) [0x40672c]
+./overridenew(_Znwm+0xaf) [0x406879]
+./overridenew(_ZN9__gnu_cxx13new_allocatorIcE8allocateEmPKv+0x3c) [0x406538]
+./overridenew(_ZNSt16allocator_traitsISaIcEE8allocateERS0_m+0x28) [0x4064aa]
+./overridenew(_ZNSt12_Vector_baseIcSaIcEE11_M_allocateEm+0x2a) [0x406450]
+./overridenew(_ZNSt12_Vector_baseIcSaIcEE17_M_create_storageEm+0x23) [0x4063cb]
+./overridenew(_ZNSt12_Vector_baseIcSaIcEEC1EmRKS0_+0x3b) [0x4062f7]
+./overridenew(_ZNSt6vectorIcSaIcEEC2EmRKS0_+0x2c) [0x406286]
+./overridenew(_ZN9SomeClassC1Ev+0x3d) [0x406215]
+./overridenew(_ZN9__gnu_cxx13new_allocatorI9SomeClassE9constructIS1_JEEEvPT_DpOT0_+0x36) [0x405e3a]
+./overridenew(_ZNSt16allocator_traitsISaI9SomeClassEE9constructIS0_JEEEvRS1_PT_DpOT0_+0x23) [0x405d51]
+./overridenew(_ZNSt23_Sp_counted_ptr_inplaceI9SomeClassSaIS0_ELN9__gnu_cxx12_Lock_policyE2EEC2IJEEES1_DpOT_+0x8c) [0x405b4a]
+./overridenew(_ZNSt14__shared_countILN9__gnu_cxx12_Lock_policyE2EEC2I9SomeClassSaIS4_EJEEESt19_Sp_make_shared_tagPT_RKT0_DpOT1_+0xaf) [0x405837]
+./overridenew(_ZNSt12__shared_ptrI9SomeClassLN9__gnu_cxx12_Lock_policyE2EEC2ISaIS0_EJEEESt19_Sp_make_shared_tagRKT_DpOT0_+0x3c) [0x4056ae]
+./overridenew(_ZNSt10shared_ptrI9SomeClassEC2ISaIS0_EJEEESt19_Sp_make_shared_tagRKT_DpOT0_+0x28) [0x40560e]
+
+...
+</pre>
+<p>&#8230;io non ci riesco. Dove sta &#8220;main+0xa8&#8221; nel mio programma? Fortunatamente, nel &#8220;mondo gnu/Linux&#8221; ci sono strumenti per fare il de-mangling e trovare i punti del codice corrispondenti agli indirizzi. Possiamo usarli, per esempio, in un semplice <a href="javascript:void(0);" data-target="#nota6" data-toggle="collapse">script</a>.</p>
+<div id="nota6" class="collapse inlineNote">
+<DIV class="page-snippet-container">
+	<div id=cesnippet7 class='ace_coliru_editor'><br />
+#!/usr/bin/python<br />
+#<br />
+# C++filt fa il demangling dei nomi.<br />
+#<br />
+# addr2line converte i puntatori a codice (es. indirizzi di funzioni)<br />
+# alla coppia file:riga col codice corrispondente (se ci sono i simboli di debug).<br />
+#<br />
+# Il codice python dovrebbe essere portabile, ma non le utility a riga di comando.<br />
+#</p>
+<p>import re<br />
+import subprocess<br />
+#</p>
+<p># Apre un sottoprocesso e gli passa dei comandi per la shell, poi ritorna il risultato in una stringa.<br />
+# Non molto efficiente, ma semplice.<br />
+def run_shell(command):<br />
+	return subprocess.Popen(command, stdout=subprocess.PIPE).communicate()[0]<br />
+#<br />
+#<br />
+if __name__ == &#8220;__main__&#8221;:<br />
+	total_size = 0;<br />
+#<br />
+	# L&#8217;output ha 2 tipi di righe: quella con la dimensione dell&#8217;allocazione, e quella con uno stack frame.<br />
+	size_line  = re.compile(&#8220;Allocation, size = (\d+) at (\d+)&#8221;)  # Allocation, size = &lt;bytes&gt; at &lt;punto dell&#8217;heap&gt;<br />
+	stack_line = re.compile(&#8220;.*\((.*)\+.*\) \[(.*)\]&#8221;)  # &lt;immondizia&gt;(nome mangled) [&lt;puntatore al codice&gt;]<br />
+#<br />
+	allocations_file = open(&#8220;allocations.txt&#8221;)<br />
+	for line in allocations_file:<br />
+		match_size = size_line.match(line)<br />
+		match_stack = stack_line.match(line)<br />
+#<br />
+		# A scopo dimostrativo, accumulo il totale della memoria allocata.<br />
+		# Un esempio di quello che si puo&#8217; fare quando si controlla new!<br />
+		if (match_size):<br />
+			allocation_size = int(match_size.group(1))<br />
+			total_size += allocation_size<br />
+			print &#8220;Allocati &#8221; + str(allocation_size)<br />
+#<br />
+		elif (match_stack):<br />
+			mangled_name = match_stack.group(1)<br />
+			line_address = match_stack.group(2)<br />
+			demangled_name = run_shell([&quot;c++filt&quot;,  &quot;-n&quot;, mangled_name])<br />
+			line_number = run_shell([&#8220;addr2line&quot;,  &#8220;-e&#8221;,   &#8220;./overridenew&#8221;,  line_address])<br />
+#<br />
+			# La formattazione non e&#8217; molto professionale. Il -1 &quot;gratuito&quot; e&#8217; per togliere un newline.<br />
+			print&#8221;\t&#8221; + demangled_name[:-1] + &#8220;\n\t\t&#8221; + line_number,<br />
+#<br />
+		# Rimette i separatori esattamente dov&#8217;erano.<br />
+		else:<br />
+			print line<br />
+#<br />
+	print &#8220;\n total allocated size &#8221;  + str(total_size)<br />
+</div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet7');</script>
+</DIV>
+</p></div>
+<p>In alternativa, si può fare tutto a run time, con le utility di demangling dei compilatori. Per esempio <a href="https://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html">quella di gcc</a>. Personalmente preferisco tenere il codice di misurazione il più semplice possibile e &#8220;sbrigarmela&#8221; off-line. Con il mio script ottengo:</p>
+<pre>
+Allocati 40
+    segnaLoStackTrace(std::basic_ofstream&lt;char, std::char_traits&lt;char&gt; &gt;&)
+        /home/stefano/projects/overrideNew/InstrumentedNew.cpp:31
+    operator new(unsigned long)
+        /home/stefano/projects/overrideNew/InstrumentedNew.cpp:51
+    __gnu_cxx::new_allocator&lt;std::_Sp_counted_ptr_inplace&lt;UnaClasseDelProgramma, std::allocator&lt;UnaClasseDelProgramma&gt;, (__gnu_cxx::_Lock_policy)2&gt; &gt;::allocate(unsigned long, void const*)
+        /usr/include/c++/5/ext/new_allocator.h:105
+
+   ... stack delle chiamate "interne" di shared_ptr...
+
+    std::shared_ptr&lt;UnaClasseDelProgramma&gt; std::allocate_shared&lt;UnaClasseDelProgramma, std::allocator&lt;UnaClasseDelProgramma&gt;&gt;(std::allocator&lt;UnaClasseDelProgramma&gt; const&)
+        /usr/include/c++/5/bits/shared_ptr.h:620
+    std::shared_ptr&lt;UnaClasseDelProgramma&gt; std::make_shared&lt;UnaClasseDelProgramma&gt;()
+        /usr/include/c++/5/bits/shared_ptr.h:636
+    main
+        /home/stefano/projects/overrideNew/main.cpp:25
+    __libc_start_main
+        ??:0
+    _start
+        ??:?
+-----------
+
+Allocati 10000000
+    segnaLoStackTrace(std::basic_ofstream&lt;char, std::char_traits&lt;char&gt; &gt;&)
+        /home/stefano/projects/overrideNew/InstrumentedNew.cpp:31
+    operator new(unsigned long)
+        /home/stefano/projects/overrideNew/InstrumentedNew.cpp:51
+    __gnu_cxx::new_allocator&lt;char&gt;::allocate(unsigned long, void const*)
+        /usr/include/c++/5/ext/new_allocator.h:105
+
+         ... stack delle chiamate interne di vector...
+
+    std::vector&lt;char, std::allocator&lt;char&gt; &gt;::vector(unsigned long, std::allocator&lt;char&gt; const&)
+        /usr/include/c++/5/bits/stl_vector.h:279
+    UnaClasseDelProgramma::UnaClasseDelProgramma()
+        /home/stefano/projects/overrideNew/UnaClasseDelProgramma.cpp:4 (discriminator 2)
+...
+</pre>
+<p>La prima allocazione sono 40 byte chiesti da make_shared. 24 per UnaClasseDelProgramma (che contiene un vector come membro &#8211; sizeof(vector) è 24), i restanti dovrebbero essere il control block dello shared pointer. La seconda allocazione sono i 10MB del famigerato costruttore di UnaClasseDelProgramma.</p>
+<p>Bisogna faticare un po&#8217; per decifrare gli stack, ma si riesce a capire che la riga misteriosa era <span class="inlineCode">std::shared_ptr<UnaClasseDelProgramma> stdSmartPointer = std::make_shared&lt;UnaClasseDelProgramma&gt;();</span> &#8211;  dalle parti del return a main.cpp:25.</p>
+<p>Compito per casa: quante allocazioni ci sarebbero con <span class="inlineCode">std::shared_ptr&lt;UnaClasseDelProgramma&gt; notSoSmartPointer(new UnaClasseDelProgramma());<br />
+?</span><a href="javascript:void(0);" data-target="#nota7" data-toggle="collapse">*</a></p>
+<div id="nota7" class="collapse inlineNote" data-target="#nota7" data-toggle="collapse">
+Tre, e si usano 8 byte in più.<br />
+In un test ho misurato:<br />
+24 byte per l&#8217;istanza di UnaClasseDelProgramma<br />
+10 MB per il contenuto del vector<br />
+24 byte per lo shared pointer.</p>
+<p>Giudiacando dalle <a href="en.cppreference.com/w/cpp/memory/shared_ptr">implementation notes</a>, penso che la differenza sia nel contenuto del control_block dello shared pointer.
+</div>
+<hr />
+<h4>Riassumendo&#8230;</h4>
+<p>I programmatori combattono da sempre con la memoria, vuoi perché è poca, vuoi perché è lenta. Come per tutti i colli di bottiglia, non ci si può fidare dell’istinto. Abbiamo visto che esistono strumenti appropriati (i memory profiler) per misurare il consumo di memoria. Abbiamo scoperto che, male che vada, esistono strumenti &#8220;casarecci&#8221; che possiamo costruirci da soli con il &#8220;classico hack da C++&#8221;, manipolando operator new.</p>
+<p><em>Trovate il codice degli esempi &#8220;pronto da compilare&#8221; <a href="https://github.com/italiancpp/code/tree/master/spy-memory-with-new">sul repo GitHub di ++It<a>.</em></p>
+]]></content:encoded>
+		<post-id xmlns="com-wordpress:feed-additions:1">7318</post-id>	</item>
+		<item>
+		<title>Spy your memory usage with operator new</title>
+		<link>https://www.italiancpp.org/2017/01/27/spy-your-memory-usage-with-operator-new/</link>
+		<pubDate>Fri, 27 Jan 2017 18:18:53 +0000</pubDate>
+		<dc:creator><![CDATA[stefano]]></dc:creator>
+				<category><![CDATA[Hands-on]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=7387</guid>
+		<description><![CDATA[Special thanks to Marco Alesiani for many corrections and suggestions. Anche tu campi a spaghetti e pizza? Leggi l&#8217;articolo in italiano. When we say &#8220;efficiency&#8221;, we often think &#8220;time&#8221;. The sooner the code does its job, the more it is efficient. What about memory? Granted, today even the lousiest laptop comes with &#8220;a bucket load&#8221; [&#8230;]]]></description>
+				<content:encoded><![CDATA[<style>
+.inlineNote {border-style: solid; border-radius: 5px; border-color: rgb(39,​ 48,​ 57); border-width: 2px;}
+p {text-align: justify !important;}
+.inlineCode {font-family: "Courier New", Courier, monospace;}
+</style>
+<p><em>Special thanks to </em><strong><em>Marco Alesiani</em></strong> <em>for many corrections and suggestions.</em></p>
+<p><em>Anche tu campi a spaghetti e pizza? Leggi <a href="http://www.italiancpp.org/?p=7318">l&#8217;articolo in italiano</a>.</em></p>
+<hr />
+<p>When we say &#8220;efficiency&#8221;, we often think &#8220;time&#8221;. The sooner the code does its job, the more it is efficient.</p>
+<p>What about memory? Granted, today even the lousiest laptop comes with &#8220;a bucket load&#8221; of RAM which… is never enough. My PC &#8220;wastes&#8221; 1.4GB just to idle. I open a browser, 300 more MB are gone.<a href="javascript:void(0);" data-target="#nota1" data-toggle="collapse">*</a>.</p>
+<div id="nota1" class="collapse inlineNote" data-target="#nota1" data-toggle="collapse">&#8230;we take the occasion to apologize for the “Allowed memory size of &#8230; bytes exhausted “ errors and the white pages that you may occasionally see on ++It. There is a reason why we care so much about memory.</div>
+<p>Adding insult to injury, using memory is one of the slowest operations on current systems<a href="javascript:void(0);" data-target="#nota2" data-toggle="collapse">*</a>.</p>
+<div id="nota2" class="collapse inlineNote" data-target="#nota2" data-toggle="collapse">
+(Italian only) Daniele Maccioni: <a href="http://www.italiancpp.org/sessioni-cppday16/#cpp17">Data Oriented Design: alte performance in C++</a>
+</div>
+<p>Moreover, finding the culprit line among the code is not easy. Was it a &#8220;new&#8221; we wrote? Some allocation hidden inside a library? Are temporary objects to blame?</p>
+<p><em>How to easily find the part of the code that uses most of the memory?</em></p>
+<p>This post collects some personal experiments. You can &#8220;thank&#8221; the author for any mistake.</p>
+<h4>Let&#8217;s use some memory</h4>
+<p>Today&#8217;s toy-code is nothing special, but it does many an allocation using operator new.</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet8 class='ace_coliru_editor'><br />
+/* Program that allocates some memory when it feels like.<br />
+   No delete &#8211; today&#8217;s essay is not about memory leaks.*/<br />
+#include &lt;string&gt;<br />
+#include &lt;memory&gt;<br />
+#include &lt;boost/shared_ptr.hpp&gt;<br />
+#include &lt;boost/make_shared.hpp&gt;<br />
+#include &quot;SomeClass.h&quot;<br />
+//<br />
+void h() {<br />
+  SomeClass* t = new SomeClass();<br />
+}<br />
+void g() {  h(); }<br />
+void f() {  g(); }<br />
+void MakeSomeClass() {  f(); }<br />
+//<br />
+int main(int argc, char **argv) {<br />
+    int * number = new int(89);<br />
+    std::string * test = new std::string(&quot;abc&quot;);<br />
+//<br />
+    SomeClass * oggetto = new SomeClass();<br />
+    MakeSomeClass();<br />
+//<br />
+    boost::shared_ptr&lt;SomeClass&gt; smartPointer = boost::make_shared&lt;SomeClass&gt;();<br />
+    std::shared_ptr&lt;SomeClass&gt; stdSmartPointer = std::make_shared&lt;SomeClass&gt;();<br />
+    return 0;<br />
+}<br />
+</div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet8');</script>
+</DIV>
+<p>Compile, run and&#8230; almost 42MB (measured &#8220;on the cheap&#8221; with <span class="inlineCode">/usr/bin/time -v</span>).</p>
+<p><em>Who is using all that memory?</em></p>
+<h4>The right way: memory profiler</h4>
+<p>The idea should be familiar: the &#8220;classic&#8221; profiler tells for how long each function executes. The memory profiler instead tells where and when the program uses memory, and how much.<br />
+For example, here is some of the information that Massif <a href="javascript:void(0);" data-target="#nota3" data-toggle="collapse">*</a> returns about our program.</p>
+<div id="nota3" class="collapse inlineNote" data-target="#nota3" data-toggle="collapse">
+<a href="http://valgrind.org/docs/manual/ms-manual.html">http://valgrind.org/docs/manual/ms-manual.html</a><br />
+Should you work on Windows: <a href="https://blogs.msdn.microsoft.com/vcblog/2015/10/21/memory-profiling-in-visual-c-2015/">https://blogs.msdn.microsoft.com/vcblog/2015/10/21/memory-profiling-in-visual-c-2015/</a>
+</div>
+<p>We can start with the memory growth (in ASCII art!) over &#8220;time&#8221; &#8211; actually its growth over the number of executed instructions:</p>
+<pre>
+    MB
+38.23^                                                           ::::::::::::#
+     |                                                           :           #
+     |                                                           :           #
+     |                                                           :           #
+     |                                                           :           #
+     |                                               :::::::::::::           #
+     |                                               :           :           #
+     |                                               :           :           #
+     |                                               :           :           #
+     |                                               :           :           #
+     |                                   @@@@@@@@@@@@:           :           #
+     |                                   @           :           :           #
+     |                                   @           :           :           #
+     |                                   @           :           :           #
+     |                                   @           :           :           #
+     |                       ::::::::::::@           :           :           #
+     |                       :           @           :           :           #
+     |                       :           @           :           :           #
+     |                       :           @           :           :           #
+     |                       :           @           :           :           #
+   0 +----------------------------------------------------------------------->Mi
+     0                                                                   6.203
+</pre>
+<p>Then we can get detailed snapshots (the &#8220;A&#8221;, &#8220;B&#8221; and &#8220;C&#8221; tags are ours):</p>
+<pre>
+--------------------------------------------------------------------------------
+  n        time(i)         total(B)   useful-heap(B) extra-heap(B)    stacks(B)
+--------------------------------------------------------------------------------
+...
+  9      4,311,691       30,080,056       30,072,844         7,212            0
+99.98% (30,072,844B) (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+-&gt;99.73% (30,000,000B) 0x4078E8: __gnu_cxx::new_allocator&lt;char&gt;::allocate(unsigned long, void const*) (new_allocator.h:104)
+| -&gt;99.73% (30,000,000B) 0x40785A: std::allocator_traits&lt;std::allocator&lt;char&gt; &gt;::allocate(std::allocator&lt;char&gt;&, unsigned long) (alloc_traits.h:491)
+|   -&gt;99.73% (30,000,000B) 0x407800: std::_Vector_base&lt;char, std::allocator&lt;char&gt; &gt;::_M_allocate(unsigned long) (stl_vector.h:170)
+|     -&gt;99.73% (30,000,000B) 0x40777B: std::_Vector_base&lt;char, std::allocator&lt;char&gt; &gt;::_M_create_storage(unsigned long) (stl_vector.h:185)
+|       -&gt;99.73% (30,000,000B) 0x4076A7: std::_Vector_base&lt;char, std::allocator&lt;char&gt; &gt;::_Vector_base(unsigned long, std::allocator&lt;char&gt; const&) (stl_vector.h:136)
+|         -&gt;99.73% (30,000,000B) 0x407636: std::vector&lt;char, std::allocator&lt;char&gt; &gt;::vector(unsigned long, std::allocator&lt;char&gt; const&) (stl_vector.h:278)
+|           -&gt;99.73% (30,000,000B) 0x4075C5: SomeClass::SomeClass() (SomeClass.cpp:4)
+|  A ====>   -&gt;33.24% (10,000,000B) 0x405F91: main (main.cpp:20)
+|             | 
+|  B ====>    -&gt;33.24% (10,000,000B) 0x405EC1: h() (main.cpp:10)
+|             | -&gt;33.24% (10,000,000B) 0x405EEF: g() (main.cpp:12)
+|             |   -&gt;33.24% (10,000,000B) 0x405EFB: f() (main.cpp:13)
+|             |     -&gt;33.24% (10,000,000B) 0x405F07: MakeSomeClass() (main.cpp:14)
+|             |       -&gt;33.24% (10,000,000B) 0x405F9A: main (main.cpp:21)
+|             |         
+|  C ====>    -&gt;33.24% (10,000,000B) 0x4063F2: _ZN5boost11make_sharedI9SomeClassIEEENS_6detail15sp_if_not_arrayIT_E4typeEDpOT0_ (make_shared_object.hpp:254)
+|               -&gt;33.24% (10,000,000B) 0x405FA6: main (main.cpp:23)
+|                 
+-&gt;00.24% (72,844B) in 1+ places, all below ms_print's threshold (01.00%)
+</pre>
+<p>We quickly see that line 20 of the main uses one third of the memory (A) where we wrote a new. The next 30% of the memory (B) is allocated in h() &#8211; Massif recorded all the call stack at the point of allocation. We can trace it down to the call to MakeSomeClass() in the main. Massif also works with shared pointers (C).</p>
+<p>We can&#8217;t see the allocation at line 24 because it has not yet been executed and &#8220;intercepted&#8221; by Massif. We may spot it in a later snapshot. The remaining allocations are &#8220;small&#8221; and summarized in the last line.</p>
+<p>A quick glance at the report tells us to go check the constructor of SomeClass. What the heck is it doing with a std::vector that takes 99% of the memory?</p>
+<p>This is already a good result, obtained with little effort. Be aware that Massif can do more. It can measure the memory used &#8220;behind the scenes&#8221; by the system to make the heap work (extra-heap – 7,212 bytes in the example), track the stack&#8230;</p>
+<h4>The do-it-yourself way: override operator new</h4>
+<p>C++ allows to replace the operator to create objects (new) with a custom one.<a href="javascript:void(0);" data-target="#nota4" data-toggle="collapse">*</a></p>
+<div id="nota4" class="collapse inlineNote" data-target="#nota4" data-toggle="collapse">
+<a href="http://en.cppreference.com/w/cpp/memory/new/operator_new">http://en.cppreference.com/w/cpp/memory/new/operator_new</a>
+</div>
+<p>Almost nobody has a good reason to do so, but we do: <span style="text-decoration: line-through;">I could not figure out how to use the profiler</span> intercept heap allocations.</p>
+<p>By and large, all we have to do is define a custom new (and its overloads) in any file of a program.</p>
+<p>If the memory profiler is an equivalent of the “time” profiler, then you can compare this trick to the classic snippet <span class="inlineCode">cout << endTime - startTime;</span>. Not really detailed or accurate, but simple and useful.</p>
+<p>A few lines of code can give us something raw, but usable. You should compile with debug symbols. The code that outputs the stack trace can probably work only on Linux.<a href="javascript:void(0);" data-target="#nota5" data-toggle="collapse">*</a>.</p>
+<div id="nota5" class="collapse inlineNote"> <!-- No collapse on click, altrimenti non si può cliccare per fare copia e incolla del codice. --><br />
+There is nothing portable when you work at low level.</p>
+<p>If you are in the Microsoft world: <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb204633%28v=vs.85%29.aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/bb204633%28v=vs.85%29.aspx</a>.</p>
+<p>That means:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet9 class='ace_coliru_editor'><br />
+#include &lt;iostream&gt;<br />
+//<br />
+#include &lt;Windows.h&gt;  // Capture stack traces.<br />
+#include &lt;Dbghelp.h&gt;  // Read debug symbols.</p>
+<p>//<br />
+void StackTrace() {<br />
+	/* Capture the stack trace. */<br />
+	const ULONG doNotSkipAnyFrame = 0;<br />
+	const ULONG takeTenFrames = 10;<br />
+	const PULONG doNotHash = nullptr;<br />
+	PVOID stackTrace[takeTenFrames];<br />
+	const USHORT framesCaptured = CaptureStackBackTrace(<br />
+								doNotSkipAnyFrame,<br />
+								takeTenFrames,<br />
+								stackTrace,<br />
+								doNotHash<br />
+							);<br />
+//<br />
+	/*Prepare the symbol table to convert from addresses to lines of code. */<br />
+	const HANDLE thisProcess = GetCurrentProcess();<br />
+	SymInitialize(thisProcess, NULL, TRUE);  // Linkare Dbghelp.lib<br />
+//<br />
+	for (ULONG i = 0; i &lt; framesCaptured; i++) {<br />
+		/*Estrae il nome della funzione. */<br />
+		const size_t nameStringSize = 256;<br />
+		SYMBOL_INFO * functionData = (SYMBOL_INFO*)malloc(sizeof(SYMBOL_INFO) + (nameStringSize + 1) * sizeof(char)); // +1 because there is \0<br />
+		functionData-&gt;MaxNameLen = nameStringSize;<br />
+		functionData-&gt;SizeOfStruct = sizeof(SYMBOL_INFO);<br />
+		SymFromAddr(thisProcess, (DWORD64)(stackTrace[i]), 0, functionData);<br />
+//<br />
+		/* Find the file matching the function call.*/<br />
+		DWORD displacementInLine;<br />
+		IMAGEHLP_LINE64 lineOfCode;<br />
+		lineOfCode.SizeOfStruct = sizeof(IMAGEHLP_LINE64);<br />
+		SymGetLineFromAddr64(thisProcess, (DWORD)(stackTrace[i]), &#038;displacementInLine, &#038;lineOfCode);<br />
+//<br />
+		std::cout &lt;&lt; functionData-&gt;Name &lt;&lt; &quot; at &quot;<br />
+			      &lt;&lt; lineOfCode.FileName &lt;&lt; &quot;:&quot; &lt;&lt; lineOfCode.LineNumber &lt;&lt; std::endl;<br />
+	}<br />
+}<br />
+</div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet9');</script>
+</DIV>
+</div>
+<p>.</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet10 class='ace_coliru_editor'><br />
+// Our special new must allocate memory as expected&#8230;<br />
+#include &lt;cstdio&gt;<br />
+#include &lt;cstdlib&gt;<br />
+// &#8230;but also inspect the stack and print some results.<br />
+#include &lt;execinfo.h&gt;<br />
+#include &lt;unistd.h&gt;<br />
+#include &lt;fstream&gt;<br />
+// Import bad_alloc, expected in case of errors.<br />
+#include &lt;new&gt;<br />
+//<br />
+/* Opens (once) and return the file to save the results.. */<br />
+static std::ofstream&#038; resultFile() {<br />
+  static std::ofstream memoryProfile;<br />
+  static bool open = false;  // Init on 1st use, as usual.<br />
+    if (! open) {<br />
+      memoryProfile.open (&quot;allocations.txt&quot;);<br />
+      open = true;<br />
+    }<br />
+    // Else, handle errors, close the file&#8230;<br />
+    // We won&#8217;t do it, to keep the example simple.<br />
+   return memoryProfile;<br />
+}<br />
+//<br />
+/* This is the &quot;magic&quot; function that inspect the stack and writes it in a file. */<br />
+static void dumpStackTrace(std::ofstream&#038; memoryProfile) {<br />
+  // Record 15 pointers to stack frame &#45; enough for the example program.<br />
+  const int maximumStackSize = 15;<br />
+  void *callStack[maximumStackSize];<br />
+  size_t framesInUse = backtrace(callStack, maximumStackSize);<br />
+  // Now callStack is full of pointers. Request the names of the functions matching each frame.<br />
+  char ** mangledFunctionNames = backtrace_symbols(callStack, framesInUse);<br />
+  // Writes all the function names in the stream.<br />
+  for (size_t i = 0; i &lt; framesInUse; ++i)<br />
+    memoryProfile &lt;&lt; mangledFunctionNames[i] &lt;&lt; std::endl;<br />
+  // To be fair, we should release mangledFunctionNames with free&#8230;<br />
+}<br />
+//<br />
+/* Now we have all the elements to build the custom operator new. */<br />
+void* operator new(std::size_t sz) {<br />
+    // Allocate the requested memory for the caller.<br />
+    void * requestedMemory = std::malloc(sz);<br />
+    if (! requestedMemory)<br />
+      throw std::bad_alloc();<br />
+    // Share our allocations with the world.<br />
+    std::ofstream&#038; memoryProfile = resultFile();<br />
+    memoryProfile &lt;&lt; &quot;Allocation, size = &quot; &lt;&lt; sz &lt;&lt; &quot; at &quot; &lt;&lt; static_cast&lt;void*&gt;(requestedMemory) &lt;&lt; std::endl;<br />
+    dumpStackTrace(memoryProfile);<br />
+    memoryProfile &lt;&lt; &quot;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&quot; &lt;&lt; std::endl;  // Poor man&#8217;s separator.</p>
+<p>    return requestedMemory;<br />
+}<br />
+</div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet10');</script>
+</DIV>
+<p>Let&#8217;s add the &#8220;tricked out&#8221; operator new to our test program. This is an example of the result &#8211; can you guess the line of code behind it?</p>
+<pre>
+Allocation, size = 40 at 0x18705b0
+./overridenew(_Z14dumpStackTraceRSt14basic_ofstreamIcSt11char_traitsIcEE+0x3c) [0x40672c]
+./overridenew(_Znwm+0xaf) [0x406879]
+./overridenew(_ZN9__gnu_cxx13new_allocatorISt23_Sp_counted_ptr_inplaceI9SomeClassSaIS2_ELNS_12_Lock_policyE2EEE8allocateEmPKv+0x4a) [0x405d9e]
+./overridenew(_ZNSt16allocator_traitsISaISt23_Sp_counted_ptr_inplaceI9SomeClassSaIS1_ELN9__gnu_cxx12_Lock_policyE2EEEE8allocateERS6_m+0x28) [0x405bef]
+./overridenew(_ZSt18__allocate_guardedISaISt23_Sp_counted_ptr_inplaceI9SomeClassSaIS1_ELN9__gnu_cxx12_Lock_policyE2EEEESt15__allocated_ptrIT_ERS8_+0x21) [0x4059e2]
+./overridenew(_ZNSt14__shared_countILN9__gnu_cxx12_Lock_policyE2EEC2I9SomeClassSaIS4_EJEEESt19_Sp_make_shared_tagPT_RKT0_DpOT1_+0x59) [0x4057e1]
+./overridenew(_ZNSt12__shared_ptrI9SomeClassLN9__gnu_cxx12_Lock_policyE2EEC2ISaIS0_EJEEESt19_Sp_make_shared_tagRKT_DpOT0_+0x3c) [0x4056ae]
+./overridenew(_ZNSt10shared_ptrI9SomeClassEC2ISaIS0_EJEEESt19_Sp_make_shared_tagRKT_DpOT0_+0x28) [0x40560e]
+./overridenew(_ZSt15allocate_sharedI9SomeClassSaIS0_EIEESt10shared_ptrIT_ERKT0_DpOT1_+0x37) [0x405534]
+./overridenew(_ZSt11make_sharedI9SomeClassJEESt10shared_ptrIT_EDpOT0_+0x3b) [0x405454]
+./overridenew(main+0x9c) [0x4052e8]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xf0) [0x7f83fe991830]
+./overridenew(_start+0x29) [0x405079]
+-----------
+Allocation, size = 10000000 at 0x7f83fc9c3010
+./overridenew(_Z14dumpStackTraceRSt14basic_ofstreamIcSt11char_traitsIcEE+0x3c) [0x40672c]
+./overridenew(_Znwm+0xaf) [0x406879]
+./overridenew(_ZN9__gnu_cxx13new_allocatorIcE8allocateEmPKv+0x3c) [0x406538]
+./overridenew(_ZNSt16allocator_traitsISaIcEE8allocateERS0_m+0x28) [0x4064aa]
+./overridenew(_ZNSt12_Vector_baseIcSaIcEE11_M_allocateEm+0x2a) [0x406450]
+./overridenew(_ZNSt12_Vector_baseIcSaIcEE17_M_create_storageEm+0x23) [0x4063cb]
+./overridenew(_ZNSt12_Vector_baseIcSaIcEEC1EmRKS0_+0x3b) [0x4062f7]
+./overridenew(_ZNSt6vectorIcSaIcEEC2EmRKS0_+0x2c) [0x406286]
+./overridenew(_ZN9SomeClassC1Ev+0x3d) [0x406215]
+./overridenew(_ZN9__gnu_cxx13new_allocatorI9SomeClassE9constructIS1_JEEEvPT_DpOT0_+0x36) [0x405e3a]
+./overridenew(_ZNSt16allocator_traitsISaI9SomeClassEE9constructIS0_JEEEvRS1_PT_DpOT0_+0x23) [0x405d51]
+./overridenew(_ZNSt23_Sp_counted_ptr_inplaceI9SomeClassSaIS0_ELN9__gnu_cxx12_Lock_policyE2EEC2IJEEES1_DpOT_+0x8c) [0x405b4a]
+./overridenew(_ZNSt14__shared_countILN9__gnu_cxx12_Lock_policyE2EEC2I9SomeClassSaIS4_EJEEESt19_Sp_make_shared_tagPT_RKT0_DpOT1_+0xaf) [0x405837]
+./overridenew(_ZNSt12__shared_ptrI9SomeClassLN9__gnu_cxx12_Lock_policyE2EEC2ISaIS0_EJEEESt19_Sp_make_shared_tagRKT_DpOT0_+0x3c) [0x4056ae]
+./overridenew(_ZNSt10shared_ptrI9SomeClassEC2ISaIS0_EJEEESt19_Sp_make_shared_tagRKT_DpOT0_+0x28) [0x40560e]
+
+...
+</pre>
+<p>&#8230;I can&#8217;t. Where is &#8220;main+0xa8&#8221; in my code? Thankfully in the &#8220;gnu/Linux world&#8221; there are tools to de-mangle names and find the point in the code that corresponds to a given address. We can use them, for example, in a simple <a href="javascript:void(0);" data-target="#nota6" data-toggle="collapse">script</a>.</p>
+<div id="nota6" class="collapse inlineNote">
+<DIV class="page-snippet-container">
+	<div id=cesnippet11 class='ace_coliru_editor'><br />
+#!/usr/bin/python<br />
+#<br />
+# C++filt demangles names.<br />
+#<br />
+# addr2line converts code pointers (e. g. functions&#8217; addresses)<br />
+# into the file:line couple corresponding to the code (if there are debug symbols).<br />
+#<br />
+# The python code should be portable, but the called utilities aren&#8217;t.<br />
+#</p>
+<p>import re<br />
+import subprocess<br />
+#</p>
+<p># Opens a sub-process and passes shell commands to it. Returns the results as a string.<br />
+# Not very efficient, but easy.<br />
+def run_shell(command):<br />
+	return subprocess.Popen(command, stdout=subprocess.PIPE).communicate()[0]<br />
+#<br />
+#<br />
+if __name__ == &quot;__main__&quot;:<br />
+	total_size = 0;<br />
+#<br />
+	# There are 2 types of lines in the output: stack frames and allocation sizes.<br />
+	size_line  = re.compile(&quot;Allocation, size = (\d+) at (\d+)&quot;)  # Allocation, size = &lt;bytes&gt; at &lt;pointer somewhere in the heap&gt;<br />
+	stack_line = re.compile(&quot;.*\((.*)\+.*\) \[(.*)\]&quot;)  # &lt;rubbish&gt;(mangled name) [&lt;code pointer&gt;]<br />
+#<br />
+	allocations_file = open(&quot;allocations.txt&quot;)<br />
+	for line in allocations_file:<br />
+		match_size = size_line.match(line)<br />
+		match_stack = stack_line.match(line)<br />
+#<br />
+		# For a demo, I compute the sum of all the used memory.<br />
+		# The things you can do with an overridden new!<br />
+		if (match_size):<br />
+			allocation_size = int(match_size.group(1))<br />
+			total_size += allocation_size<br />
+			print &quot;Used &quot; + str(allocation_size)<br />
+#<br />
+		elif (match_stack):<br />
+			mangled_name = match_stack.group(1)<br />
+			line_address = match_stack.group(2)<br />
+			demangled_name = run_shell([&quot;c++filt&quot;,  &quot;-n&quot;, mangled_name])<br />
+			line_number = run_shell([&quot;addr2line&quot;,  &quot;-e&quot;,   &quot;./overridenew&quot;,  line_address])<br />
+#<br />
+			# This is not professional-grade formatting. The -1 cuts away the newlines.<br />
+			print&quot;\t&quot; + demangled_name[:-1] + &quot;\n\t\t&quot; + line_number,<br />
+#<br />
+		# Copy the separator as they were.<br />
+		else:<br />
+			print line<br />
+#<br />
+	print &quot;\n total allocated size &quot;  + str(total_size)<br />
+</div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet11');</script>
+</DIV>
+</p></div>
+<p>As an alternative, we could to everything at run time, using the compiler&#8217;s demangling utilities, such as <a href="https://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html">the gcc one</a>. Personally I prefer to keep the code instrumentation as simple as possible and do the &#8220;heavy lifting&#8221; off-line. My script returns:</p>
+<pre>
+Used 40
+    dumpStackTrace(std::basic_ofstream&lt;char, std::char_traits&lt;char&gt; &gt;&)
+        /home/stefano/projects/code/spy-memory-with-new/InstrumentedNew.cpp:29
+    operator new(unsigned long)
+        /home/stefano/projects/code/spy-memory-with-new/InstrumentedNew.cpp:48
+    __gnu_cxx::new_allocator&lt;std::_Sp_counted_ptr_inplace&lt;SomeClass, std::allocator&lt;SomeClass&gt;, (__gnu_cxx::_Lock_policy)2&gt; &gt;::allocate(unsigned long, void const*)
+        /usr/include/c++/5/ext/new_allocator.h:105
+    
+    ... internal calls of the shared pointer...
+    
+    std::shared_ptr&lt;SomeClass&gt; std::allocate_shared&lt;SomeClass, std::allocator&lt;SomeClass&gt;&gt;(std::allocator&lt;SomeClass&gt; const&)
+        /usr/include/c++/5/bits/shared_ptr.h:620
+    _ZSt11make_sharedI9SomeClassIEESt10shared_ptrIT_EDpOT0_
+        /usr/include/c++/5/bits/shared_ptr.h:636
+    main
+        /home/stefano/projects/code/spy-memory-with-new/main.cpp:25
+    __libc_start_main
+        ??:0
+    _start
+        ??:?
+-----------
+
+Used 10000000
+    dumpStackTrace(std::basic_ofstream&lt;char, std::char_traits&lt;char&gt; &gt;&)
+        /home/stefano/projects/code/spy-memory-with-new/InstrumentedNew.cpp:29
+    operator new(unsigned long)
+        /home/stefano/projects/code/spy-memory-with-new/InstrumentedNew.cpp:48
+    __gnu_cxx::new_allocator&lt;char&gt;::allocate(unsigned long, void const*)
+        /usr/include/c++/5/ext/new_allocator.h:105
+    
+    ...internal calls of vector...
+    
+    std::vector&lt;char, std::allocator&lt;char&gt; &gt;::vector(unsigned long, std::allocator&lt;char&gt; const&)
+        /usr/include/c++/5/bits/stl_vector.h:279
+    SomeClass::SomeClass()
+        /home/stefano/projects/code/spy-memory-with-new/SomeClass.cpp:4 (discriminator 2)
+    ...
+</pre>
+<p>The first allocation are the 40 bytes requested by make_shared. 24 for SomeClass (its only member is a vector &#8211; sizeof(vector) is 24), the rest should be the control block of the shared pointer. The second allocation are the 10MB in the notorious constructor of SomeClass.</p>
+<p>It takes some effort to navigate the stacks, but it is possible to understand that the mistery line was <span class="inlineCode">std::shared_ptr<SomeClass> stdSmartPointer = std::make_shared&lt;SomeClass&gt;();</span> &#8211;  close to the return at main.cpp:25.</p>
+<p>Homework: how many allocations would there be with <span class="inlineCode">std::shared_ptr&lt;SomeClass&gt; notSoSmartPointer(new SomeClass());<br />
+?</span><a href="javascript:void(0);" data-target="#nota7" data-toggle="collapse">*</a></p>
+<div id="nota7" class="collapse inlineNote" data-target="#nota7" data-toggle="collapse">
+Three, and using 8 more bytes.<br />
+In a test I found:<br />
+24 bytes for SomeClass&#8217;s instance<br />
+10 MB to fill the vector<br />
+24 bytes for the shared pointer.</p>
+<p>Looking at the <a href="en.cppreference.com/w/cpp/memory/shared_ptr">implementation notes</a>, I believe that the difference is in the content of the shared pointer&#8217;s control block.
+</div>
+<hr />
+<h4>In the end&#8230;</h4>
+<p>Programmers have been fighting against memory since the dawn of time, because it is slow and too small. As for every bottleneck, one can&#8217;t trust his instincts. We saw that there are proper tools (memory profilers) to measure the memory usage. We discovered that, in a pinch, there are &#8220;home made&#8221; tools we can build ourselves with a &#8220;stereotypical C++ hack&#8221;, the override of operator new.</p>
+<p><em>You can find the &#8220;ready-to-compile&#8221; code <a href="https://github.com/italiancpp/code/tree/master/spy-memory-with-new">in the ++It GitHub repo<a>.</em></p>
+]]></content:encoded>
+		<post-id xmlns="com-wordpress:feed-additions:1">7387</post-id>	</item>
+		<item>
+		<title>Coroutines Internals</title>
+		<link>https://www.italiancpp.org/2016/11/02/coroutines-internals/</link>
+		<pubDate>Wed, 02 Nov 2016 09:15:30 +0000</pubDate>
+		<dc:creator><![CDATA[Marco Alesiani]]></dc:creator>
+				<category><![CDATA[Hands-on]]></category>
+		<category><![CDATA[boost]]></category>
+		<category><![CDATA[C++11]]></category>
+		<category><![CDATA[C++14]]></category>
+		<category><![CDATA[C++17]]></category>
+		<category><![CDATA[cooperative]]></category>
+		<category><![CDATA[CoRoutines]]></category>
+		<category><![CDATA[fcontext]]></category>
+		<category><![CDATA[multitasking]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=6862</guid>
+		<description><![CDATA[What are coroutines and why should I care? In The Art of Computer Programming Donald Knuth introduced coroutines as an alternative to the usual function caller/callee idiom where two pieces of code were treated as cooperating equals. Coroutines can be thought of as language-level constructs that generalize subroutines by providing multiple exit/entry points. A normal [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p><a href="https://github.com/italiancpp/code" target="_blank"><img class="alignnone size-full wp-image-6930" src="https://i2.wp.com/www.italiancpp.org/wp-content/uploads/2016/10/github_available-1.png?resize=200%2C50" alt="Article's code is available on Github" data-recalc-dims="1" /></a></p>
+<h2>What are coroutines and why should I care?</h2>
+<p style="text-align: justify;">In <em>The Art of Computer Programming</em> Donald Knuth introduced coroutines as an alternative to the usual function caller/callee idiom where two pieces of code were treated as cooperating equals.<br />
+Coroutines can be thought of as language-level constructs that generalize subroutines by providing multiple exit/entry points. A normal subroutine usually has a starting point and one or more exit (return) points. A coroutine provides the ability to enter/exit its control flow at different spots therefore allowing for greater code expressiveness, preservation of automatic states across function calls and <a href="https://en.wikipedia.org/wiki/Cooperative_multitasking">nonpreemptive multitasking</a>.</p>
+<p style="text-align: justify;">It has to be noted that different programming languages can provide various levels of support for coroutines, e.g.</p>
+<ul style="text-align: justify;">
+<li>Languages supporting the <em>yield</em> keyword</li>
+<li>Languages providing full support for <em>async</em>, <em>await</em>, <em>yield</em></li>
+</ul>
+<p style="text-align: justify;">In this article we&#8217;ll focus on the former.</p>
+<p style="text-align: justify;">Thoughtful use of coroutines can lead to cleaner and more maintainable code in a variety of situations. As a motivating example let&#8217;s take for instance the following pseudocode</p>
+<pre>function start_accepting() {
+
+  socket.async_accept(accept_handler);
+
+  start_accepting();
+
+}
+
+function accept_handler() {
+
+  socket.async_read(read_handler);
+ 
+}
+
+function read_handler(data) {
+
+  request = parse_data(data);
+
+  switch(request) {
+
+    case SEND_DATA: {
+
+      data_to_send = prepare_data_for(request);
+
+      socket.async_write(data_to_send, write_handler);
+
+    } break;
+
+  };
+
+}
+
+function write_handler() {
+
+  ... // continue execution
+
+}</pre>
+<p style="text-align: justify;">Asynchronous programming is often the preferred way of accomplishing potentially blocking operations without stalling the thread on blocking calls. In the pseudocode above we&#8217;re assuming (and omitting for clarity&#8217;s sake) that all operations are queued and handled by an event loop manager (a common and powerful idiom in asynchronous applications programming, cfr. <a href="http://www.boost.org/doc/libs/">boost::asio</a>).</p>
+<p style="text-align: justify;">Coroutines allow modeling the same behavior with more readable code</p>
+<pre>coroutine acceptor() {
+
+  while(true) {
+
+    socket.async_accept_connection(yield); // To event manager
+
+    start_coroutine(serve_request);
+
+  }
+
+}
+
+coroutine serve_request() {
+
+  socket.async_read(data, yield);
+
+  request = parse_data(data);
+
+  switch(request) {
+
+    case SEND_DATA: {
+
+      data_to_send = prepare_data_for(request);
+
+      socket.async_write(data_to_send, yield);
+
+      ... // Continue execution
+
+    } break;
+
+  };
+
+}</pre>
+<p>&nbsp;</p>
+<p style="text-align: justify;">The code in <em>serve_request()</em> uses a sequential-looking paradigm</p>
+<blockquote>
+<p style="text-align: justify;">Coroutines let you create a structure that mirrors the actual program logic. Asynchronous operations don’t split functions, because there are no handlers to define what should happen when an asynchronous operation completes. Instead of having handlers call each other, the program can use a sequential structure.</p>
+<p>(<a href="http://theboostcpplibraries.com/boost.asio-coroutines">boost.asio-coroutines</a>)</p>
+<p>&nbsp;</p></blockquote>
+<h2>Standard support</h2>
+<p style="text-align: justify;">At the time of writing this article coroutines didn&#8217;t make it for the next standard version (C++17) although recent MSVC versions already ship with an <em>/await</em> option to test experimental support for coroutines.</p>
+<h2>Coroutines internals</h2>
+<p style="text-align: justify;">It is important to understand the role of coroutines in providing a collaborative non-preemptive multitasking: spawning a coroutine <strong>does not spawn a new thread</strong> of execution but coroutines <em>waive</em> execution by <a href="https://en.wikipedia.org/wiki/Yield_(multithreading)" target="_blank">yielding</a> to callers (<em>asymmetric coroutines</em>) or to other coroutines (<em>symmetric coroutines</em>) explicitly.</p>
+<p style="text-align: justify;">Since coroutines are concepts that have been known for a relatively long time many different techniques (both at language level and system level) have been devised (an interesting suggested reading: <a href="http://www.chiark.greenend.org.uk/~sgtatham/coroutines.html" target="_blank">Duff&#8217;s device based coroutines</a>).</p>
+<p style="text-align: justify;">Implementing basic support for asymmetric stackful coroutines can be a rewarding experience in terms of understanding the relationship between coroutines and the way these program flow constructs interact with callers and the underlying memory. Most of the code that will be presented is a pruned-down version of the coroutine implementation by Oliver Kowalke (cfr. <a href="http://www.boost.org/doc/libs/" target="_blank">boost::coroutine2</a>) available with the boost libraries.</p>
+<h3>Abstracting away the execution context</h3>
+<p style="text-align: justify;">In order to implement a coroutine context switch (in its simplest form from the callee to the caller) we need a mechanism to abstract the execution state of our routines and to save/restore stack, registers, CPU flags, etc.</p>
+<p style="text-align: justify;">A context switch between threads on x86_64 can be quite costly in terms of performances since it also involves a trip to kernel syscalls. Coroutines context switches in the same thread are far more lightweight and require no kernel interaction. The foundation bricks for userland context switches are contained in the <a href="https://github.com/boostorg/context" target="_blank">boost/context</a> library. These functionalities provide a solid abstraction that can provide ready-to-use stacks (either basic <em>malloc&#8217;d</em> stack buffers or even <a href="https://gcc.gnu.org/wiki/SplitStacks" target="_blank">split stacks</a> on supported architectures) to store our context data or complement system-level constructs (e.g. <em>ucontext</em> on Unix systems, <em>Fibers</em> on Windows). It has to be noted that <em>boost::context</em> used to support Windows fibers due to undocumented TEB-swapping related issues; after fixes were deployed support was dropped since the introduction of execution context v2.</p>
+<p style="text-align: justify;">In this article we&#8217;ll go for a <em>fcontext</em> implementation in assembler on a x86_64 Unix system (no system calls involved).</p>
+<h3>Saving the state</h3>
+<p style="text-align: justify;">When a coroutine yields an <em>fcontext</em> switch should occur, i.e. we should save whatever state the routine was at that point in time and <em>JMP</em> to another context. On a recent Unix system calling conventions, object and executable file formats and other low-level ABI issues are defined by the <a href="http://wiki.osdev.org/System_V_ABI" target="_blank">System V ABI</a>. On a x86_64 architecture the stack grows downwards and parameters to functions are passed in registers <em>rdi, rsi, rcx, r8, r9</em> + additional stack space if needed. The stack is always 16-byte aligned before a <em>call</em> instruction is issued. Registers <em>rbx, rsp, rbp, r12, r13, r14,</em> and <em>r15</em> are preserved across function calls while <em>rax, rdi, rsi, rdx, rcx, r8, r9, r10, r11</em> are scratch registers:</p>
+<table>
+<tbody>
+<tr>
+<th>Return value</th>
+<th>Parameter Registers</th>
+<th>Scratch Registers</th>
+<th>Preserved Registers</th>
+</tr>
+<tr>
+<td>rax, rdx</td>
+<td>rdi, rsi, rdx, rcx, r8, r9 + additional_stack</td>
+<td>rax, rdi, rsi, rdx, rcx, r8, r9, r10, r11</td>
+<td>rbx, rsp, rbp, r12, r13, r14, r15</td>
+</tr>
+</tbody>
+</table>
+<p style="text-align: justify;">Therefore following in <em>boost::context</em>&#8216;s footsteps a reasonable memory layout is the following</p>
+<pre>/****************************************************************************************
+ *                                                                                      *
+ *  ----------------------------------------------------------------------------------  *
+ *  |    0    |    1    |    2    |    3    |    4     |    5    |    6    |    7    |  *
+ *  ----------------------------------------------------------------------------------  *
+ *  |   0x0   |   0x4   |   0x8   |   0xc   |   0x10   |   0x14  |   0x18  |   0x1c  |  *
+ *  ----------------------------------------------------------------------------------  *
+ *  |        R12        |         R13       |         R14        |        R15        |  *
+ *  ----------------------------------------------------------------------------------  *
+ *  ----------------------------------------------------------------------------------  *
+ *  |    8    |    9    |   10    |   11    |    12    |    13   |    14   |    15   |  *
+ *  ----------------------------------------------------------------------------------  *
+ *  |   0x20  |   0x24  |   0x28  |  0x2c   |   0x30   |   0x34  |   0x38  |   0x3c  |  *
+ *  ----------------------------------------------------------------------------------  *
+ *  |        RBX        |         RBP       |         RIP        |       EXIT        |  *
+ *  ----------------------------------------------------------------------------------  *
+ *                                                                                      *
+ ****************************************************************************************/
+</pre>
+<p style="text-align: justify;">The <em>EXIT</em> field is going to be left unused for our purposes but it will be left in place anyway.</p>
+<p style="text-align: justify;">The first thing we need is to allocate space to store the context data and make sure it has a valid alignment for the architecture we&#8217;re dealing with</p>
+<pre>// Allocate context-stack space
+context_stack = (void*)malloc(64_Kb);
+
+std::size_t space = UNIX_CONTEXT_DATA_SIZE + 64;
+sp = static_cast&lt;char*&gt;(context_stack) + 64_Kb - space;
+
+sp = std::align(64, UNIX_CONTEXT_DATA_SIZE, sp, space);
+assert(sp != nullptr &amp;&amp; space &gt;= UNIX_CONTEXT_DATA_SIZE);
+</pre>
+<p style="text-align: justify;"><em>boost::context</em> offers both memory-efficient on-demand growing stacks or fixed stack allocations (cfr. <a href="http://www.boost.org/doc/libs/1_62_0/libs/context/doc/html/context/stack.html" target="_blank">boost docs</a>). In this example code we&#8217;ll go for a fixed stack allocation.<br />
+Since we can&#8217;t deal with registers directly in C++ we&#8217;ll have to fallback on a pure assembly routine. The <a href="https://en.wikipedia.org/wiki/GNU_Assembler" target="_blank">GAS</a> backend seems the logical tool of choice for this work. We therefore define an external function to link against our executable with C linkage:</p>
+<pre>extern "C" fcontext_t jump_to_context(fcontext_t context);
+</pre>
+<p style="text-align: justify;">What is an <em>fcontext_t</em>? In a x86_64 world it is just a register&#8217;s content:</p>
+<pre>using fcontext_t = void*;
+</pre>
+<p style="text-align: justify;">Luckily for us <em>RIP</em> will have already been set by the fact we&#8217;re invoking <em>jump_to_context</em> with a <em>CALL</em> instruction so we get an instruction pointer on the stack for free in our assembly code:</p>
+<pre>.text
+.globl jump_to_context
+.type jump_to_context,@function
+.align 16
+jump_to_context:
+    pushq  %rbp  /* save RBP */
+    pushq  %rbx  /* save RBX */
+    pushq  %r15  /* save R15 */
+    pushq  %r14  /* save R14 */
+    pushq  %r13  /* save R13 */
+    pushq  %r12  /* save R12 */
+
+    /* omissis */
+
+    /* restore RSP (pointing to context-data) from RDI */
+    movq  %rdi, %rsp
+
+    popq  %r12  /* restore R12 */
+    popq  %r13  /* restore R13 */
+    popq  %r14  /* restore R14 */
+    popq  %r15  /* restore R15 */
+    popq  %rbx  /* restore RBX */
+    popq  %rbp  /* restore RBP */
+
+    /* continue... */
+
+.size jump_to_context,.-jump_to_context
+
+/* Mark that we don't need executable stack. */
+.section .note.GNU-stack,"",%progbits
+</pre>
+<p style="text-align: justify;">Using <a href="https://cmake.org/cmake/help/v3.0/command/project.html" target="_blank">CMake</a> putting everything together becomes quite easy:</p>
+<pre>project(simple_crts CXX ASM)
+cmake_minimum_required(VERSION 2.8.12)
+set (CMAKE_CXX_STANDARD 14)
+
+set_source_files_properties(jump_to_context_x86_64_elf_gas.S 
+                            PROPERTIES COMPILE_FLAGS "-x assembler-with-cpp")
+
+add_executable(simple_crts simple_crts.cpp jump_to_context_x86_64_elf_gas.S)
+target_link_libraries(simple_crts ${CONAN_LIBS} pthread)
+</pre>
+<h3>Trampolines to coroutines</h3>
+<p style="text-align: justify;">Something is missing at this point: we need a valid <em>RIP</em> pointer to the coroutine to jump to. We could enter the coroutine and have another function store this information for us, but there&#8217;s a better way which avoids cluttering the coroutine code entirely: using a trampoline function.</p>
+<p style="text-align: justify;">Just as in <a href="https://github.com/boostorg/context/blob/2e5430fd27b963ffd72e7ee820ae81bb34c17a33/include/boost/context/execution_context_v2.hpp#L66" target="_blank">boost::context</a>, we define a trampoline function ourselves which, when jumped to, re-jumps to the caller and saves its context as a pre-stage for the coroutine:</p>
+<pre>void trampoline(fcontext_t ctx) {
+
+  yield_ctx = jump_to_context(ctx);
+
+  wannabe_coroutine();
+}
+</pre>
+<p style="text-align: justify;">What we have to do now is a simplified version of the <em>make_context</em> routine to set the first <em>RIP</em> towards the trampoline&#8217;s prologue:</p>
+<pre>// Do make_context's work (simplified)
+// Do *NOT* try this at home (or even worse in the office)
+void** addr = reinterpret_cast&lt;void**&gt;(static_cast&lt;char*&gt;(sp) +
+                                         UNIX_CONTEXT_DATA_RIP_OFFSET);
+*addr = reinterpret_cast&lt;void*&gt;(&amp;trampoline);
+
+// In a more complex case there might be additional initialization and
+// frame adjustments going on
+coroutine_ctx = jump_to_context(sp);
+</pre>
+<p style="text-align: justify;">So right now we have a valid trampoline <em>RIP</em> set in place:</p>
+<pre>/****************************************************************************************
+ *                                                                                      *
+ *  ----------------------------------------------------------------------------------  *
+ *  |    0    |    1    |    2    |    3    |    4     |    5    |    6    |    7    |  *
+ *  ----------------------------------------------------------------------------------  *
+ *  |   0x0   |   0x4   |   0x8   |   0xc   |   0x10   |   0x14  |   0x18  |   0x1c  |  *
+ *  ----------------------------------------------------------------------------------  *
+ *  |        R12        |         R13       |         R14        |        R15        |  *
+ *  ----------------------------------------------------------------------------------  *
+ *  ----------------------------------------------------------------------------------  *
+ *  |    8    |    9    |   10    |   11    |    12    |    13   |    14   |    15   |  *
+ *  ----------------------------------------------------------------------------------  *
+ *  |   0x20  |   0x24  |   0x28  |  0x2c   |   0x30   |   0x34  |   0x38  |   0x3c  |  *
+ *  ----------------------------------------------------------------------------------  *
+ *  |        RBX        |         RBP       |         RIP        |       EXIT        |  *
+ *  ----------------------------------------------------------------------------------  *
+ *                                           ^^^^^^^^^^^^^^^^^^^^                       *
+ ****************************************************************************************/
+</pre>
+<p style="text-align: justify;">This kickstarts the bouncing to/from the trampoline:</p>
+<pre>.text
+.globl jump_to_context
+.type jump_to_context,@function
+.align 16
+jump_to_context:
+    pushq  %rbp
+    pushq  %rbx 
+    pushq  %r15 
+    pushq  %r14 
+    pushq  %r13 
+    pushq  %r12 
+
+    /* store RSP (pointing to context-data) in RAX */
+    movq  %rsp, %rax
+
+    movq  %rdi, %rsp
+
+    popq  %r12 
+    popq  %r13 
+    popq  %r14 
+    popq  %r15 
+    popq  %rbx 
+    popq  %rbp 
+
+    /* restore return-address (must have been put on the new stack) */
+    popq  %r8
+
+    /*
+       pass the old context as first parameter (if we're headed
+       towards a landing function)
+    */
+    movq  %rax, %rdi
+
+    /* indirect jump to new context */
+    jmp  *%r8
+
+.size jump_to_context,.-jump_to_context
+.section .note.GNU-stack,"",%progbits
+</pre>
+<p style="text-align: justify;">It is important to note that we&#8217;re keeping the stack aligned during this entire process (recall that the stack has to be 16-bytes aligned before a <em>call</em> instruction is issued).</p>
+<p style="text-align: justify;">The process roughly goes on like this:<br />
+<a href="https://i2.wp.com/www.italiancpp.org/wp-content/uploads/2016/10/coroutines_graph1.png"><img data-attachment-id="6917" data-permalink="https://www.italiancpp.org/2016/11/02/coroutines-internals/coroutines_graph1/" data-orig-file="https://i0.wp.com/www.italiancpp.org/wp-content/uploads/2016/10/coroutines_graph1.png?fit=900%2C300&amp;ssl=1" data-orig-size="900,300" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="coroutines_graph1" data-image-description="" data-medium-file="https://i0.wp.com/www.italiancpp.org/wp-content/uploads/2016/10/coroutines_graph1.png?fit=300%2C100&amp;ssl=1" data-large-file="https://i0.wp.com/www.italiancpp.org/wp-content/uploads/2016/10/coroutines_graph1.png?fit=610%2C203&amp;ssl=1" class="alignnone size-full wp-image-6917" src="https://i2.wp.com/www.italiancpp.org/wp-content/uploads/2016/10/coroutines_graph1.png?resize=610%2C203" alt="coroutines_graph1" srcset="https://i0.wp.com/www.italiancpp.org/wp-content/uploads/2016/10/coroutines_graph1.png?w=900&amp;ssl=1 900w, https://i2.wp.com/www.italiancpp.org/wp-content/uploads/2016/10/coroutines_graph1.png?resize=300%2C100&amp;ssl=1 300w, https://i2.wp.com/www.italiancpp.org/wp-content/uploads/2016/10/coroutines_graph1.png?resize=768%2C256&amp;ssl=1 768w, https://i0.wp.com/www.italiancpp.org/wp-content/uploads/2016/10/coroutines_graph1.png?resize=600%2C200&amp;ssl=1 600w, https://i1.wp.com/www.italiancpp.org/wp-content/uploads/2016/10/coroutines_graph1.png?resize=250%2C83&amp;ssl=1 250w" sizes="(max-width: 610px) 100vw, 610px" data-recalc-dims="1" /></a></p>
+<p style="text-align: justify;">It has to be noted that the trampoline function might reserve stack space for its parameters as well. In the code above we allocated 64Kb of heap space to be used as stack space for context operations. So after the first jump the <em>sp</em> automatic variable is no longer reliable. <em>coroutine_ctx</em> should be used instead.</p>
+<h3>Resuming fcontext</h3>
+<p style="text-align: justify;">Resuming trampoline&#8217;s <em>fcontext</em> requires another <em>call and rip-save </em> and stack pointer adjustment to <em>coroutine_ctx</em>. Trampoline&#8217;s old <em>RIP</em> will be available for free after we&#8217;ve restored the first 48 bytes of the <em>fcontext</em>.</p>
+<p style="text-align: justify;">Execution can afterwards continue to the designated coroutine. At this point the coroutine should be somehow encapsulated to be able to use the <em>yield_ctx</em> context pointer: that is the gateway to our (in an asymmetric view) caller context.</p>
+<p style="text-align: justify;">Each time we want to yield execution back to the caller we&#8217;ll have to <em>jump_to_context</em> to the <em>yield_ctx:</em></p>
+<pre>void yield() {
+  yield_ctx = jump_to_context(yield_ctx);
+}
+
+void wannabe_coroutine() {
+  std::cout &lt;&lt; "I wanna be a coroutine when I grow my stack space up\n";
+  yield();
+  std::cout &lt;&lt; "Hooray!\n";
+  yield();
+}
+</pre>
+<p style="text-align: justify;">Notice that we&#8217;re also reassigning the variable with the return value provided by <em>jump_to_context</em>. This assignment is not executed until the control flow comes back to the <em>yield()</em> function:</p>
+<pre>.. save
+
+/* store RSP (pointing to context-data) in RAX */
+movq  %rsp, %rax
+
+.. restore
+</pre>
+<p style="text-align: justify;">This is a cooperative behavior example: each <em>jump_to_context()</em> invocation from this point onward actually returns <em>fcontext</em> data for the previous invocation.</p>
+<p style="text-align: justify;">The rest of the code bounces back and forth through the contexts resulting in the following sequence:</p>
+<p><a href="https://i0.wp.com/www.italiancpp.org/wp-content/uploads/2016/10/coroutines_graph2.png"><img data-attachment-id="6919" data-permalink="https://www.italiancpp.org/2016/11/02/coroutines-internals/coroutines_graph2/" data-orig-file="https://i2.wp.com/www.italiancpp.org/wp-content/uploads/2016/10/coroutines_graph2.png?fit=697%2C1236&amp;ssl=1" data-orig-size="697,1236" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="Coroutines" data-image-description="" data-medium-file="https://i0.wp.com/www.italiancpp.org/wp-content/uploads/2016/10/coroutines_graph2.png?fit=169%2C300&amp;ssl=1" data-large-file="https://i1.wp.com/www.italiancpp.org/wp-content/uploads/2016/10/coroutines_graph2.png?fit=577%2C1024&amp;ssl=1" class="alignnone size-full wp-image-6919" src="https://i0.wp.com/www.italiancpp.org/wp-content/uploads/2016/10/coroutines_graph2.png?resize=610%2C1082" alt="coroutines_graph2" srcset="https://i0.wp.com/www.italiancpp.org/wp-content/uploads/2016/10/coroutines_graph2.png?w=697&amp;ssl=1 697w, https://i2.wp.com/www.italiancpp.org/wp-content/uploads/2016/10/coroutines_graph2.png?resize=169%2C300&amp;ssl=1 169w, https://i1.wp.com/www.italiancpp.org/wp-content/uploads/2016/10/coroutines_graph2.png?resize=577%2C1024&amp;ssl=1 577w, https://i0.wp.com/www.italiancpp.org/wp-content/uploads/2016/10/coroutines_graph2.png?resize=600%2C1064&amp;ssl=1 600w, https://i0.wp.com/www.italiancpp.org/wp-content/uploads/2016/10/coroutines_graph2.png?resize=250%2C443&amp;ssl=1 250w" sizes="(max-width: 610px) 100vw, 610px" data-recalc-dims="1" /></a></p>
+<p style="text-align: justify;">At the end of the day the stack is freed (sounds weird to say) and the program terminates.</p>
+<h2>Exercise: wrapping up</h2>
+<p style="text-align: justify;">As a didactic exercise (i.e. <strong>do not EVER use this code in a production environment</strong>) we can use some metaprogramming to wrap our coroutines and avoid polluting our code with stack adjustments and cleanup boilerplate. Eventually we&#8217;d like to end up with code like this</p>
+<pre>int g_fib = -1;
+
+void fibonacci_gen() {
+
+  int first = 1;
+  g_fib = first;
+  yield();
+
+  int second = 1;
+  g_fib = second;
+  yield();
+
+  for (int i = 0; i &lt; 9; ++i) {
+
+    int third = first + second;
+    first = second;
+    second = third;
+    g_fib = third;
+    yield();
+
+  }
+
+}
+
+int main() {
+
+  // Outputs the first 10 Fibonacci numbers
+
+  coroutine&lt;void(void)&gt; coro(fibonacci_gen);
+
+  for (int i = 0; i &lt;= 10; ++i) {
+      coro.resume();
+
+    if(i) std::cout &lt;&lt; g_fib &lt;&lt; " ";
+  }
+
+}
+</pre>
+<p style="text-align: justify;">To do this we create a templated wrapper class:</p>
+<pre>template class coroutine;
+</pre>
+<p style="text-align: justify;">that will handle the stack and trampoline setup for us. One difference from the first example is the need for a wrapper that will handle the trampoline invocation (shields us from <a href="http://www.codeproject.com/Articles/7150/Member-Function-Pointers-and-the-Fastest-Possible" target="_blank">implementation-dependent</a> issues):</p>
+<pre>template 
+void call_member_trampoline(coroutine *instance, fcontext_t ctx) {
+  instance-&gt;trampoline(ctx);
+}
+</pre>
+<p style="text-align: justify;">The trampoline is therefore modified as follows:</p>
+<pre>void trampoline(fcontext_t ctx) {
+
+  size_t index = yield_ctx.size() - 1;
+  yield_ctx[index] = jump_to_context(this, ctx);
+
+  this-&gt;m_fn();
+}
+</pre>
+<p style="text-align: justify;">The only difference in the <em>jump_to_context()</em> function is in handling its new arity:</p>
+<pre>/* restore RSP (pointing to context-data) from RSI */
+movq  %rsi, %rsp
+</pre>
+<p style="text-align: justify;">and the promotion of <em>%rdi</em> from scratch-register to parameter-register (since we&#8217;re directly jumping to a destination context&#8217;s <em>RIP</em>).</p>
+<p style="text-align: justify;">The rest of the code remains largely unchanged.</p>
+<h2>Back to boost::context</h2>
+<p style="text-align: justify;">If you&#8217;ve followed through the entire article and you made it here, you should by now know what the following <em>boost::context2</em> program does:</p>
+<DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler2 class='ace_coliru_editor'></p>
+<pre>#include &lt;boost/context/all.hpp&gt;
+#include &lt;iostream&gt;
+#include &lt;array&gt;
+
+namespace ctx = boost::context::detail;
+
+class Coroutine {
+public:
+  Coroutine() {
+    my_context = ctx::make_fcontext(
+      stack.data() + stack.size(),
+      stack.size(),
+      &amp;Coroutine::dispatch
+    );
+  }
+  virtual ~Coroutine() {}
+
+  void operator()() {
+    auto transfer_ctx = ctx::jump_fcontext(my_context, this);
+    my_context = transfer_ctx.fctx;
+  }
+
+protected:
+  void yield() {
+    auto transfer_ctx = ctx::jump_fcontext(yield_context, 0);
+    my_context = transfer_ctx.fctx;
+  }
+
+  virtual void call() = 0;
+
+private:
+  static void dispatch(ctx::transfer_t coroutine_ptr) {
+    Coroutine *coroutine = reinterpret_cast&lt;Coroutine *&gt;(coroutine_ptr.data);
+    coroutine-&gt;yield_context = coroutine_ptr.fctx;
+    coroutine-&gt;call();
+    while(true)
+      coroutine-&gt;yield();
+  }
+
+private:
+  ctx::fcontext_t my_context;
+  ctx::fcontext_t yield_context;
+  std::array&lt;intptr_t, 66 * 1024&gt; stack;
+};
+
+struct A : public Coroutine {
+  void call() {
+    std::cout &lt;&lt; " __________________________________ " &lt;&lt; std::endl;
+    yield();
+    std::cout &lt;&lt; "|    _       _       |_|    _| |_  |" &lt;&lt; std::endl;
+    yield();
+    std::cout &lt;&lt; "|   |_|     |_|      | |     | |_  |" &lt;&lt; std::endl;
+  }
+};
+
+struct B : public Coroutine {
+  void call() {
+    std::cout &lt;&lt; "|                                  |" &lt;&lt; std::endl;
+    yield();
+    std::cout &lt;&lt; "|  _| |_   _| |_      _    |_   _| |" &lt;&lt; std::endl;
+    yield();
+    std::cout &lt;&lt; "|                    |_|     |___| |" &lt;&lt; std::endl;
+    yield();
+    std::cout &lt;&lt; "|                                  |" &lt;&lt; std::endl;
+    yield();
+    std::cout &lt;&lt; "|__________________________________|" &lt;&lt; std::endl;
+  }
+};
+
+struct C : public Coroutine {
+  void call() {
+    std::cout &lt;&lt; "|                     _       _    |" &lt;&lt; std::endl;
+    yield();
+    std::cout &lt;&lt; "| |_   _| |_   _|    | |     | |   |" &lt;&lt; std::endl;
+  }
+
+  void operator++(int) {
+    std::cout &lt;&lt; "| ++It - The Italian C++ Community |" &lt;&lt; std::endl;
+    std::cout &lt;&lt; "|__________________________________|" &lt;&lt; std::endl;
+  }
+};
+
+
+int main() {
+
+  A a;
+  B b;
+  C c;
+  for (size_t i = 0; i&lt;10; ++i) {
+    a();
+    b();
+    c();
+  }
+
+  c++; // An entire operator overloading to write 'c++'? Worth it!
+}
+</pre>
+<p></div>
+</DIV>
+	<INPUT id="cecompiler2_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler2_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler2');
+</script>
+</DIV>
+<h2>Final words</h2>
+<p style="text-align: justify;">Coroutines provide a powerful abstraction to offer the same level of concurrency one would get with asynchronous callbacks by offering at the same time a chance to write more maintainable code. At the time of writing this article boost offers context, coroutine and fiber libraries. As we&#8217;ve seen <em>boost::context</em> provides the foundation for userland context switches, <em>boost::coroutine2</em> offers coroutines support (which conceptually have no need of synchronization whatsoever since they implement a nonpreemptive cooperative multitasking) and <em>boost::fiber</em> which builds on <em>boost::context</em> to add a scheduling mechanism: each time a fiber yields, control is given back to a scheduler manager which decides the next execution strategy (cfr. <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4024.pdf" target="_blank">N4024</a>).</p>
+<p style="text-align: justify;">As usual it is up to the programmer to carefully choose which abstractions are to be used in a specific context.</p>
+<h2>References and credits</h2>
+<ul>
+<li><a href="http://www.boost.org/doc/libs/" target="_blank">The boost library</a></li>
+<li><a href="http://www.crystalclearsoftware.com/soc/coroutine/coroutine/implementation.html" target="_blank">Coroutine implementation</a></li>
+<li><a href="http://www.chiark.greenend.org.uk/~sgtatham/coroutines.html" target="_blank">Coroutines in C</a></li>
+<li><a href="https://isocpp.org/files/papers/n3985.pdf" target="_blank">N3985</a></li>
+<li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4024.pdf" target="_blank">N4024</a></li>
+<li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n3964.pdf">Library Foundations for Asynchronous Operations</a></li>
+</ul>
+<p style="text-align: justify;">Special thanks to the <strong>++it community</strong> and Oliver Kowalke for providing insights and reviews of parts of this article.</p>
+]]></content:encoded>
+		<post-id xmlns="com-wordpress:feed-additions:1">6862</post-id>	</item>
+		<item>
+		<title>Unicode, localization and C++ support</title>
+		<link>https://www.italiancpp.org/2016/04/20/unicode-localization-and-cpp-support/</link>
+		<comments>https://www.italiancpp.org/2016/04/20/unicode-localization-and-cpp-support/#comments</comments>
+		<pubDate>Wed, 20 Apr 2016 10:06:20 +0000</pubDate>
+		<dc:creator><![CDATA[Marco Alesiani]]></dc:creator>
+				<category><![CDATA[Hands-on]]></category>
+		<category><![CDATA[C++11]]></category>
+		<category><![CDATA[ucs]]></category>
+		<category><![CDATA[unicode]]></category>
+		<category><![CDATA[utf]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=5941</guid>
+		<description><![CDATA[This document doesn&#8217;t attempt to be yet another Unicode article but rather target the fundamental points that should be of interest to a C++ programmer diving into the new standards and into the Unicode subject either for the first time or as a refresher. It isn&#8217;t by any means a complete source of information on [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p style="text-align: justify;">This document doesn&#8217;t attempt to be <em>yet another Unicode article</em> but rather target the fundamental points that should be of interest to a C++ programmer diving into the new standards and into the Unicode subject either for the first time or as a refresher. It isn&#8217;t by any means a complete source of information on Unicode (there&#8217;s no mention of versioning, <em>BOM</em> sequences or other advanced topics like cluster composition algorithms or language-specific drawbacks addressing techniques) but only meant to provide insights on features that might be relevant for a programmer.</p>
+<h3>What is Unicode</h3>
+<p style="text-align: justify;">Unicode is an industry standard to encode text independently from language, platform or program. The idea is to assign a unique number (called <em>code point</em>) to each character used in writing. E.g. the codepoint for the latin capital letter <em>A</em> is <em>0041</em> and to indicate that this is a unicode codepoint a <em>U+</em> prefix is commonly added: <em>U+0041</em>. One might notice that the same number is also the hex for the character <em>A</em> in the <a href="https://en.wikipedia.org/wiki/ASCII#ASCII_printable_code_chart" target="_blank">ASCII table</a>. This is by design since the first 256 code points were made identical to the content of the <a href="https://en.wikipedia.org/wiki/ISO/IEC_8859-1" target="_blank">ISO-8859-1</a> <em>ASCII</em>-based encoding standard in order to make it easy to port existing western texts to unicode. Attention has to be paid to an often misunderstood aspect: unicode was originally designed to use 2 bytes for its codepoints, but this is no longer the case (e.g. emoji characters have been added to the unicode pages and mapped from codepoint <em>U+1F600</em> onward, which cannot be represented with just 2 bytes).</p>
+<p style="text-align: justify;">The getaway from this paragraph is that unicode is a standard way to assign a unique number called <em>code point</em> to each writing character.</p>
+<h3>Implementing unicode</h3>
+<p style="text-align: justify;">Since unicode maps each character to a (potentially very large) number, different encodings were developed to map this number (codepoint) to a sequence that could efficiently be transmitted or stored. <a href="https://en.wikipedia.org/wiki/UTF-16#History" target="_blank">Business interests and technical arguments</a> caused standardization issues and therefore many different ways were developed.</p>
+<h4>UCS</h4>
+<p style="text-align: justify;">UCS stands for <em>Universal Coded Character Set</em> and it was originally a standard with goals similar to those of the unicode consortium. Nowadays efforts have been made to (more or less) synchronize Unicode and UCS. Some of the original encodings are still used though, for instance what is now called <em>UCS-2</em> consists in encoding a codepoint in two bytes. <em>UCS-2</em> is now deprecated since, again, 2 bytes cannot suffice to represent every codepoint in Unicode. Another UCS encoding is <em>UCS-4</em> (now also called <em>UTF-32</em>) which uses 32 bits per codepoint (and this suffices to represent Unicode codepoints).</p>
+<h4>UTF</h4>
+<p style="text-align: justify;">UTF stands for <em>Unicode Transformation Format</em>. Instead of a fixed-length encoding that uses the same amount of bytes to encode a codepoint as <em>UCS-2</em> or <em>UCS-4</em> do, many UTF encodings prefer to use a variable-width encoding. <em>UTF-8</em> is one of the most used and famous variable-length encoding. It uses 8-bit <em>code-units</em> (the basic unit of an encoded sequence, in <em>UTF-8</em> corresponds to one byte which encodes both the character codepoint and some other encoding-specific data) so for example the &#8220;Hello&#8221; string in <em>UTF-8</em> would be stored as:</p>
+<pre> Hello
+ 0x48 0x65 0x6C 0x6C 0x6F</pre>
+<p style="text-align: justify;">which again, maps the contents of directly translating the string into the <em>ASCII</em>-table sequence (5 bytes). Characters whose codepoints are below <em>U+0080</em> are represented with a single byte. These are also the first 128 <em>ASCII</em> table characters. If the codepoint is higher, as in the case for the € euro sign <em>U+20AC</em>, the most significant bit is set to 1.</p>
+<pre> €
+ 0xE2        0x82        0xAC
+ 1110 0010   10 000010   10 101100
+ ^^^^        ^^          ^^
+ bits not part of the character codepoint but only related to the encoding</pre>
+<p style="text-align: justify;">In this case three bytes are necessary to represent in <em>UTF-8</em> the € character. The number of bytes needed is <a href="https://en.wikipedia.org/wiki/UTF-8#Description" target="_blank">described in the specification</a> and decoding it is a <a href="https://en.wikipedia.org/wiki/UTF-8#Examples" target="_blank">straightforward procedure</a>.</p>
+<p style="text-align: justify;"><em>UTF-8</em> therefore takes a variable amount of bytes (1 up to 4 by design) to encode a codepoint. <em>UTF-16</em> is also variable-length and uses one or two 16-bit code units and it was originally developed as a successor for the now obsolete <em>UCS-2</em> (codepoints in the so-called <a href="https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane" target="_blank">BMP</a> plane can be represented by <em>UCS-2</em>, other codepoints could not and as a workaround had to be encoded differently and are commonly referred to as <em>surrogate pairs</em>). <em>UTF-32</em> uses 32 bits per code unit but since 4 bytes is also the defined maximum to be used to encode a codepoint, this effectively makes <em>UTF-32</em> a fixed-length encoding. Its usage is <a href="http://w3c.github.io/html/document-metadata.html#specifying-the-documents-character-encoding" target="_blank">discouraged</a> by <a href="https://www.w3.org/" target="_blank">W3C</a>.</p>
+<h3>C++11 and Unicode support</h3>
+<p style="text-align: justify;">Since the C++11 standard some additional Unicode facilities have been integrated into the language. C++ <a href="http://en.cppreference.com/w/cpp/language/types" target="_blank">fundamental <em>wchar_t</em></a> type is dedicated to storing any supported code unit (usually 32 bits on systems that support Unicode with the exception of Windows using 16 bytes). C++11 introduced <em>char16_t</em> and <em>char32_t</em>, types large enough to store <em>UTF-16</em> code units (2 bytes each) and<em> UTF-32</em> code units (4 bytes each). The <em>char</em> type remains dedicated to whatever representation can be most efficiently processed on the system and, on a machine where <em>char</em> is 8 bits, it is used for 8-bit code units. One should not assume that plain <em>ASCII</em>-table characters are encoded into a <em>char</em> sequence but rather treat it as containing 8-bit codeunits.</p>
+<p style="text-align: justify;">The header <em>&lt;string&gt; </em>provides useful typedefs to work with specializations of the base string class template:</p>
+<table class="t-dsc-begin">
+<tbody>
+<tr class="t-dsc">
+<td><span class="t-lc"><strong class="selflink">std::string</strong></span></td>
+<td><span class="t-c"><span class="mw-geshi cpp source-cpp">std<span class="sy4">::</span><span class="me2">basic_string</span><span class="sy1">&lt;</span><span class="kw4">char</span><span class="sy1">&gt;</span></span></span></td>
+</tr>
+<tr class="t-dsc">
+<td><span class="t-lc"><strong class="selflink">std::wstring</strong></span></td>
+<td><span class="t-c"><span class="mw-geshi cpp source-cpp">std<span class="sy4">::</span><span class="me2">basic_string</span><span class="sy1">&lt;</span><span class="kw4">wchar_t</span><span class="sy1">&gt;</span></span></span></td>
+</tr>
+<tr class="t-dsc">
+<td><span class="t-lc"><strong class="selflink">std::u16string</strong></span> <span class="t-mark-rev t-since-cxx11">(C++11)</span></td>
+<td><span class="t-c"><span class="mw-geshi cpp source-cpp">std<span class="sy4">::</span><span class="me2">basic_string</span><span class="sy1">&lt;</span><span class="kw4">char16_t</span><span class="sy1">&gt;</span></span></span></td>
+</tr>
+<tr class="t-dsc">
+<td><span class="t-lc"><strong class="selflink">std::u32string</strong></span> <span class="t-mark-rev t-since-cxx11">(C++11)</span></td>
+<td><span class="t-c"><span class="mw-geshi cpp source-cpp">std<span class="sy4">::</span><span class="me2">basic_string</span><span class="sy1">&lt;</span><span class="kw4">char32_t</span><span class="sy1">&gt;</span></span></span></td>
+</tr>
+</tbody>
+</table>
+<p style="text-align: justify;">Converting between byte string <em>std::string</em> and wide string <em>std::basic_string&lt;wchar_t&gt;</em> (<em>std::wstring</em>) are also supported natively starting with C++11. An example follows:</p>
+<DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler3 class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+#include &lt;codecvt&gt;
+#include &lt;string&gt;
+#include &lt;locale&gt;
+#include &lt;iomanip&gt;
+
+int main() {
+  using namespace std;
+
+  ios_base::sync_with_stdio(false); // Avoids synchronization with C stdio on gcc         
+                                    // (either localize both or disable sync)
+
+  wcout.imbue(locale("en_US.UTF-8")); // change default locale
+
+  unsigned char euroUTF8[] = { 0xE2, 0x82, 0xAC, 0x00 }; // Euro sign UTF8
+
+  wstring_convert&lt;codecvt_utf8&lt;wchar_t&gt;&gt; converter_UTF8_wchar;
+  wstring euroWideStr = converter_UTF8_wchar.from_bytes((char*)euroUTF8);
+  wcout &lt;&lt; euroWideStr &lt;&lt; endl;
+
+  string euroNarrowStr = converter_UTF8_wchar.to_bytes(euroWideStr);
+  cout &lt;&lt; euroNarrowStr &lt;&lt; endl;
+}
+</pre>
+<p></div>
+</DIV>
+	<INPUT id="cecompiler3_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler3_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler3');
+</script>
+</DIV>
+<p style="text-align: justify;">A <em>locale</em> is an immutable set of so-called <em>facets</em> that help writing localized-aware code (i.e. render some features specific for a geographic area / culture). Examples are formatting time and date in a specific format (US or EU) or currency parsing. Each feature is represented via a class facet that encapsulates the locale-specific logic.</p>
+<p style="text-align: justify;">In the code above the default locale for the <em>wcout</em> global object (output for wide strings) is changed to English &#8211; US region with <em>UTF-8</em> <a href="https://msdn.microsoft.com/en-us/library/hzz3tw78.aspx" target="_blank">code pages</a>.</p>
+<p style="text-align: justify;">After the setup, a sequence of <em>UTF-8</em> encoded bytes which represent the € euro character codepoint are stored into an array.</p>
+<p style="text-align: justify;">The class template <em><a href="http://en.cppreference.com/w/cpp/locale/wstring_convert" target="_blank">std::wstring_convert</a></em> accepts a code conversion facet to perform the conversion to a wide string. The standard facets provided by the standard library suitable to be used are <a href="http://en.cppreference.com/w/cpp/locale/codecvt_utf8" target="_blank">std::codecvt_utf8</a> and <a href="http://en.cppreference.com/w/cpp/locale/codecvt_utf8_utf16" target="_blank">std::codecvt_utf8_utf16</a>. <em>std::codecvt_utf8</em> manages conversions from/to <em>UTF-8</em> to/from <em>UCS2</em> and from/to <em>UTF-8</em> to/from <em>UCS4</em>. In order to understand why these conversions are available, recall that the fundamental type <em>wchar_t</em> is usually 32 bit with the exception of Windows systems (16 bit). <em>std::codecvt_utf8_utf16</em> provides conversion from/to <em>UTF-8</em> to/from <em>UTF-16</em>.</p>
+<p style="text-align: justify;">Starting from C++11 new <a href="http://en.cppreference.com/w/cpp/language/string_literal" target="_blank">string literals</a> were also added to specify encoding and type of a literal: <em>L</em> for <em>wchar_t</em>, <em>u8</em> for <em>UTF-8</em> encoded, <em>u</em> for <em>UTF-16</em> encoded and <em>U</em> for <em>UTF-32</em> encoded. <a href="http://en.cppreference.com/w/cpp/language/escape" target="_blank">Escape sequences</a> for 16 bit and 32 bit codepoints were also added.</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet12 class='ace_coliru_editor'></p>
+<pre>unsigned char euroUTF8_1[] = { 0xE2, 0x82, 0xAC, 0x00 };
+unsigned char euroUTF8_2[] = u8"\U000020AC"; // Null character is always appended to the literal          
+assert(memcmp(euroUTF8_1, euroUTF8_2, sizeof(euroUTF8_2) / sizeof(unsigned char)) == 0);
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet12');</script>
+</DIV>
+<p style="text-align: justify;">Using a 32 bit escape sequence to encode a 32 bit codepoint into a <em>UTF-16</em> sequence will generate a sequence of <em>UTF-16</em> code units that can be later converted or used:</p>
+<DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler4 class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+#include &lt;codecvt&gt;
+#include &lt;string&gt;
+#include &lt;locale&gt;
+#include &lt;iomanip&gt;
+
+void hex_print(const std::string&amp; s) {
+  std::cout &lt;&lt; std::hex &lt;&lt; std::setfill('0');
+  for(unsigned char c : s)
+    std::cout &lt;&lt; std::setw(2) &lt;&lt; static_cast&lt;int&gt;(c) &lt;&lt; ' ';
+  std::cout &lt;&lt; std::dec &lt;&lt; '\n';
+}
+
+int main() {
+  using namespace std;
+  ios_base::sync_with_stdio(false);
+  cout.imbue(locale("C.UTF-8"));
+
+  u16string globeUTF16 = u"\U0001F30D"; // Globe                                             
+
+  wstring_convert&lt;codecvt_utf8_utf16&lt;char16_t&gt;, char16_t&gt; convert_UTF16_UTF8;
+
+  string utf8Str = convert_UTF16_UTF8.to_bytes(globeUTF16);
+  cout &lt;&lt; "UTF-8 code units: ";
+  hex_print(utf8Str);
+
+  cout &lt;&lt; utf8Str &lt;&lt; endl;
+}
+</pre>
+<p></div>
+</DIV>
+	<INPUT id="cecompiler4_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler4_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler4');
+</script>
+</DIV>
+<p style="text-align: justify;">It has to be noted that even when string literals are used, compile-time error checking isn&#8217;t available and failures should be expected when doing nonsensical operations like converting to <em>UTF-8</em> a <em>UCS-2</em> sequence of code units mapped in the range <em>0xD800-0xDFFF</em> which, by design, are used by <em>UCS-2</em> to map <a href="https://en.wikipedia.org/wiki/UTF-16#U.2B10000_to_U.2B10FFFF" target="_blank">surrogate pairs</a> to codepoints outside the <em>BMP</em> plane:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet13 class='ace_coliru_editor'></p>
+<pre>char16_t globeUTF16[] = u"\U0001F34C";
+wstring_convert&lt;codecvt_utf8&lt;char16_t&gt;, char16_t&gt; convert_UTF8_UCS2;
+// std::string u8Str = convert_UTF8_UCS2.to_bytes(globeUTF16); // range_error                  
+
+auto globeCodepoint = (globeUTF16[0] - 0xD800) * 0x400 + globeUTF16[1] - 0xDC00 + 0x10000;
+
+cout &lt;&lt; hex &lt;&lt; globeCodepoint &lt;&lt; endl; // 1F34C
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet13');</script>
+</DIV>
+<p style="text-align: justify;">At the time of writing this few compilers actually implement this behavior while others either completely lack the facet features or allow for an illegal conversion.</p>
+<h3>Compilers settings</h3>
+<p style="text-align: justify;">A few words might be worth spending talking about compiler behaviors on different systems and architectures. Some compilers might document their default execution charset (gcc has the <a href="https://gcc.gnu.org/onlinedocs/cpp/Invocation.html" target="_blank"><em>-fexec-charset</em> option</a> while MSVC has no command-line equivalent but rather a preprocessor directive</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet14 class='ace_coliru_editor'></p>
+<pre>#pragma execution_character_set("utf-8")
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet14');</script>
+</DIV>
+<p style="text-align: justify;">). This setting is not affected in MSVC by the &#8220;multi-byte character set&#8221; or &#8220;unicode&#8221; option in the project property pane that instructs the compiler whether to use <a href="https://msdn.microsoft.com/en-us/library/microsoft.visualstudio.vcproject.vcprojectconfigurationproperties.characterset.aspx">wide APIs or not</a>.</p>
+<p style="text-align: justify;">Although there are still some rough edges, an ongoing effort to fix standard library implementations and provide more features and algorithms to operate with Unicode is being carried out and will continue to improve with future C++ versions.</p>
+<p style="text-align: justify;"><em>A big thanks to Stefano Saraulli, Alessandro Vergani and the reddit community for reviewing this article.</em></p>
+]]></content:encoded>
+			<wfw:commentRss>https://www.italiancpp.org/2016/04/20/unicode-localization-and-cpp-support/feed/</wfw:commentRss>
+		<slash:comments>5</slash:comments>
+	<post-id xmlns="com-wordpress:feed-additions:1">5941</post-id>	</item>
+		<item>
+		<title>Folding Expressions</title>
+		<link>https://www.italiancpp.org/2015/06/15/folding-expressions/</link>
+		<comments>https://www.italiancpp.org/2015/06/15/folding-expressions/#comments</comments>
+		<pubDate>Mon, 15 Jun 2015 16:32:38 +0000</pubDate>
+		<dc:creator><![CDATA[Marco Alesiani]]></dc:creator>
+				<category><![CDATA[Hands-on]]></category>
+		<category><![CDATA[C++17]]></category>
+		<category><![CDATA[fold-expressions]]></category>
+		<category><![CDATA[templates]]></category>
+		<category><![CDATA[Variadics]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=4980</guid>
+		<description><![CDATA[People familiar with the new features C++11 brought to the C++ programming language should know what a variadic template is and why they&#8217;re important. Variadic templates can have a variable number of parameters of any type: This not only brings type safety to the code but also ensures that all the variadic arguments handling is [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p style="text-align: justify;">People familiar with the new features C++11 brought to the C++ programming language should know what a <a href="https://en.wikipedia.org/wiki/Variadic_template" target="_blank">variadic template</a> is and why they&#8217;re important. Variadic templates can have a variable number of parameters of any type:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet15 class='ace_coliru_editor'></p>
+<pre>template &lt;typename... Types&gt; class tuple;</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet15');</script>
+</DIV>
+<p style="text-align: justify;">This not only brings type safety to the code but also ensures that all the variadic arguments handling is performed at compile-time. Before their introduction, in order to have a template accepting a variable number of template parameters, programmers were used to write verbose code like:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet16 class='ace_coliru_editor'></p>
+<pre>template&lt;typename T0&gt;
+void function( T0 arg0 );
+
+template&lt;typename T0, typename T1&gt;
+void function( T0 arg0, T1 arg1 );
+
+template&lt;typename T0, typename T1, typename T2&gt;
+void function( T0 arg0, T1 arg1, T2 arg2 );
+
+template&lt;typename T0, typename T1, typename T2, typename T3&gt;
+void function( T0 arg0, T1 arg1, T2 arg2, T3 arg3 );
+
+...</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet16');</script>
+</DIV>
+<p style="text-align: justify;">Template <a href="http://en.cppreference.com/w/cpp/language/parameter_pack" target="_blank">parameter packs</a> went hand-in-hand with variadic templates and together with <a href="http://en.cppreference.com/w/cpp/language/constant_expression" target="_blank">constant expressions</a> they enabled a recursive-like style of coding to create more complex compile-time operations:</p>
+<DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler5 class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+#include &lt;array&gt;
+
+template&lt;size_t... Is&gt; struct seq{};
+template&lt;size_t N, size_t... Is&gt;
+struct gen_seq : gen_seq&lt;N-1, N-1, Is...&gt;{};
+template&lt;size_t... Is&gt;
+struct gen_seq&lt;0, Is...&gt; : seq&lt;Is...&gt;{};
+
+template&lt;size_t N1, size_t... I1, size_t N2, size_t... I2&gt;
+// Expansion pack
+constexpr std::array&lt;int, N1+N2&gt; concat(const std::array&lt;int, N1&gt;&amp; a1, 
+        const std::array&lt;int, N2&gt;&amp; a2, seq&lt;I1...&gt;, seq&lt;I2...&gt;){
+  return {{ a1[I1]..., a2[I2]... }};
+}
+
+template&lt;size_t N1, size_t N2&gt;
+// Initializer for the recursion
+constexpr std::array&lt;int, N1+N2&gt; concat(const std::array&lt;int, N1&gt;&amp; a1, 
+                                       const std::array&lt;int, N2&gt;&amp; a2){
+  return concat(a1, a2, gen_seq&lt;N1&gt;{}, gen_seq&lt;N2&gt;{});
+}
+
+int main() {
+    constexpr std::array&lt;int, 3&gt; a1 = {{1,2,3}};
+    constexpr std::array&lt;int, 2&gt; a2 = {{4,5}};
+
+    constexpr std::array&lt;int,5&gt; res = concat(a1,a2);
+    for(int i=0; i&lt;res.size(); ++i)
+        std::cout &lt;&lt; res[i] &lt;&lt; " "; // 1 2 3 4 5
+
+    return 0;
+}</pre>
+<p></div>
+</DIV>
+	<INPUT id="cecompiler5_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler5_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler5');
+</script>
+</DIV>
+<p style="text-align: justify;">Exploiting a <a href="http://en.cppreference.com/w/cpp/container/array/operator_at" target="_blank">constexpr overload of the operator[]</a> the code above generates an integer sequence, aggregate-initializes an <em>std::array</em> and concatenates the input arrays at compile time (details of the operations involved are available <a href="http://stackoverflow.com/q/25068481/1938163" target="_blank">at this link</a>).</p>
+<p style="text-align: justify;">The integer generation sequence construct was then provided by the standard library itself in C++14 with <a href="http://en.cppreference.com/w/cpp/utility/integer_sequence" target="_blank">std::integer_sequence</a>.</p>
+<p style="text-align: justify;">These features allowed new ways to exploit templates, anyway parameter packs could only be used and expanded in a strictly-defined series of contexts. For instance, something like the following wasn&#8217;t allowed:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet17 class='ace_coliru_editor'></p>
+<pre>template&lt;typename T&gt;
+void printer(T arg) {
+    std::cout &lt;&lt; arg &lt;&lt; " ";
+}
+
+template&lt;typename... Args&gt;
+static void function(Args &amp;&amp;... args) {
+    (printer(std::forward&lt;Args&gt;(args)) , ...);
+}</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet17');</script>
+</DIV>
+<p style="text-align: justify;">Anyway one of those restricted contexts was <a href="http://en.cppreference.com/w/cpp/language/list_initialization" target="_blank">brace-init-lists</a>, therefore workarounds to have parameter packs be expanded were immediately deployed:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet18 class='ace_coliru_editor'></p>
+<pre>template&lt;typename T&gt;
+void printer(T arg) {
+    std::cout &lt;&lt; arg &lt;&lt; " ";
+}
+
+template&lt;typename... Args&gt;
+static void function(Args &amp;&amp;... args) {
+    // Expand the pack into a brace-init-list while discarding the return
+    // values and filling an unused array
+    int unusedVar[] = { 0, 
+              ( (void) printer(std::forward&lt;Args&gt;(args)), 0) ... };
+}</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet18');</script>
+</DIV>
+<hr />
+<h3></h3>
+<h3>C++17 ~ fold expressions</h3>
+<p style="text-align: justify;"><a href="https://en.wikipedia.org/wiki/C%2B%2B17" target="_blank">C++17</a>, scheduled by 2017 at the time of writing, will introduce<strong> fold expressions</strong> into play and significantly broaden parameter packs scopes of use (cfr. <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4191.html" target="_blank">N4191 paper</a>).</p>
+<p style="text-align: justify;">As listed in <a href="http://en.cppreference.com/w/cpp/language/fold" target="_blank">cppreference</a>, at the time of writing, there are four kinds of fold expressions:</p>
+<ul>
+<li>Unary right fold
+<pre>( pack op ... )</pre>
+</li>
+<li>Unary left fold
+<pre>( ... op pack )</pre>
+</li>
+<li>Binary right fold
+<pre>( pack op ... op init )</pre>
+</li>
+<li>Binary left fold
+<pre>( init op ... op pack )</pre>
+</li>
+</ul>
+<p>being their respective expansions:</p>
+<ul>
+<li>
+<pre>E_1 op (... op (E_N-1 op E_N))</pre>
+</li>
+<li>
+<pre>((E_1 op E_2) op ...) op E_N</pre>
+</li>
+<li>
+<pre>E_1 op (... op (E_N−1 op (E_N op init)))</pre>
+</li>
+<li>
+<pre> (((init op E_1) op E_2) op ...) op E_N</pre>
+</li>
+</ul>
+<p style="text-align: justify;">In binary folds the <em>op</em> operators must be the same and <em>init</em> represents an expression without an unexpanded parameter pack (e.g. the init value for the expanded expression).</p>
+<p style="text-align: justify;">With fold expressions writing a printer construct becomes straightforward:</p>
+<DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler6 class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+
+template&lt;typename F, typename... T&gt;
+void for_each(F fun, T&amp;&amp;... args)
+{
+    (fun (std::forward&lt;T&gt;(args)), ...);
+}
+
+int main() {
+     for_each([](auto i) { std::cout &lt;&lt; i &lt;&lt; " "; }, 4, 5, 6); // 4 5 6
+}</pre>
+<p></div>
+</DIV>
+	<INPUT id="cecompiler6_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler6_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler6');
+</script>
+</DIV>
+<p style="text-align: justify;">The sample above uses fold expressions together with the <a href="http://en.cppreference.com/w/cpp/language/operator_other#Built-in_comma_operator" target="_blank">comma operator</a> to create a simple function that calls the provided lambda per each one of the supplied arguments with <a href="http://stackoverflow.com/q/24732926/1938163" target="_blank">perfect forwarding</a>.</p>
+<p style="text-align: justify;">A caveat relative to the previous example though: unary right fold expressions and unary left fold expressions applied with the comma operator do yield different expressions but their evaluation order remains the same, e.g.</p>
+<DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler7 class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+
+template&lt;typename F, typename... T&gt;
+void for_each1(F fun, T&amp;&amp;... args)
+{
+    (fun (std::forward&lt;T&gt;(args)), ...);
+}
+
+template&lt;typename F, typename... T&gt;
+void for_each2(F fun, T&amp;&amp;... args)
+{
+    (..., fun (std::forward&lt;T&gt;(args)));
+}
+
+int main()
+{
+     for_each1([](auto i) { std::cout &lt;&lt; i &lt;&lt; " "; }, 4, 5, 6); // 4 5 6
+     std::cout &lt;&lt; std::endl;
+     for_each2([](auto i) { std::cout &lt;&lt; i &lt;&lt; " "; }, 4, 5, 6); // 4 5 6
+}</pre>
+<p></div>
+</DIV>
+	<INPUT id="cecompiler7_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler7_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler7');
+</script>
+</DIV>
+<p style="text-align: justify;">It has to be noted that one of the main reasons fold expressions were accepted as a C++17 proposal is because of their use in <a href="https://en.wikipedia.org/wiki/Concepts_(C%2B%2B)" target="_blank">concepts</a>:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet19 class='ace_coliru_editor'></p>
+<pre>template &lt;typename T&gt;
+  concept bool Integral = std::is_integral&lt;T&gt;::value;
+
+template &lt;Integral... Ts&gt; // A constrained-parameter pack
+  void foo(Ts...);
+
+template &lt;typename... Ts&gt;
+  requires Integral&lt;Ts&gt;... // error: requirement is ill-formed
+void foo(Ts...);</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet19');</script>
+</DIV>
+<p style="text-align: justify;">The problem boiled down to the same issue we talked of some paragraphs ago: the parameter pack cannot expand in that context. Fold expressions provide an elegant and effective way to deal with this issue instead of resorting to other <em>constexpr</em> machineries to ensure requirements are met:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet20 class='ace_coliru_editor'></p>
+<pre>template&lt;typename... Ts&gt;
+  requires (Integral&lt;Ts&gt; &amp;&amp; ...)
+void foo(Ts...);</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet20');</script>
+</DIV>
+<hr />
+<p>&nbsp;</p>
+<p>References and sources:<br />
+<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4191.html" target="_blank">N4191 &#8211; Folding expressions</a><br />
+<a href="http://en.cppreference.com/" target="_blank">cppreference</a><br />
+<a href="http://stackoverflow.com/questions/25068481/c11-constexpr-flatten-list-of-stdarray-into-array" target="_blank">constexpr flatten list of std::array into array</a><br />
+<a href="http://stackoverflow.com/q/25680461/1938163" target="_blank">Variadic template pack expansion</a><br />
+<a href="http://stackoverflow.com/questions/30819547/why-doesnt-a-left-fold-expression-invert-the-output-of-a-right-fold-expression" target="_blank">Why doesn&#8217;t a left fold expression invert the output of a right fold expression</a></p>
+<p>Thanks to <a href="http://www.italiancpp.org/utenti/marco/" target="_blank">Marco Arena</a> and <a href="http://stackoverflow.com/users/1932150/andy-prowl" target="_blank">Andy</a> for the quick review of this article.</p>
+]]></content:encoded>
+			<wfw:commentRss>https://www.italiancpp.org/2015/06/15/folding-expressions/feed/</wfw:commentRss>
+		<slash:comments>2</slash:comments>
+	<post-id xmlns="com-wordpress:feed-additions:1">4980</post-id>	</item>
+		<item>
+		<title>Serializing access to Streams</title>
+		<link>https://www.italiancpp.org/2015/04/29/serializing-access-to-streams/</link>
+		<pubDate>Wed, 29 Apr 2015 13:41:54 +0000</pubDate>
+		<dc:creator><![CDATA[Marco Foco]]></dc:creator>
+				<category><![CDATA[Hands-on]]></category>
+		<category><![CDATA[stream]]></category>
+		<category><![CDATA[thread]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=3869</guid>
+		<description><![CDATA[Last december, I was at Meeting C++ in Berlin and I attended &#8211; among others &#8211; the talk Multithreading done right? by Rainer Grimm. In most of the examples, two or more threads were writing to cout using the form: And one of the problems was that data sent from one thread often interrupted another thread, so the output [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p style="text-align: justify;">Last december, I was at <a href="http://meetingcpp.com" target="_blank">Meeting C++</a> in Berlin and I attended &#8211; among others &#8211; the talk <a href="https://www.youtube.com/watch?v=paK38WAq8WY" target="_blank">Multithreading done right?</a> by <em>Rainer Grimm</em>.</p>
+<p style="text-align: justify;">In most of the examples, two or more threads were writing to cout using the form:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet21 class='ace_coliru_editor'></p>
+<pre>cout &lt;&lt; someData &lt;&lt; "some string" &lt;&lt; someObject &lt;&lt; endl;</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet21');</script>
+</DIV>
+<p style="text-align: justify;">And one of the problems was that data sent from one thread often interrupted another thread, so the output was always messed up.<br />
+You can see the problem in this example:</p>
+<DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler8 class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;thread&gt;
+
+using namespace std;
+
+int main() {
+    vector&lt;thread&gt; thr;
+    for(int i = 0; i &lt; 10; i++) {
+        thr.emplace_back([i]() { cout &lt;&lt; "thread " &lt;&lt; i &lt;&lt; endl; });
+    }
+    for(int i = 0; i &lt; 10; i++) {
+        thr[i].join();
+    }
+}
+</pre>
+<p></div>
+</DIV>
+	<INPUT id="cecompiler8_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler8_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler8');
+</script>
+</DIV>
+<p style="text-align: justify;">Which on a test execution produces things like this on CLang:</p>
+<pre>tththrhrereaeadad d  201</pre>
+<p style="text-align: justify;">And this on Visual Studio:</p>
+<pre style="text-align: justify;">thread 0 thread thread 2 1</pre>
+<p style="text-align: justify;">I speculated with Marco Arena about possible solutions to the problem, and tried to find a simple and elegant solution in my way back.</p>
+<p style="text-align: justify;">I started designing a solution by giving myself some guidelines, here listed in order of importance:</p>
+<ol style="text-align: justify;">
+<li>Opt-in: The user doesn&#8217;t have to pay (no performance penalty if the feature is not used).</li>
+<li>Readability: The user code must be self-explaining.</li>
+<li>Simplicity of use: I wanted to provide the end-user with something that worked &#8220;out of the box&#8221; requiring as less code as possible.</li>
+<li>Predictability: I wanted to maintain all the features and feature the standard streams have.</li>
+<li>Concise solution: I didn&#8217;t want to write tons of code, I&#8217;m too lazy.</li>
+</ol>
+<p style="text-align: justify;">An intrusive solution (e.g. adding a mutex to each stream) would have violated the first principle, and quite definitely the fifth too.</p>
+<h2>Wrapping streams</h2>
+<p style="text-align: justify;">The first solution I tried was a simple stream wrapper that locks the stream using <strong>RAII</strong> idiom:</p>
+<p style="text-align: justify;"><DIV class="page-snippet-container">
+	<div id=cesnippet22 class='ace_coliru_editor'></p>
+<pre>class stream_locker {
+    ostream&amp; stream;
+    lock_guard&lt;mutex&gt; guard;
+public:
+    stream_locker(ostream &amp;s, mutex &amp;m) : stream(s), guard(m) {}
+
+    template&lt;typename T&gt; stream_locker&amp; operator &lt;&lt; (const T &amp;x) {
+        stream &lt;&lt; x;
+        return *this;
+    }
+};</pre>
+<p style="text-align: justify;"></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet22');</script>
+</DIV></p>
+<p style="text-align: justify;">Here&#8217;s the intended usage:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet23 class='ace_coliru_editor'></p>
+<pre>mutex m;
+stream_locker(cout, m) &lt;&lt; someData &lt;&lt; "some string" &lt;&lt; someObject &lt;&lt; endl;</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet23');</script>
+</DIV>
+<p style="text-align: justify;">This didn&#8217;t work, because the type is not getting deduced for manipulators like endl (since it&#8217;s an overloaded function).</p>
+<p style="text-align: justify;">A solution to this problem could have been manually providing overloads for operator &lt;&lt; for manipulators, such as:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet24 class='ace_coliru_editor'></p>
+<pre>class stream_locker {
+    ...
+    stream_locker&amp; operator &lt;&lt; (ostream&amp; (*pf)(ostream&amp;)) {
+        stream &lt;&lt; pf;
+        return *this;
+    }
+ };</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet24');</script>
+</DIV>
+<p style="text-align: justify;">The big drawback with this solution was that we needed to provide an overload for every std manipulator type, like the ones declared in <em><strong>&lt;ostream&gt;</strong></em> and also any other manipulator contained in <em>&lt;iomanip&gt;</em>. Moreover, any overloaded <em>operator &lt;&lt;</em> in other libraries or user code would have require additional effort (it violates both simplicity and predictability guidelines I gave myself). This was not getting anywhere.</p>
+<p style="text-align: justify;">Another possible solution was to return back using the <em>ostream&amp;</em> as soon as possible, like after the first execution of <em>operator &lt;&lt;</em>.</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet25 class='ace_coliru_editor'></p>
+<pre>class stream_locker {
+    ostream&amp; stream;
+    lock_guard&lt;mutex&gt; guard;
+public:
+    stream_locker(ostream &amp;s, mutex &amp;m) : stream(s), guard(m) {}
+
+    template&lt;typename T&gt; ostream&amp; operator &lt;&lt; (const T &amp;x) {
+        return stream &lt;&lt; x;
+    }
+};</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet25');</script>
+</DIV>
+<p style="text-align: justify;">This was slightly better, but it would require, sometimes, to insert empty strings to achieve correct results. Consider the following:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet26 class='ace_coliru_editor'></p>
+<pre>stream_locker(cout, m) &lt;&lt; value &lt;&lt; " in octal is " &lt;&lt; oct &lt;&lt; value &lt;&lt; dec &lt;&lt; endl; // OK
+stream_locker(cout, m) &lt;&lt; oct &lt;&lt; value &lt;&lt; " in octal is " &lt;&lt; dec &lt;&lt; value &lt;&lt; " in decimal." &lt;&lt; endl; // ERROR
+stream_locker(cout, m) &lt;&lt; "" &lt;&lt; oct &lt;&lt; value &lt;&lt; " in octal is " &lt;&lt; dec &lt;&lt; value &lt;&lt; " in decimal." &lt;&lt; endl; // OK
+
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet26');</script>
+</DIV>
+<p style="text-align: justify;">The second line won&#8217;t compile, since there&#8217;s no overload for <em>operator &lt;&lt;</em> between a stream_locker and a manipulator like <em>oct</em>. The third will work, because inserting the empty string will result in calling our member <em>operator &lt;&lt;</em>, which now returns an <em>ostream&amp;</em>.</p>
+<p style="text-align: justify;">We could definitely solve the problem by making the stream variable public, and changing the usage syntax slightly:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet27 class='ace_coliru_editor'></p>
+<pre>class stream_locker {
+    lock_guard&lt;mutex&gt; guard;
+public:
+    ostream&amp; stream;
+    stream_locker(ostream &amp;s, mutex &amp;m) : stream(s), guard(m) {}
+};
+
+stream_locker(cout, m).stream &lt;&lt; value &lt;&lt; " in octal is " &lt;&lt; oct &lt;&lt; value &lt;&lt; dec &lt;&lt; endl; // OK
+stream_locker(cout, m).stream &lt;&lt; oct &lt;&lt; value &lt;&lt; " in octal is " &lt;&lt; dec &lt;&lt; value &lt;&lt; " in decimal." &lt;&lt; endl; // OK
+stream_locker(cout, m).stream &lt;&lt; "" &lt;&lt; oct &lt;&lt; value &lt;&lt; " in octal is " &lt;&lt; dec &lt;&lt; value &lt;&lt; " in decimal." &lt;&lt; endl; // OK
+
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet27');</script>
+</DIV>
+<p style="text-align: justify;">This works, but the syntax looks horrible.</p>
+<h2>Lifetime of temporaries</h2>
+<p style="text-align: justify;">Wait a second, why does this works? If we are return back to the <em>ostream&amp;</em>, doesn&#8217;t our temporary <em>stream_locker</em> get destroyed right away, releasing the lock?</p>
+<p style="text-align: justify;">The answer is no. Any temporary variable created in a sub-expression have its lifetime extended to the &#8220;full-expression&#8221;, which in our case ends at the <em>semicolon</em>.</p>
+<p style="text-align: justify;">The stream_locker object is now just behaving exactly like a normal <em>lock_guard&lt;mutex&gt;</em>. Can&#8217;t we just use a <em>lock_guard&lt;mutex&gt;</em> directly?</p>
+<p style="text-align: justify;"><DIV class="page-snippet-container">
+	<div id=cesnippet28 class='ace_coliru_editor'></p>
+<pre>cout &lt;&lt; lock_guard&lt;mutex&gt;(m) &lt;&lt; ... ;</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet28');</script>
+</DIV></p>
+<p>To provide this syntax we just need to overload the<em> operator &lt;&lt;:</em></p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet29 class='ace_coliru_editor'></p>
+<pre>inline ostream&amp; operator&lt;&lt;(ostream&amp; out, const lock_guard&lt;mutex&gt; &amp;) {
+    return out;
+}</pre>
+<p style="text-align: justify;"></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet29');</script>
+</DIV>
+<p style="text-align: justify;">This solution doesn&#8217;t have the drawbacks of wrapper object, since no wrapper is created anywhere. The stream is returned right away, and the lock guard parameter is there for the only sake of including it in the streaming chain.</p>
+<p style="text-align: justify;">This definitely looks promising, but the syntax is still a bit too complex. Could we possibly simplify it?</p>
+<p>I would definitely prefer something like:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet30 class='ace_coliru_editor'></p>
+<pre>cout &lt;&lt; lock_with(m) &lt;&lt; ... ;</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet30');</script>
+</DIV>
+<p>Basically, lock_with should return a fresh new lock_guard locking our mutex m. Something like this:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet31 class='ace_coliru_editor'></p>
+<pre>template &lt;typename T&gt; lock_guard&lt;T&gt; lock_with(T &amp;mutex) {
+    return lock_guard&lt;T&gt;(mutex);
+}</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet31');</script>
+</DIV>
+<p>Unluckily, this doesn&#8217;t work, as you can see yourself by trying to compile the following snippet.</p>
+<DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler9 class='ace_coliru_editor'></p>
+<pre>#include &lt;mutex&gt;
+#include &lt;iostream&gt;
+
+using namespace std;
+
+inline ostream&amp; operator&lt;&lt;(ostream&amp; out, const lock_guard&lt;mutex&gt; &amp;) {
+    return out;
+}
+
+template &lt;typename T&gt; lock_guard&lt;T&gt; lock_with(T &amp;mutex) {
+    return lock_guard&lt;T&gt;(mutex);
+}
+
+int main() {
+    mutex m;
+    cout &lt;&lt; lock_with(m) &lt;&lt; "test" &lt;&lt; endl;
+}</pre>
+<p></div>
+</DIV>
+	<INPUT id="cecompiler9_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler9_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler9');
+</script>
+</DIV>
+<p style="text-align: justify;">Problem is, lock_guard is not copyable. Moving is also deleted, because this class implements the concept of &#8220;scoped ownership&#8221;. Moreover, the constructor taking a mutex is explicit, so we can&#8217;t exploit <em>copy-list-initialization</em> in our solution. Not with that constructor, at least.</p>
+<p style="text-align: justify;">As often happens, the solution to my problem was already on <a title="Stack Overflow" href="http://stackoverflow.com/questions/22502606/why-is-stdlock-guard-not-movable" target="_blank">stack overflow</a>, The link explains why lock_guard is not moveable, and it provides a nice workaround, using another constructor, taking two parameters (so we can use <em>copy-list-initialization</em> on that).</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet32 class='ace_coliru_editor'></p>
+<pre>template &lt;typename T&gt; inline lock_guard&lt;T&gt; lock_with(T &amp;mutex) {
+    mutex.lock();
+    return { mutex, adopt_lock };
+}</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet32');</script>
+</DIV>
+<h2>The solution</h2>
+<p>Finally, we can test our original code with the final structure:</p>
+<DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler10 class='ace_coliru_editor'></p>
+<pre>#include &lt;mutex&gt;
+#include &lt;vector&gt;
+#include &lt;thread&gt;
+#include &lt;iostream&gt;
+
+using namespace std;
+
+inline ostream&amp; operator&lt;&lt;(ostream&amp; out, const lock_guard&lt;mutex&gt; &amp;) {
+    return out;
+}
+
+template &lt;typename T&gt; inline lock_guard&lt;T&gt; lock_with(T &amp;mutex) {
+    mutex.lock();
+    return { mutex, adopt_lock };
+}
+
+int main() {
+    mutex m;
+    vector&lt;thread&gt; thr;
+    for(int i = 0; i &lt; 10; i++) {
+        thr.emplace_back([i, &amp;m]() { cout &lt;&lt; lock_with(m) &lt;&lt; "thread " &lt;&lt; i &lt;&lt; endl; });
+    }
+    for(int i = 0; i &lt; 10; i++) {
+        thr[i].join();
+    }
+}
+</pre>
+<p></div>
+</DIV>
+	<INPUT id="cecompiler10_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler10_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler10');
+</script>
+</DIV>
+]]></content:encoded>
+		<post-id xmlns="com-wordpress:feed-additions:1">3869</post-id>	</item>
+		<item>
+		<title>Anti-IF idioms in C++</title>
+		<link>https://www.italiancpp.org/2014/11/23/anti-if-idioms-in-cpp/</link>
+		<comments>https://www.italiancpp.org/2014/11/23/anti-if-idioms-in-cpp/#comments</comments>
+		<pubDate>Sun, 23 Nov 2014 17:03:10 +0000</pubDate>
+		<dc:creator><![CDATA[marco]]></dc:creator>
+				<category><![CDATA[Hands-on]]></category>
+		<category><![CDATA[Anti-IF]]></category>
+		<category><![CDATA[IOP vs OOP]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=3751</guid>
+		<description><![CDATA[Last November 15th I attended the Italian Agile Day in Ancona, where Gianluca Padovani, Marco Foco, and I facilitated a workshop on refactoring in C++ (if you like, read more details here). Before our session, I attended a couple of talks and one was about &#8220;IF-Oriented Programming vs Object Oriented Programming&#8221;, by Claudio Pattarello (a former [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p style="text-align: justify;">Last November 15th I attended the <a href="http://agileday.it" target="_blank">Italian Agile Day</a> in Ancona, where Gianluca Padovani, Marco Foco, and I facilitated a workshop on refactoring in C++ (if you like, read more details <a href="http://www.italiancpp.org/2014/11/16/italy-speaks-cpp-too/#workshop" target="_blank">here</a>). Before our session, I attended a couple of talks and one was about &#8220;IF-Oriented Programming vs Object Oriented Programming&#8221;, by <a href="http://claudiopattarello.blogspot.it" target="_blank">Claudio Pattarello</a> (a former collegue of mine). I enjoyed this talk because it was completely on the code (in C#) and rich of interesting examples on removing IFs. I have attended this kind of talks for at least 8 years (the first time was at the university, in 2006) but this time something was different: each solution Claudio introduced could be written in C++ with almost no effort. This wouldn&#8217;t have been possible without new C++.</p>
+<p style="text-align: justify;">In this post I&#8217;d like to show you how to rewrite these idioms in C++, starting from a C# snippet. And the resulting code is pretty much identical. <a href="https://iopvsoop.codeplex.com/SourceControl/latest" target="_blank">Here are Claudio&#8217;s examples</a>. First let me clarify:</p>
+<ul>
+<li style="text-align: justify;">I&#8217;m skipping <strong>visitors</strong> because they are well-known in C++ (and from C++11, variadic templates could help even more);</li>
+<li style="text-align: justify;">Claudio&#8217;s target was to show different ways to remove IFs and to play with the code. The real point is: don&#8217;t tell &#8220;the IF cannot be removed&#8221;, but instead, wonder if it&#8217;s worth. For this reason, I&#8217;m not discussing edge cases nor saying these rules apply everywhere (they don&#8217;t)..</li>
+<li style="text-align: justify;">I&#8217;m not saying &#8220;this is the best thing you can do in C++&#8221;. For example: <a href="http://www.italiancpp.org/2014/11/23/anti-if-idioms-in-cpp/#comment-81" target="_blank">as Nicola suggested</a>, the first example I&#8217;m showing could be rewritten by using an <em>optional type</em>, that is (likely) a more effective thing to do in C++ and it results in less code. Sure, we have specific idioms in our favorite language but I think it’s lovely that we are able to reuse the same code from other languages with a little effort. And this is also appealing for other programmers who want to experience C++, maybe by starting coding idioms they know. Please, stop me if I&#8217;m raving!</li>
+</ul>
+<p>Let&#8217;s start with an example you have to deal with a <strong>null</strong>. Here is the first version of the code:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet33 class='ace_coliru_editor'></p>
+<pre>public void NullResult_IF()
+{
+      var employeeRepository = new EmployeeRepositoryNullIF();
+      var employee = employeeRepository.GetOrNull("CLAPAT01");
+      if (employee!=null)
+         Assert.AreEqual("Claudio", employee.Name);
+}</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet33');</script>
+</DIV>
+<p style="text-align: justify;">What if the repository does not contain the name we are looking for? It returns a null. Null case has to be handled. Suppose you have to fill a form with employee&#8217;s data. Using a <strong>NullObject</strong> doesn&#8217;t help so much because you won&#8217;t fill a form with fake values.</p>
+<p style="text-align: justify;">Then, the proposed solution is to add a layer of abstraction and pass an action instead of checking the null case by hand:</p>
+<p style="text-align: justify;"><DIV class="page-snippet-container">
+	<div id=cesnippet34 class='ace_coliru_editor'></p>
+<pre>public interface IPerformer&lt;out T&gt;
+{
+    void Ask(Action&lt;T&gt; action);
+}
+
+public class Performer&lt;T&gt; : IPerformer&lt;T&gt;
+{
+    private readonly T value;
+
+    public Performer(T value)
+    {
+        this.value = value;
+    }
+
+    public void Ask(Action&lt;T&gt; action)
+    {
+        action(value);
+    }
+}
+
+public class NoPerformer&lt;T&gt; : IPerformer&lt;T&gt;
+{
+    public void Ask(Action&lt;T&gt; action) { }
+}
+
+public class EmployeeRepositoryNullNOIF
+{
+    //...
+
+    public IPerformer&lt;Employee&gt; Get(string number)
+    {
+        var employee = repository.SingleOrDefault(e =&gt; e.Number == number);
+        if (employee==null)
+            return new NoPerformer&lt;Employee&gt;();
+        return new Performer&lt;Employee&gt;(employee);
+    }
+}
+
+public void CentralisedNullResult_NOIF()
+{
+    var employeeRepository = new EmployeeRepositoryNullNOIF();
+    var employee = employeeRepository.Get("CLAPAT01");
+    employee.Ask(e =&gt; Assert.AreEqual("Claudio", e.Name));
+}</pre>
+<p style="text-align: justify;"></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet34');</script>
+</DIV></p>
+<p style="text-align: justify;"><strong>employeeRepository</strong> now returns an <strong>IPerformer&lt;T&gt;</strong>, an interface you can ask to call a lambda which wants a parameter of type T. In this example, the lambda will be called only if the T &#8220;is valid&#8221;. An alternative consists in providing also a lambda for the failing case. But now the juicy part: what does it look like in C++? This is a possible migration:</p>
+<p style="text-align: justify;"><DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler11 class='ace_coliru_editor'></p>
+<pre>#include &lt;functional&gt;
+#include &lt;iostream&gt;
+#include &lt;memory&gt;
+#include &lt;map&gt;
+using namespace std;
+
+template&lt;typename T&gt;
+class IPerformer
+{
+public:
+    virtual ~IPerformer() = default;
+    virtual void Ask(function&lt;void(const T&amp;)&gt; f) = 0;
+};
+
+template&lt;typename T&gt;
+class NoPerformer : public IPerformer&lt;T&gt;
+{
+public:
+    void Ask(function&lt;void(const T&amp;)&gt;) override 
+    {
+
+    }
+};
+
+template&lt;typename T&gt;
+class Performer : public IPerformer&lt;T&gt;
+{
+public:
+    Performer(T _value)
+        : value(move(_value))
+    {
+
+    }
+
+    void Ask(function&lt;void(const T&amp;)&gt; action) override 
+    {
+        action(value);
+    }
+
+private:
+    T value;
+};
+
+struct Employee
+{
+    string Name;
+    string Last;
+    string Number;
+};
+
+class EmployeeRepositoryNullNOIF
+{
+public:
+    unique_ptr&lt;IPerformer&lt;Employee&gt;&gt; Get(const string&amp; number)
+    {
+        const auto it = employees.find(number);
+        if (it != end(employees))
+            return make_unique&lt;Performer&lt;Employee&gt;&gt;(it-&gt;second);
+        return make_unique&lt;NoPerformer&lt;Employee&gt;&gt;();
+    }
+
+    map&lt;string, Employee&gt; employees = { 
+        {"1", {"Marco", "Arena", "1"}},  
+        {"2", {"Claudio", "Pattarello", "2"}}
+    };
+};
+
+int main()
+{
+    EmployeeRepositoryNullNOIF repo;
+    auto employee = repo.Get("2");
+    employee-&gt;Ask([](const Employee&amp; e) {
+        cout &lt;&lt; e.Name &lt;&lt; " " &lt;&lt; e.Last &lt;&lt; endl;
+    });
+}</pre>
+<p style="text-align: justify;"></div>
+</DIV>
+	<INPUT id="cecompiler11_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler11_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler11');
+</script>
+</DIV></p>
+<p style="text-align: justify;">It&#8217;s just a toy, but you may play with this example. Ha, I forgot to say: C++ examples here are editable and runnable (thanks to <a href="http://www.stacked-crooked.com" target="_blank">Coliru</a> online compiler and <a href="http://ace.c9.io/#nav=about" target="_blank">ACE editor</a>). Then, try the code yourself!</p>
+<p style="text-align: justify;">C++&#8217;s control is finer, thus I considered passing T to Performer by value and then move-construct the internal one; also, T is passed to the function by const&amp;.</p>
+<p>Apart from these details, C++ code is pretty much the same as the C# one.</p>
+<p style="text-align: justify;">The next example is a variation of the previous one. It&#8217;s about doing something with the result of an operation if it succeeds, otherwise doing something else. Trivial. Here is the C# snippet:</p>
+<p style="text-align: justify;"><DIV class="page-snippet-container">
+	<div id=cesnippet35 class='ace_coliru_editor'></p>
+<pre>public void ConvertNumber_IF()
+{
+    int number;
+    if (int.TryParse("38", out number))
+        Assert.AreEqual(38, number);
+    else
+        Assert.Fail();
+}</pre>
+<p style="text-align: justify;"></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet35');</script>
+</DIV></p>
+<p style="text-align: justify;">To remove this IF, Claudio used a lambda, again:</p>
+<p style="text-align: justify;"><DIV class="page-snippet-container">
+	<div id=cesnippet36 class='ace_coliru_editor'></p>
+<pre>public void ConvertNumberWrapIf_NOIF()
+{
+    Action action = Assert.Fail;
+    ConvertNumberStatusNOIF.Parse("38", number =&gt;
+    {
+        action = () =&gt; Assert.AreEqual(38, number);
+    });
+    action();
+}</pre>
+<p style="text-align: justify;"></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet36');</script>
+</DIV></p>
+<p style="text-align: justify;">As before, the lambda gets called only if the operation succeeds. C++ code is embarrassingly similar:</p>
+<p style="text-align: justify;"><DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler12 class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+#include &lt;sstream&gt;
+#include &lt;functional&gt;
+
+using namespace std;
+
+class ConvertNumberStatusNOIF
+{
+public:
+    static void Parse(const string&amp; number, function&lt;void(int)&gt; action)
+    {
+        stringstream ss(number);
+        char c;
+        int age;
+        if (ss &gt;&gt; age &amp;&amp; !ss.get(c))
+            action(age);
+    }  
+};
+
+int main()
+{
+    function&lt;void()&gt; action = []{ cout &lt;&lt; "fail\n"; };
+    ConvertNumberStatusNOIF::Parse("38", [&amp;](int number)
+    {
+        action = [=]() { cout &lt;&lt; number &lt;&lt; endl; };
+    });
+    action();
+}</pre>
+<p style="text-align: justify;"></div>
+</DIV>
+	<INPUT id="cecompiler12_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler12_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler12');
+</script>
+</DIV></p>
+<p style="text-align: justify;">A variation consists in making <em>action</em> a sort of scoped function (i.e. that will be executed when the scope ends &#8211; I saw this kind of workflow to handle DB transactions).</p>
+<p style="text-align: justify;">Going ahead, the following snippet handles error conditions by catching exceptions explicitly:</p>
+<p style="text-align: justify;"><DIV class="page-snippet-container">
+	<div id=cesnippet37 class='ace_coliru_editor'></p>
+<pre>public void CatchExceptions_IF()
+{
+    var promocode = new PromocodeStatusIF();
+    try
+    {
+        promocode.Apply("g128g7d2g");
+    }
+    catch (AlreadyUsedPromocodeException)
+    {
+        Assert.Pass("Already used");    
+    }
+    catch (ExpiredPromocodeException)
+    {
+        Assert.Pass("Expired");
+    }
+    catch (NotValidPromocodeException)
+    {
+        Assert.Pass("Not valid");
+    }
+    Assert.Fail("no exception");
+}</pre>
+<p style="text-align: justify;"></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet37');</script>
+</DIV></p>
+<p style="text-align: justify;">Try/Catch can be seen as another kind of IF, maybe more structured. To remove yet another IF, we pass actions instead and we let the promocode checker call the right one for us:</p>
+<p style="text-align: justify;"><DIV class="page-snippet-container">
+	<div id=cesnippet38 class='ace_coliru_editor'></p>
+<pre>public void RemoveCatchExceptionsAndUseMessages_NOIF()
+{
+    var promocode = new PromocodeStatusNOIF();
+    promocode
+        .AlreadyUsed(() =&gt; Assert.Pass("Already used"))
+        .Expired(() =&gt; Assert.Pass("Expired"))
+        .NotValid(() =&gt; Assert.Pass("Not valid"))
+        .Apply("g128g7d2g");
+
+    Assert.Fail("no exception");
+}</pre>
+<p style="text-align: justify;"></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet38');</script>
+</DIV></p>
+<p style="text-align: justify;"><strong>PromocodeStatusNOIF</strong> just calls the right action. No exceptions are involved, no manual handling to do, adding/removing logic is trivial. What does it look like in C++? Not so different:</p>
+<p style="text-align: justify;"><DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler13 class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+#include &lt;functional&gt;
+#include &lt;string&gt;
+
+using namespace std;
+
+class PromocodeStatusNOIF
+{
+    function&lt;void()&gt; alreadyUsed = []{};
+    function&lt;void()&gt; expired = []{};
+    function&lt;void()&gt; notValid =  []{};
+
+public:
+    PromocodeStatusNOIF&amp; AlreadyUsed(function&lt;void()&gt; action)
+    {
+        alreadyUsed = action;
+        return *this;
+    }
+
+    PromocodeStatusNOIF&amp; Expired(function&lt;void()&gt; action)
+    {
+        expired = action;
+        return *this;
+    }
+
+    PromocodeStatusNOIF&amp; NotValid(function&lt;void()&gt; action)
+    {
+        notValid = action;
+        return *this;
+    }
+
+    void Apply(const string&amp; promocode)
+    {
+        // logic...
+        expired(); 
+    }
+};
+
+int main()
+{
+    PromocodeStatusNOIF{}
+        .AlreadyUsed([] { cout &lt;&lt; "Already used\n"; })
+        .Expired([] { cout &lt;&lt; "Expired\n"; })
+        .NotValid([] { cout &lt;&lt; "NotValid\n"; })
+        .Apply("g128g7d2g");
+}</pre>
+<p style="text-align: justify;"></div>
+</DIV>
+	<INPUT id="cecompiler13_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler13_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler13');
+</script>
+</DIV></p>
+<p style="text-align: justify;">I don&#8217;t have the final Assert.Fail because we are not really testing anything. A variation is to add the &#8220;no exception&#8221; action either in the constructor or as another function of the chain.</p>
+<p style="text-align: justify;"><span style="line-height: 1.5em;">The last example I show you is a singleton factory which the first time you ask an instace it creates and returns a fresh one, other times this instance is reused. The IF solution is straightforward:</span></p>
+<p style="text-align: justify;"><DIV class="page-snippet-container">
+	<div id=cesnippet39 class='ace_coliru_editor'></p>
+<pre>public class FooSingletonLazyFactoryIF
+{
+    private Foo foo;
+
+    public Foo Get()
+    {
+        if (foo==null)
+            foo = new Foo();
+        return foo;
+    }
+}</pre>
+<p style="text-align: justify;"></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet39');</script>
+</DIV></p>
+<p style="text-align: justify;">Removing the IF is a good exercise of self-modifying lambdas:</p>
+<p style="text-align: justify;"><DIV class="page-snippet-container">
+	<div id=cesnippet40 class='ace_coliru_editor'></p>
+<pre>public class FooSingletonLazyFactoryNOIF 
+{
+    public FooSingletonLazyFactoryNOIF()
+    {
+        Get = () =&gt;
+        {
+            var foo = new Foo();
+            Get = () =&gt; foo;
+            return Get();
+        };
+    }
+
+    public Func&lt;Foo&gt; Get { get; private set; }
+}</pre>
+<p style="text-align: justify;"></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet40');</script>
+</DIV></p>
+<p style="text-align: justify;">Forget using a local static variable, just enjoy a different way to code. What does it look like in C++? This is a possible implementation:</p>
+<p style="text-align: justify;"><DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler14 class='ace_coliru_editor'></p>
+<pre>#include &lt;functional&gt;
+#include &lt;iostream&gt;
+
+using namespace std;
+
+struct Foo
+{ 
+    Foo(int _magic) 
+       : magic(_magic)
+    { cout &lt;&lt; "new Foo" &lt;&lt; endl; }
+    int magic = 0; 
+};
+
+class FooSingletonLazyFactoryNOIF 
+{
+public:
+    FooSingletonLazyFactoryNOIF()
+    {
+        _Get = [this] 
+        {
+            _Get = [foo=Foo{256}]() -&gt; const Foo&amp; { return foo; };
+            return _Get();
+        };
+    }
+
+    const Foo&amp; Get() const
+    {
+        return _Get();
+    }
+
+private:
+    function&lt;const Foo&amp;()&gt; _Get;
+};
+
+int main()
+{
+    FooSingletonLazyFactoryNOIF factory;
+    auto&amp;&amp; foo = factory.Get();
+    auto&amp;&amp; foo2 = factory.Get();
+    cout&lt;&lt; foo.magic &lt;&lt; endl;
+    cout&lt;&lt; foo2.magic &lt;&lt; endl;
+}</pre>
+<p style="text-align: justify;"></div>
+</DIV>
+	<INPUT id="cecompiler14_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler14_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler14');
+</script>
+</DIV></p>
+<p style="text-align: justify;">Thanks to init-lambda capture I was able to initialize Foo directly in the lambda. This version has a problem: what if the factory goes out of scope? The internal foo is destroyed and we have a dangling reference. Ok, you can make the factory a global object but there is another solution using smart pointers. Don&#8217;t try to move-capture a <strong>unique_ptr</strong> into the lambda because it is <strong>not</strong> possible to construct a std::function from a <strong>move-only type </strong>(cfr. §20.9.11.2.1 [func.wrap.func.con]). We can use a shared_ptr and return it, or return just a Foo*, or a weak_ptr. For example:</p>
+<p style="text-align: justify;"><DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler15 class='ace_coliru_editor'></p>
+<pre>#include &lt;functional&gt;
+#include &lt;memory&gt;
+#include &lt;iostream&gt;
+
+using namespace std;
+
+struct Foo
+{ 
+    Foo(int _magic) 
+       : magic(_magic)
+    { cout &lt;&lt; "new Foo" &lt;&lt; endl; }
+    int magic = 0; 
+};
+
+class FooSingletonLazyFactoryNOIF 
+{
+public:
+    FooSingletonLazyFactoryNOIF()
+    {
+        _Get = [this] 
+        {
+            auto foo = make_shared&lt;Foo&gt;(256);
+            _Get = [foo=move(foo)]() { return foo; };
+            return _Get();
+        };
+    }
+
+    auto Get() const
+    {
+        return _Get();
+    }
+
+private:
+    function&lt;weak_ptr&lt;Foo&gt;()&gt; _Get;
+};
+
+int main()
+{
+    FooSingletonLazyFactoryNOIF factory;
+    auto foo = factory.Get();
+    if (auto spt = foo.lock()) // not needed actually
+    {
+        cout &lt;&lt; spt-&gt;magic &lt;&lt; endl;
+    }
+}</pre>
+<p style="text-align: justify;"></div>
+</DIV>
+	<INPUT id="cecompiler15_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler15_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler15');
+</script>
+</DIV></p>
+<p style="text-align: justify;">As you can note, C++ snippets are very similar to C# ones. Since C++ gives more control and it doesn&#8217;t have a garbage collector, you need to be careful of more aspects. In particular, dealing with self-modifying lambdas could lead to several problems like capturing local variables by reference.</p>
+<p style="text-align: justify;">Using std::function is not optimal. Not only because of its runtime cost but also because of its inability to work with move-only captured types. I&#8217;d like also to share a fact you could care about when dealing with self-modifying lambdas. Suppose you wrote this circular object pool by using the same ideas we discussed a moment ago:</p>
+<p style="text-align: justify;"><DIV class="page-snippet-container">
+	<div id=cesnippet41 class='ace_coliru_editor'></p>
+<pre>class Pool
+{
+    function&lt;int()&gt; generator;
+
+    function&lt;int()&gt; next(vector&lt;int&gt; v, size_t i)
+    {
+        return [this, v=move(v), i]{
+            auto tmp = v[i];
+            auto size = v.size();
+            generator = next(move(v), (i+1)%size);
+            return tmp;
+        };
+    }
+public:    
+    Pool(vector&lt;int&gt; v)
+        : generator {next(move(v), 0)}
+    {
+
+    }
+
+    int operator()()
+    {
+        return generator();
+    }
+};
+
+//...user code
+Pool pool { {1,2,3} };
+cout &lt;&lt; pool.Get() &lt;&lt; endl; // 1
+cout &lt;&lt; pool.Get() &lt;&lt; endl; // 2
+cout &lt;&lt; pool.Get() &lt;&lt; endl; // 3
+cout &lt;&lt; pool.Get() &lt;&lt; endl; // 1</pre>
+<p style="text-align: justify;"></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet41');</script>
+</DIV></p>
+<p style="text-align: justify;">You are storing the vector inside generator (which is a std::function). How many copies of this vector do you expect? You could say: &#8220;Zero! Just moves, because I&#8217;m always moving the vector from a lambda to the next one&#8221;. I thought so too. Look more carefully how you are updating the next function:  when you capture the vector by move it gets moved into the lambda. Ok. What next? You store tmp and size, ok. Then? You update generator&#8230; Ah! Moving the vector here is just a copy! Why? Because the lambda is not <strong>mutable</strong>, thus the vector is <strong>const</strong> and moving a const object is actually (and silently) a copy. I prepared this snippet to let you play (i.e. remove mutable):</p>
+<p style="text-align: justify;"><DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler16 class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+#include &lt;vector&gt;
+#include &lt;functional&gt;
+using namespace std;
+
+struct sentinel
+{
+    sentinel() = default;
+    sentinel(const sentinel&amp;) { cout &lt;&lt; "copy" &lt;&lt; endl; }
+    sentinel(sentinel&amp;&amp;) { cout &lt;&lt; "move" &lt;&lt; endl; }
+};
+
+class Pool
+{
+    function&lt;int()&gt; generator;
+
+    function&lt;int()&gt; next(vector&lt;int&gt; v, sentinel s, size_t i)
+    {
+        return [this, v=move(v), i, s=move(s)]()mutable{
+            auto tmp = v[i];
+            auto size = v.size();
+            generator = next(move(v), move(s), (i+1)%size);
+            return tmp;
+        };
+    }
+public:    
+    Pool(vector&lt;int&gt; v)
+       : generator {next(move(v), sentinel{}, 0)}
+    {
+
+    }
+
+    int operator()()
+    {
+        return generator();
+    }
+};
+
+int main()
+{
+    Pool p { {1,2,3} };
+    cout &lt;&lt; p() &lt;&lt; endl;
+    cout &lt;&lt; p() &lt;&lt; endl;
+    cout &lt;&lt; p() &lt;&lt; endl;
+}</pre>
+<p style="text-align: justify;"></div>
+</DIV>
+	<INPUT id="cecompiler16_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler16_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler16');
+</script>
+</DIV></p>
+<p style="text-align: justify;">Target of this post was purely to implement Claudio&#8217;s examples in C++, taking into account some particularities of our favourite language. As I said, I&#8217;m not discussing edge cases nor saying these idioms apply everywhere (they don&#8217;t). If you have more examples please share them here!</p>
+]]></content:encoded>
+			<wfw:commentRss>https://www.italiancpp.org/2014/11/23/anti-if-idioms-in-cpp/feed/</wfw:commentRss>
+		<slash:comments>5</slash:comments>
+	<post-id xmlns="com-wordpress:feed-additions:1">3751</post-id>	</item>
+		<item>
+		<title>Brace initialization inside a lambda capture list</title>
+		<link>https://www.italiancpp.org/2014/05/26/brace-initialization-inside-a-lambda-capture-list/</link>
+		<pubDate>Mon, 26 May 2014 13:24:05 +0000</pubDate>
+		<dc:creator><![CDATA[Gian Lorenzo]]></dc:creator>
+				<category><![CDATA[Hands-on]]></category>
+		<category><![CDATA[auto]]></category>
+		<category><![CDATA[initialized lambda capture]]></category>
+		<category><![CDATA[initializer-list]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=3229</guid>
+		<description><![CDATA[Mi sono inmbattuto oggi in un problema abbastanza subdolo: Se eseguite il codice, l&#8217;output del programma è (ammetto con mia sorpresa) il seguente: v size is: 1000 inside lambda =&#62; v size is: 1 La dimensione di v all&#8217;interno della lambda è 1. Ma perchè? Il problema, come vedremo, non ha nulla a che vedere [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>Mi sono inmbattuto oggi in un problema abbastanza subdolo:<br />
+<DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler17 class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+#include &lt;functional&gt;
+#include &lt;vector&gt;
+using namespace std;
+function&lt;void()&gt; f()
+{
+    vector&lt;int&gt; v(1000, 0);
+    cout &lt;&lt; "v size is: " &lt;&lt; v.size() &lt;&lt; endl;
+
+    return [ v {move(v)} ]() {
+        cout &lt;&lt; "inside lambda =&gt; v size is: " &lt;&lt; v.size() &lt;&lt; endl;
+    };
+}
+
+int main()
+{
+    f() ();
+}</pre>
+<p></div>
+</DIV>
+	<INPUT id="cecompiler17_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler17_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler17');
+</script>
+</DIV><br />
+Se eseguite il codice, l&#8217;output del programma è (ammetto con mia sorpresa) il seguente:</p>
+<p><strong>v size is: 1000</strong><br />
+<strong>inside lambda =&gt; v size is: 1</strong></p>
+<p style="text-align: justify;">La dimensione di <strong>v</strong> all&#8217;interno della lambda è 1. Ma perchè?<br />
+Il problema, come vedremo, non ha nulla a che vedere con le lambda in se ma risiede nel modo in cui <strong>v</strong> viene dedotto nella <em>capture list</em>.</p>
+<p>Dato un vettore cosi definito:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet42 class='ace_coliru_editor'></p>
+<pre>vector&lt;int&gt; v(1000, 0); // crea 1000 interi inizializzati a 0</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet42');</script>
+</DIV><br />
+e altri due oggetti (t, u) cosi definiti:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet43 class='ace_coliru_editor'></p>
+<pre>vector&lt;int&gt; u{10,20,30};
+auto t{10,20,30};</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet43');</script>
+</DIV></p>
+<p style="text-align: justify;"><strong>u</strong> è un vettore come tutti ce lo aspettiamo, completamente definito ed inizializzato (tramite la uniform initialization) con tre numeri (10, 20, 30), <strong>t</strong> invece è definito tramite <em><strong>auto. </strong></em>Il compilatore deduce <strong>t</strong> come <strong>std::initializer_list&lt;decltype(v)&gt;</strong> (= <strong>std::initializer_list&lt;vector&lt;int&gt;&gt;</strong>)!.</p>
+<p style="text-align: justify;">Ecco perchè <strong>v</strong> catturata dentro la lambda, definita implicitamente come <strong>auto</strong>, ha dimensione 1 (in quel caso abbiamo una std::initializer_list&lt;vector&lt;int&gt;&gt;). Per evitare il problema dobbiamo dunque riscrivere la nostra funzione in questo modo:<br />
+<DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler18 class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+#include &lt;functional&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+function&lt;void()&gt; f()
+{
+    vector&lt;int&gt; v(1000, 0);
+    cout &lt;&lt; "v size is: " &lt;&lt; v.size() &lt;&lt; endl;
+
+    return [ v = move(v) ]() { //adesso v è un vector&lt;int&gt;
+        cout &lt;&lt; "inside lambda =&gt; v size is: " &lt;&lt; v.size() &lt;&lt; endl;
+    };
+}
+
+int main()
+{
+    f()();
+}</pre>
+<p></div>
+</DIV>
+	<INPUT id="cecompiler18_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler18_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler18');
+</script>
+</DIV></p>
+<p style="text-align: justify;">Finalmente il compilatore dedurrà correttamente <strong>v</strong> nella capture list come un <strong>vector&lt;int&gt;</strong>. Con questa modifica il risultato è quello atteso!</p>
+<p style="text-align: justify;">Concludendo: <strong>evitate</strong> <strong>di usare la brace initialization all&#8217;interno delle capture list</strong>, ma piuttosto utilizzate la notazione <strong>VAR = EXPR</strong>, perchè <strong>auto + brace initialization</strong> implica che il tipo dedotto sia una std::initializer_list.</p>
+<p><strong>Biblio</strong>: [Scott Meyers] &#8211; <a title="Item 7 - More Effective C++" href="http://aristeia.com/EC++11-14/parens%20or%20braces%202014-03-18.pdf" target="_blank">Item 7 More Effective C++</a></p>
+]]></content:encoded>
+		<post-id xmlns="com-wordpress:feed-additions:1">3229</post-id>	</item>
+		<item>
+		<title>Una sbirciatina al C++14</title>
+		<link>https://www.italiancpp.org/2014/02/03/una-sbirciatina-al-cpp14/</link>
+		<pubDate>Mon, 03 Feb 2014 11:40:45 +0000</pubDate>
+		<dc:creator><![CDATA[marco]]></dc:creator>
+				<category><![CDATA[Hands-on]]></category>
+		<category><![CDATA[C++14]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=2614</guid>
+		<description><![CDATA[Il C++14 è il nome informale della prossima revisione dello standard C++ ISO/IEC che potrebbe essere ufficializzata quest&#8217;anno. La bozza approvata dal comitato ISO &#8211; N3797 &#8211; è stata pubblicata il 15 Maggio 2013. In questo breve articolo vediamo alcune delle features più interessanti già disponibili su Clang (ogni argomento ha il link al relativo paper/draft). [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p style="text-align: justify;">Il <strong>C++14</strong> è il nome informale della prossima revisione dello standard C++ ISO/IEC che potrebbe essere ufficializzata quest&#8217;anno. La bozza approvata dal comitato ISO &#8211; <a title="N3797" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3797.pdf" target="_blank">N3797</a> &#8211; è stata pubblicata il 15 Maggio 2013.</p>
+<p style="text-align: justify;">In questo breve articolo vediamo alcune delle features più interessanti già disponibili su Clang (ogni argomento ha il link al relativo paper/draft). Vi diamo la possibilità di provare <strong>alcuni</strong> esempi direttamente nell&#8217;articolo. Qualsiasi autore può utilizzare nei propri articoli questi &#8220;snippet compilabili&#8221;, quindi se avete voglia di scrivere un articolo del genere <a title="Diventa autore!" href="http://www.italiancpp.org/articoli/diventa-un-autore/" target="_blank">fatevi sotto</a>!</p>
+<h3 style="text-align: justify;"><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3649.html" target="_blank">Generic lambdas</a> &amp; <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3648.html" target="_blank">initialized capture</a></h3>
+<p style="text-align: justify;">Scrivendo una lambda, quante volte  vi siete chiesti: &#8220;ma perché il compilatore non deduce il tipo dei parametri automaticamente?!&#8221; Per esempio in un for_each:</p>
+<p style="text-align: justify;"><DIV class="page-snippet-container">
+	<div id=cesnippet44 class='ace_coliru_editor'></p>
+<pre>vector&lt;int&gt; v;
+for_each(begin(v), end(v), [](int i) {
+   cout &lt;&lt; i &lt;&lt; endl;
+});</pre>
+<p style="text-align: justify;"></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet44');</script>
+</DIV></p>
+<p style="text-align: justify;">Per prima cosa il compilatore sa quale tipo ci va, ma non solo: la stessa lambda (a parte il parametro) potrebbe essere riutilizzata altrove, per stampare qualsiasi oggetto che supporti l&#8217;operator&lt;&lt;(ostream&amp;):</p>
+<p style="text-align: justify;"><DIV class="page-snippet-container">
+	<div id=cesnippet45 class='ace_coliru_editor'></p>
+<pre>auto printer = [](string s) {
+   cout &lt;&lt; s &lt;&lt; endl;
+};</pre>
+<p style="text-align: justify;"></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet45');</script>
+</DIV></p>
+<p style="text-align: justify;">In C++14 è possibile creare delle <strong>lambda generiche</strong> (dette anche <em>polimorfe</em>), tramite <strong>auto</strong>:</p>
+<p style="text-align: justify;"><DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler19 class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+
+using namespace std;
+
+int main()
+{
+   auto printer = [](auto value) {
+      cout &lt;&lt; "PRINTING: " &lt;&lt; value &lt;&lt; endl;
+   };
+
+   printer(10);
+   printer("hello");
+}</pre>
+<p style="text-align: justify;"></div>
+</DIV>
+	<INPUT id="cecompiler19_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler19_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler19');
+</script>
+</DIV></p>
+<p style="text-align: justify;">Un lambda <em>stateless</em> (con cattura &#8220;vuota&#8221;), proprio come nel C++11, si può castare ad un puntatore a funzione <strong>appropriato</strong>:</p>
+<p style="text-align: justify;"><DIV class="page-snippet-container">
+	<div id=cesnippet46 class='ace_coliru_editor'></p>
+<pre>auto printer = [](auto value) {
+    cout &lt;&lt; value &lt;&lt; endl;
+};
+
+void(*printIntFn)(int) = printer;</pre>
+<p style="text-align: justify;"></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet46');</script>
+</DIV></p>
+<p style="text-align: justify;">Un altro limite delle lambda riguarda la cattura che è consentita solo per copia e per reference, escludendo, di fatto, una cattura &#8220;by-move&#8221;. Si possono adottare alcuni workaround &#8211; come bind oppure nascondere una move sotto una copy &#8211; ma si tratta, appunto, solo di trucchi per eludere un limite del linguaggio.</p>
+<p style="text-align: justify;">Nel C++14 la sintassi della capture-list permette delle vere e proprie <strong>inizializzazioni</strong> di variabili (questa nuova caratteristica è chiamata, infatti, <em>initialized lambda capture</em>):</p>
+<p style="text-align: justify;"><DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler20 class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+#include &lt;memory&gt;
+#include &lt;vector&gt;
+#include &lt;numeric&gt;
+using namespace std;
+
+int main()
+{
+    unique_ptr&lt;int&gt; ptr {new int{10}};
+
+    auto closure = [ptr = move(ptr)]{
+        cout &lt;&lt; "From closure: " &lt;&lt; *ptr &lt;&lt; endl;
+    };
+
+    closure();
+
+    if (ptr) // is ptr valid?
+        cout &lt;&lt; "ops...move didn't work..." &lt;&lt; endl;
+
+    vector&lt;int&gt; v{1,2,3,4,5};
+
+    auto printSum = [sum = accumulate(begin(v), end(v), 0)]{
+        cout &lt;&lt; "Sum is: " &lt;&lt; sum &lt;&lt; endl;
+    };
+
+    printSum();
+}</pre>
+<p style="text-align: justify;"></div>
+</DIV>
+	<INPUT id="cecompiler20_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler20_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler20');
+</script>
+</DIV></p>
+<p style="text-align: justify;">Suggeriamo di non abusare di questa notazione&#8230;Non è il caso di scrivere tutto il codice tra [ ] <img src="https://s.w.org/images/core/emoji/2.2.1/72x72/1f642.png" alt="&#x1f642;" class="wp-smiley" style="height: 1em; max-height: 1em;" /></p>
+<p style="text-align: justify;">Notevole di questa sintassi è il poter creare delle closure con &#8220;full ownership&#8221;: nell&#8217;esempio di prima, se avessimo introdotto uno shared_ptr la lambda avrebbe in qualche modo condiviso la proprietà del puntatore con lo scope in cui è definita. Al contrario, muovendo uno unique_ptr dentro la lambda si sta completamente trasferendo la proprietà del puntatore all&#8217;interno della stessa. Non mancano casi in cui questa nuova sintassi farà davvero comodo, specialmente in ambito multi-thread.</p>
+<h3 style="text-align: justify;"><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3386.html" target="_blank">Return type deduction for normal functions</a></h3>
+<p style="text-align: justify;">In C++11 il tipo di ritorno di una lambda viene dedotto automaticamente se questa è composta di una sola espressione. Nel C++14 la deduzione del tipo di ritorno di una lambda viene estesa anche per casi i più complicati.</p>
+<p style="text-align: justify;">Ma non solo: la deduzione automatica è abilitata anche per le funzioni ordinarie, tramite due diverse notazioni:</p>
+<p style="text-align: justify;"><DIV class="page-snippet-container">
+	<div id=cesnippet47 class='ace_coliru_editor'></p>
+<pre>// auto-semantics
+auto func() {...}
+
+// decltype-semantics
+decltype(auto) func() {...}</pre>
+<p style="text-align: justify;"></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet47');</script>
+</DIV></p>
+<p style="text-align: justify;">Nel primo caso il tipo di ritorno è dedotto seguendo la semantica di <strong>auto</strong> (e.g. &amp;-qualifiers eliminati), nel secondo quella di <strong>decltype</strong>. Vediamo un esempio con auto:</p>
+<p style="text-align: justify;"><DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler21 class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+#include &lt;type_traits&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+template&lt;typename T&gt;
+auto sum(T&amp;&amp; a, T&amp;&amp; b)
+{
+    return a+b;
+}
+
+int main()
+{
+    cout &lt;&lt; "Summing stuff:" &lt;&lt; endl;
+    cout &lt;&lt; sum(1, 2) &lt;&lt; endl;
+    cout &lt;&lt; sum(1.56, 3.66) &lt;&lt; endl;
+    cout &lt;&lt; sum(string{"hel"}, string{"lo"}) &lt;&lt; endl;
+}</pre>
+<p style="text-align: justify;"></div>
+</DIV>
+	<INPUT id="cecompiler21_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler21_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler21');
+</script>
+</DIV></p>
+<p style="text-align: justify;">Uno scenario nel quale questa notazione sarebbe poco appropriata (l&#8217;esempio <span style="text-decoration: underline;">non compila</span>, di fatto):</p>
+<p style="text-align: justify;"><DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler22 class='ace_coliru_editor'></p>
+<pre>#include &lt;memory&gt;
+using namespace std;
+
+struct Base {};
+struct Derived : Base {};
+
+shared_ptr&lt;Base&gt; share_ok(int i) // ok
+{
+    if (i)
+        return make_shared&lt;Base&gt;();
+    return make_shared&lt;Derived&gt;();
+}
+
+auto share_ops(int i) // ops
+{
+    if (i)
+        return make_shared&lt;Base&gt;();
+    return make_shared&lt;Derived&gt;();
+}
+
+int main()
+{
+    auto shared1 = share_ok(1);
+    auto shared2 = share_ops(1); 
+}</pre>
+<p style="text-align: justify;"></div>
+</DIV>
+	<INPUT id="cecompiler22_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler22_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler22');
+</script>
+</DIV></p>
+<p style="text-align: justify;">In ogni caso, prima di dare linee guida o suggerimenti stilistici, attendiamo di utilizzare questa feature in produzione.</p>
+<p style="text-align: justify;">Ed ecco <strong>auto</strong> e <strong>decltype(auto)</strong> a confronto:</p>
+<p style="text-align: justify;"><DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler23 class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+#include &lt;type_traits&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+vector&lt;int&gt; v{1,2,3,4};
+
+decltype(auto) getDecltype(size_t index)
+{
+    return v[index];
+}
+
+auto getAuto(size_t index)
+{
+    return v[index];
+}
+
+int main()
+{
+    auto val = getAuto(0); 
+    auto anotherVal = getDecltype(1);
+    auto&amp; ref = getDecltype(0);
+    ref += 10; // aka: v[0] += 10;
+    cout &lt;&lt; "copied v[0] = " &lt;&lt; val &lt;&lt; endl;
+    cout &lt;&lt; "copied v[1] = " &lt;&lt; anotherVal &lt;&lt; endl;
+
+    cout &lt;&lt; "final vector: [ ";
+    for (auto i : v)
+        cout &lt;&lt; i &lt;&lt; " "; 
+    cout &lt;&lt; "]" &lt;&lt; endl;
+}</pre>
+<p style="text-align: justify;"></div>
+</DIV>
+	<INPUT id="cecompiler23_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler23_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler23');
+</script>
+</DIV></p>
+<p style="text-align: justify;">Questo facile esempio mostra che, nonostante l&#8217;operator[] di un vector riporti una reference, la semantica di deduzione di <strong>auto</strong> vuole che i ref-qualifiers siano eliminati. Per questo <strong>getAuto()</strong> restituisce un int (per copia). Viceversa, con <strong>decltype(auto)</strong>, vengono utilizzate le regole deduttive di <strong>decltype</strong> che preservano i qualificatori (e quindi il fatto che operator[] riporti una reference). Per una spiegazione più accurata di auto e decltype vi consigliamo <a title="C++ auto and decltype Explained" href="http://thbecker.net/articles/auto_and_decltype/section_01.html" target="_blank">questo articolo</a> di Thomas Becker. Provate a giocare con l&#8217;esempio direttamente nell&#8217;articolo. Se siete soliti scrivere codice generico, troverete molto utili queste due novità!</p>
+<h3 style="text-align: justify;"><a href="http://isocpp.org/files/papers/N3651.pdf" target="_blank">Variable templates</a></h3>
+<p style="text-align: justify;">Nel C++11 non c&#8217;è modo di parametrizzare una costante direttamente con i template, come invece è possibile per classi e funzioni. Generalmente vengono utilizzati dei workarounds come classi al cui interno sono definite una serie di static constexpr (e.g. vedi <strong>numeric_limits</strong>).</p>
+<p style="text-align: justify;">Dal C++14 è consentito definire delle <strong>constexpr variable templates</strong> (o solo <strong>variable templates</strong>), come ad esempio:</p>
+<p style="text-align: justify;"><DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler24 class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+#include &lt;iomanip&gt;
+using namespace std;
+
+template&lt;typename T&gt;
+constexpr T pi = T(3.1415926535897932385);
+
+template&lt;typename T&gt;
+T areaOfCircle(T r) 
+{
+    return pi&lt;T&gt; * r * r;
+}
+
+int main()
+{
+    cout &lt;&lt; setprecision(10);
+    cout &lt;&lt; "PI double = " &lt;&lt; pi&lt;double&gt; &lt;&lt; endl;
+    cout &lt;&lt; "PI float = " &lt;&lt; pi&lt;float&gt; &lt;&lt; endl;
+    cout &lt;&lt; "Area double = " &lt;&lt; areaOfCircle(1.5) &lt;&lt; endl;
+    cout &lt;&lt; "Area float = " &lt;&lt; areaOfCircle(1.5f) &lt;&lt; endl;
+}</pre>
+<p style="text-align: justify;"></div>
+</DIV>
+	<INPUT id="cecompiler24_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler24_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler24');
+</script>
+</DIV></p>
+<p style="text-align: justify;">La nostra carrellata del C++14 è completa. Non esitate a lasciare un commento con le vostre impressioni. E se un commento non vi basta, scrivete un intero articolo! <a title="Diventa un autore" href="http://www.italiancpp.org/articoli/diventa-un-  autore" target="_blank">Contattateci</a> e vi aiuteremo a pubblicare il vostro &#8220;pezzo&#8221; su <strong>++it</strong> &#8211; i mini-compilatori sono disponibili per tutti!</p>
+]]></content:encoded>
+		<post-id xmlns="com-wordpress:feed-additions:1">2614</post-id>	</item>
+	</channel>
+</rss>

@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20170617T083000
+DTEND;TZID=Europe/Rome:20170617T180000
+DTSTAMP:20200908T150834
+CREATED:20170206T103325Z
+LAST-MODIFIED:20171210T105110Z
+UID:7276-1497688200-1497722400@www.italiancpp.org
+SUMMARY:Italian C++ Conference 2017
+DESCRIPTION:\nLa conferenza C++\, made in Italy\nSaturday June 17\, Milan\n  \n160+ partecipanti.\n  \nWrap-Up Post\n  \n\nVideos\n \nPictures\n \nInternational reader? Read this page in English\n� \n  \n \nUna track completamente in inglese\ngrazie ai nostri 5 ospiti internazionali eccezionali:\nKeynote speaker: Michael Wong \n\n		\n			#gallery-1 {\n				margin: auto;\n			}\n			#gallery-1 .gallery-item {\n				float: left;\n				margin-top: 10px;\n				text-align: center;\n				width: 25%;\n			}\n			#gallery-1 img {\n				border: 2px solid #cfcfcf;\n			}\n			#gallery-1 .gallery-caption {\n				margin-left: 0;\n			}\n			/* see gallery_shortcode() in wp-includes/media.php */\n		\n		\n			\n				\n			\n				\n				Phil Nash\n				\n			\n				\n			\n				\n				Jens Weller\n				\n			\n				\n			\n				\n				Bartosz Milewski\n				\n			\n				\n			\n				\n				Dietmar Kühl\n				\n		\n\n  \n\nAgenda (video e slides seguendo i link)\n\n\n\ntime\nduration\nroom 9\nroom 7\n\n\n\n8.15 &#8211; 9.00\n45'\nCheck-in\n\n\n9.00 &#8211; 9.15\n15'\nWelcome MessageMarco Arena\n-\n\n\n9.15 &#8211; 10.30\n75'\nKeynote: C++ executors to enable heterogeneous computing in tomorrow's C++ today (EN)Michael Wong\n-\n\n\n10.30 &#8211; 11.00\n30'\nCoffee Break\n\n\n11.00 &#8211; 12.00\n60'\nQuicker Sorting (EN)Dietmar Kühl\nAn overly simple C++ idiomatic pattern language for message-based product families (ITA)Carlo Pescio\n\n\n12.05 &#8211; 12.50\n45'\nDiversity and Inclusion in Microsoft (ITA)Paola Presutto\n-\n\n\n12.50 &#8211; 14.00\n70'\nLunch\n\n\n13.20 &#8211; 13.40\n20'\nBonus talk by JetBrains\n-\n\n\n14.00 &#8211; 15.00\n60'\nBoost vs Qt: What Could They Learn From Each Other? (EN)Jens Weller\nLambda out: a simple pattern for generic output (ITA)Davide Di Gennaro\n\n\n15.10 &#8211; 16.10\n60'\nMonads for C++ (EN)Bartosz Milewski\nCostruire un bridge C++ tra NodeJS e C# (ITA)Raffaele Rialdi\n\n\n16.10 &#8211; 16.40\n30'\nCoffee Break\n\n\n16.40 &#8211; 17.40\n60'\nFunctional C++ for Fun and Profit (EN)Phil Nash\nUna libreria di rete asincrona scritta in C++ ispirata a Node.js (ITA)Stefano Cristiano\n\n\n17.40 &#8211; 18.00\n20'\nClosing MessageMarco Arena\n-\n\n\n  \nL&#8217;Italian C++ Conference 2017 segue l&#8217;Italian C++ Code of Conduct.\nQuindi\, per favore sii professionale e rilassato\, in questo modo tutti potranno divertirsi all&#8217;Italian C++ Conference 2017. \n \n \nSponsors\n \n          \n \n \n \n \n \n \nPartners\n\n\n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/conference-2017/
+LOCATION:piazza dell'Ateneo Nuovo\, 1\, Milano\, Italia
+CATEGORIES:Conferenza
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

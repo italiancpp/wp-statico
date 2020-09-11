@@ -1,0 +1,119 @@
+/*
+/italiancpp.org/htdocs/wp-includes/css
+http://www.italiancpp.org/wp-includes/css/onlineCompiler.css
+*/
+
+/*Short and "discreet" text strings.*/
+.pageOneLiners {
+    float:right; 
+	font-size:12pt;
+	font-family: Trebuchet MS;
+}
+
+/*Online compiler editor*/
+#editor {
+	position: relative;
+	height: 300px;
+	font-size: 14pt;
+	border: 1px solid;
+	border-radius: 5px;
+	padding: 5px;
+	margin-bottom: 10px;
+}
+
+/*Buttons and options*/
+#compilerToolbar, #instructions, #advancedTools {
+	padding: 5px;
+	border: 1px solid;
+    border-radius: 5px;
+	margin-bottom: 5px;
+	margin-top: 10px;
+}
+
+
+#option-fontSize {
+	width: 30px;
+}
+
+/*Overrides other css directive from some wp plugin.*/
+#compilerToolbar  table  {  
+	border: none;
+    margin-bottom: 0px;
+} 
+#compilerToolbar  td  {  
+	border: none;
+} 
+
+#compilerToolbar  label, #advancedTools label {
+	width: 150px;
+	font-family: Helvetica;
+	font-size: 14px;
+	display:inline-block; /*Ensure that width takes effect.*/
+}
+
+#compilerToolbar  select {
+	width: 100px;
+	font-family: Helvetica;
+	font-size: 14px;
+	border-radius: 5px;
+}
+
+#compilerOptions {
+	width: 400px;
+}
+
+
+#compilerToolbar  input, #advancedTools  input  {
+	font-family: Helvetica;
+	font-size: 14px;
+	border-radius: 5px;
+}
+
+#compilerToolbar div {
+	margin-top: 3px;
+}
+
+/*Execution result box*/
+#outbox {
+	border:1px solid;
+	border-radius: 5px;
+	padding:10px;
+	font-family: Lucida console;
+	font-size:12pt;
+	overflow:auto;
+	resize:vertical; /*Not working on IE*/
+	max-height: 350px;
+	height: 60px;
+}
+
+#outbox  pre {
+	overflow: visible;  /*Let the outbox manage the scrollbars.*/
+	padding: 0px;
+	margin: 0px;
+	background: none;
+}
+
+.searchGizmos {
+	width: 700px;
+
+}
+
+.ui-dialog {
+    z-index: 1000;
+
+}
+
+#searchPage {
+	height: 450px;
+}
+
+.itcUnderline * {
+	background-image: url('../images/compilerUnderline.png');
+	background-position: bottom;
+	background-repeat: repeat-x;
+}
+
+
+
+
+

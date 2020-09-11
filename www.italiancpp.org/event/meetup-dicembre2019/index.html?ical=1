@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20191212T200000
+DTEND;TZID=Europe/Rome:20191212T223000
+DTSTAMP:20200908T150205
+CREATED:20191110T112116Z
+LAST-MODIFIED:20191213T104241Z
+UID:9261-1576180800-1576189800@www.italiancpp.org
+SUMMARY:Meetup Dicembre / Modena - Pair Programming: analisi attraverso quattro lenti
+DESCRIPTION: \nPair Programming: analisi attraverso quattro lenti\nMarcello Missiroli\nUn nuovo appuntamento a Modena dedicato al C++ organizzato in collaborazione con l&#8217;associazione ConoscereLinux. \n  \n20:00 \nArrivo e saluti iniziali &#8211; Marco Arena \n20:05 \nPair Programming: analisi attraverso quattro lenti &#8211; Marcello Missiroli \nIl Pair Programming è una tecnica ampiamente diffusa nel mondo dello sviluppo\, specificamente quello delle metodologie agili. Se però questa modo di lavorare porti realmente a vantaggi è oggetto di discussione. \nSecondo il prof. Brookfield\, la valutazione una esperienza di insegnamento deve passare lo scrutinio di quattro lenti: la lente personale (o autobiografica)\, quella degli studenti\, quella dei pari e quella accademica. \nPur non essendo un caso di insegnamento\, vorrei fare una carrellata di opinioni sul PP attraverso le diverse “lenti”\, possibilmente discutendo assieme delle esperienze personali. \n22:00 \nPizza e networking \nIscrizioni \n\nEvento passato\n\nMateriale \n\nSlides\nVideo\n\n\nCome sono strutturati i nostri meetup serali: \n\npresentazione tecnica con formato a scelta dello speaker (talk frontale\, workshop\, live coding\, ecc)\nspazio fare domande e confrontarsi\nuna pizza tutti insieme per fare networking e\, perché no\, parlare d&#8217;altro\n\nIn regalo a tutti i partecipanti i nostri mitici stickers 🙂 \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-dicembre2019/
+LOCATION:Via Strada Barchetta\, 77\, Modena\, 41123\, Italia
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20180913T200000
+DTEND;TZID=Europe/Rome:20180913T223000
+DTSTAMP:20200908T153010
+CREATED:20180827T082049Z
+LAST-MODIFIED:20180927T160839Z
+UID:8772-1536868800-1536877800@www.italiancpp.org
+SUMMARY:Meetup Settembre / Modena
+DESCRIPTION: \nIntroduzione a QML e integrazione con C++\nOspite: Silvio Pioli (Amaris)\nQuesto meetup è sponsorizzato da Amaris Consulting \n \nUn nuovo appuntamento a Modena dedicato al C++ organizzato in collaborazione con l&#8217;associazione ConoscereLinux. \n  \n20:00 \nArrivo e saluti iniziali &#8211; Marco Arena \n20:05 \nIntroduzione a QML e integrazione con C++ &#8211; Silvio Pioli (Amaris) \n\nIntroduzione a QT\nQt Quick caratteristiche e componenti principali\nQML\n\nPrimi passi (Sintassi\, tipi base\, attributi)\nCreare un progetto in Qt Creator\nImplementazione e utilizzo di alcuni dei controlli principali del framework\n\n\nIntegrazione C++/QML\n\nEsportare dati e funzionalità da C++ a QML\nEsportare e manipolare oggetti QML attraverso codice C++\nImportare dati e funzionalità da C++ a QML utilizzando i plugin\n\n\n\n� \n22:00 \nPizza e networking \n� \nAmaris Consulting \nAmaris è un Gruppo multinazionale indipendente di consulenza tecnologica e management. Fondato nel 2007\, il Gruppo è oggi presente in più di 50 paesi ed accompagna più di 750 clienti in tutto il mondo. Le nostre competenze coprono 5 aree di innovazione: Business and Management\, Information Technologies\, Engineering and High Technologies\, Telecommunications e Biotech and Pharma. Con oltre 65 uffici in tutto il mondo\, Amaris offre supporto capillare a tutti i propri clienti nelle loro diverse sedi e opportunità di sviluppo di carriera internazionale ai propri dipendenti. \nL&#8217;obiettivo di Amaris è di raggiungere nel 2018 un fatturato di 260 milioni di Euro\, 5000 dipendenti e di sviluppare la propria struttura futura grazie all&#8217;apertura di ulteriori 2000 assunzioni. Ci aspettiamo di triplicare il numero dei nostri dipendenti nei prossimi anni e di raggiungere una posizione di leader a livello internazionale nel mercato della consulenza indipendente. \nOfferte di Lavoro di Amaris Consulting \n\nKernel Linux Developer\nSW Developer\nC++/QT Developer\nC++ Developer\nFW tester\n\nPer inviare il proprio CV scrivere a Giulia Campolonghi:\ntalent@amaris.com oppure gcampolonghi@amaris.com \n� \n\nCome sono strutturati i nostri meetup serali: \n\npresentazione tecnica con formato a scelta dello speaker (talk frontale\, workshop\, live coding\, ecc)\nspazio fare domande e confrontarsi\nuna pizza tutti insieme per fare networking e\, perché no\, parlare d&#8217;altro\n\nIn regalo a tutti i partecipanti i nostri mitici stickers 🙂 \n \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-settembre2018/
+LOCATION:Via Strada Barchetta\, 77\, Modena\, 41123\, Italia
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

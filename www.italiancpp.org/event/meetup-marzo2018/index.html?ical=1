@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20180315T200000
+DTEND;TZID=Europe/Rome:20180315T223000
+DTSTAMP:20200908T150703
+CREATED:20180216T093547Z
+LAST-MODIFIED:20180317T133359Z
+UID:8469-1521144000-1521153000@www.italiancpp.org
+SUMMARY:Meetup Marzo / Modena
+DESCRIPTION: \nTest del codice con Google Test\nSpeaker: Yuri Valentini\nUn nuovo appuntamento a Modena dedicato al C++ organizzato in collaborazione con l&#8217;associazione ConoscereLinux. \n  \nIn questa serata avremo il piacere di ospitare Yuri Valentini: \n20:00 \nArrivo e saluti iniziali &#8211; Marco Arena \n20:10 \nTest del codice con Google Test &#8211; Yuri Valentini \nCercheremo di capire cosa sono i test automatici\, perché servono e come si differenziano (unit test\, functional test\, integration test\, performance test\, ecc)\, e spiegheremo come utilizzarli nell&#8217;ottica di progettare il software a cui stiamo lavorando (TDD &#8211; Test Driven Design).\nDopo una breve introduzione all&#8217;utilizzo base dello strumento googletest\, metteremo mano alle tastiere e proveremo a risolvere insieme un semplice &#8220;code kata&#8221; facendoci guidare dai test. \n22:00 \nPizza e networking \n  \nLink al materiale della serata\n� \nQualche foto della serata (tutte le foto sulla nostra pagina Facebook): \n                               \n\nCome sono strutturati i nostri meetup serali: \n\npresentazione tecnica con formato a scelta dello speaker (talk frontale\, workshop\, live coding\, ecc)\nspazio fare domande e confrontarsi\nuna pizza tutti insieme per fare networking e\, perché no\, parlare d&#8217;altro\n\nIn regalo a tutti i partecipanti i nostri mitici stickers 🙂 \n \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-marzo2018/
+LOCATION:Via Strada Barchetta\, 77\, Modena\, 41123\, Italia
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20180623T083000
+DTEND;TZID=Europe/Rome:20180623T180000
+DTSTAMP:20200908T150639
+CREATED:20180205T105650Z
+LAST-MODIFIED:20180708T162609Z
+UID:8431-1529742600-1529776800@www.italiancpp.org
+SUMMARY:Italian C++ Conference 2018
+DESCRIPTION:\nThe C++ Conference\, made in Italy\nSaturday June 23\, Milan\n \n200 attendees\n� \nWrap-Up Post\n\nVideos\n \nPictures\n  \nThe Italian C++ Conference is the biggest Italian event about C++ development where professionals\, companies and students meet and share experience.\nThe conference is free and organized by the Italian C++ Community. \nFor an overview of the previous edition\, including statistics and technical contents\, read the wrap-up post.\n  \n\nSchedule\n\n\ntime\nduration\nroom 10\nroom 11\n\n\n\n08.30 &#8211; 09.30\n60'\nCheck-in\n\n\n09.30 &#8211; 09.45\n15'\nWelcome MessageMarco Arena\n-\n\n\n10.00 &#8211; 11.30\n90'\nKeynoteABC &#8211; Agile BMWs and C++: 30+ years as a Software Engineer(ENG)Peter Sommerlad\n-\n\n\n11.30 &#8211; 12.00\n30'\nCoffee Break\n\n\n12.00 &#8211; 12.50\n50'\nComing Soon to a C++ Compiler Near You: Coroutines(ITA)Alberto Barbati\nDebug C++ Without Running(ENG)Anastasia Kazakova\n\n\n13.00 &#8211; 13.20\n20'\nTime Travel Debugging in Windows(ITA)Paolo Severini\nWork with C++ on Mac Linux and Windows with Visual Studio Code(ENG)Emanuele Bartolesi\n\n\n13.20 &#8211; 14.30\n70'\nLunch\n\n\n14.30 &#8211; 15.20\n50'\nC++ Barbarian Quiz&Introduction to Conan C/C++ Package Manager(ENG)Diego Rodriguez-Losada Gonzalez\nWriting and using compile-time heterogeneous hash table in C++17(ENG)Denis Panin\n\n\n15.25 &#8211; 16.15\n50'\nWebAssembly: Native code for the web(ENG)Paolo Severini\nChannels are useful &#8211; not just for water(ENG)Felix Petriconi\n\n\n16.15 &#8211; 16.45\n30'\nNetworking Break\n\n\n16.45 &#8211; 17.35\n50'\nCppWinRT e il futuro dello sviluppo desktop in Windows(ITA)Raffaele Rialdi\nZero-allocation & no type erasure futures(ENG)Vittorio Romeo\n\n\n17.35 &#8211; 18.00\n25'\nClosing MessageMarco Arena\n-\n\n\n\n\nPlatinum Sponsors\n \n \n\nGold Sponsor\n \n\nSilver Sponsors\n \n\nBronze Sponsors\n� \n \n\n \n\nSupporters\n� \n \n \n \n   \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/itcppcon18/
+LOCATION:Via Bicocca degli Arcimboldi\, 8\, Milano\, MI\, 20126\, Italia
+CATEGORIES:Conferenza
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>ucs &#8211; Italian C++ Community</title>
+	<atom:link href="https://www.italiancpp.org/tag/ucs/feed/" rel="self" type="application/rss+xml" />
+	<link>https://www.italiancpp.org</link>
+	<description></description>
+	<lastBuildDate>Mon, 24 Aug 2020 13:03:53 +0000</lastBuildDate>
+	<language>it-IT</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.7.18</generator>
+<site xmlns="com-wordpress:feed-additions:1">106700034</site>	<item>
+		<title>Unicode, localization and C++ support</title>
+		<link>https://www.italiancpp.org/2016/04/20/unicode-localization-and-cpp-support/</link>
+		<comments>https://www.italiancpp.org/2016/04/20/unicode-localization-and-cpp-support/#comments</comments>
+		<pubDate>Wed, 20 Apr 2016 10:06:20 +0000</pubDate>
+		<dc:creator><![CDATA[Marco Alesiani]]></dc:creator>
+				<category><![CDATA[Hands-on]]></category>
+		<category><![CDATA[C++11]]></category>
+		<category><![CDATA[ucs]]></category>
+		<category><![CDATA[unicode]]></category>
+		<category><![CDATA[utf]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=5941</guid>
+		<description><![CDATA[This document doesn&#8217;t attempt to be yet another Unicode article but rather target the fundamental points that should be of interest to a C++ programmer diving into the new standards and into the Unicode subject either for the first time or as a refresher. It isn&#8217;t by any means a complete source of information on [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p style="text-align: justify;">This document doesn&#8217;t attempt to be <em>yet another Unicode article</em> but rather target the fundamental points that should be of interest to a C++ programmer diving into the new standards and into the Unicode subject either for the first time or as a refresher. It isn&#8217;t by any means a complete source of information on Unicode (there&#8217;s no mention of versioning, <em>BOM</em> sequences or other advanced topics like cluster composition algorithms or language-specific drawbacks addressing techniques) but only meant to provide insights on features that might be relevant for a programmer.</p>
+<h3>What is Unicode</h3>
+<p style="text-align: justify;">Unicode is an industry standard to encode text independently from language, platform or program. The idea is to assign a unique number (called <em>code point</em>) to each character used in writing. E.g. the codepoint for the latin capital letter <em>A</em> is <em>0041</em> and to indicate that this is a unicode codepoint a <em>U+</em> prefix is commonly added: <em>U+0041</em>. One might notice that the same number is also the hex for the character <em>A</em> in the <a href="https://en.wikipedia.org/wiki/ASCII#ASCII_printable_code_chart" target="_blank">ASCII table</a>. This is by design since the first 256 code points were made identical to the content of the <a href="https://en.wikipedia.org/wiki/ISO/IEC_8859-1" target="_blank">ISO-8859-1</a> <em>ASCII</em>-based encoding standard in order to make it easy to port existing western texts to unicode. Attention has to be paid to an often misunderstood aspect: unicode was originally designed to use 2 bytes for its codepoints, but this is no longer the case (e.g. emoji characters have been added to the unicode pages and mapped from codepoint <em>U+1F600</em> onward, which cannot be represented with just 2 bytes).</p>
+<p style="text-align: justify;">The getaway from this paragraph is that unicode is a standard way to assign a unique number called <em>code point</em> to each writing character.</p>
+<h3>Implementing unicode</h3>
+<p style="text-align: justify;">Since unicode maps each character to a (potentially very large) number, different encodings were developed to map this number (codepoint) to a sequence that could efficiently be transmitted or stored. <a href="https://en.wikipedia.org/wiki/UTF-16#History" target="_blank">Business interests and technical arguments</a> caused standardization issues and therefore many different ways were developed.</p>
+<h4>UCS</h4>
+<p style="text-align: justify;">UCS stands for <em>Universal Coded Character Set</em> and it was originally a standard with goals similar to those of the unicode consortium. Nowadays efforts have been made to (more or less) synchronize Unicode and UCS. Some of the original encodings are still used though, for instance what is now called <em>UCS-2</em> consists in encoding a codepoint in two bytes. <em>UCS-2</em> is now deprecated since, again, 2 bytes cannot suffice to represent every codepoint in Unicode. Another UCS encoding is <em>UCS-4</em> (now also called <em>UTF-32</em>) which uses 32 bits per codepoint (and this suffices to represent Unicode codepoints).</p>
+<h4>UTF</h4>
+<p style="text-align: justify;">UTF stands for <em>Unicode Transformation Format</em>. Instead of a fixed-length encoding that uses the same amount of bytes to encode a codepoint as <em>UCS-2</em> or <em>UCS-4</em> do, many UTF encodings prefer to use a variable-width encoding. <em>UTF-8</em> is one of the most used and famous variable-length encoding. It uses 8-bit <em>code-units</em> (the basic unit of an encoded sequence, in <em>UTF-8</em> corresponds to one byte which encodes both the character codepoint and some other encoding-specific data) so for example the &#8220;Hello&#8221; string in <em>UTF-8</em> would be stored as:</p>
+<pre> Hello
+ 0x48 0x65 0x6C 0x6C 0x6F</pre>
+<p style="text-align: justify;">which again, maps the contents of directly translating the string into the <em>ASCII</em>-table sequence (5 bytes). Characters whose codepoints are below <em>U+0080</em> are represented with a single byte. These are also the first 128 <em>ASCII</em> table characters. If the codepoint is higher, as in the case for the € euro sign <em>U+20AC</em>, the most significant bit is set to 1.</p>
+<pre> €
+ 0xE2        0x82        0xAC
+ 1110 0010   10 000010   10 101100
+ ^^^^        ^^          ^^
+ bits not part of the character codepoint but only related to the encoding</pre>
+<p style="text-align: justify;">In this case three bytes are necessary to represent in <em>UTF-8</em> the € character. The number of bytes needed is <a href="https://en.wikipedia.org/wiki/UTF-8#Description" target="_blank">described in the specification</a> and decoding it is a <a href="https://en.wikipedia.org/wiki/UTF-8#Examples" target="_blank">straightforward procedure</a>.</p>
+<p style="text-align: justify;"><em>UTF-8</em> therefore takes a variable amount of bytes (1 up to 4 by design) to encode a codepoint. <em>UTF-16</em> is also variable-length and uses one or two 16-bit code units and it was originally developed as a successor for the now obsolete <em>UCS-2</em> (codepoints in the so-called <a href="https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane" target="_blank">BMP</a> plane can be represented by <em>UCS-2</em>, other codepoints could not and as a workaround had to be encoded differently and are commonly referred to as <em>surrogate pairs</em>). <em>UTF-32</em> uses 32 bits per code unit but since 4 bytes is also the defined maximum to be used to encode a codepoint, this effectively makes <em>UTF-32</em> a fixed-length encoding. Its usage is <a href="http://w3c.github.io/html/document-metadata.html#specifying-the-documents-character-encoding" target="_blank">discouraged</a> by <a href="https://www.w3.org/" target="_blank">W3C</a>.</p>
+<h3>C++11 and Unicode support</h3>
+<p style="text-align: justify;">Since the C++11 standard some additional Unicode facilities have been integrated into the language. C++ <a href="http://en.cppreference.com/w/cpp/language/types" target="_blank">fundamental <em>wchar_t</em></a> type is dedicated to storing any supported code unit (usually 32 bits on systems that support Unicode with the exception of Windows using 16 bytes). C++11 introduced <em>char16_t</em> and <em>char32_t</em>, types large enough to store <em>UTF-16</em> code units (2 bytes each) and<em> UTF-32</em> code units (4 bytes each). The <em>char</em> type remains dedicated to whatever representation can be most efficiently processed on the system and, on a machine where <em>char</em> is 8 bits, it is used for 8-bit code units. One should not assume that plain <em>ASCII</em>-table characters are encoded into a <em>char</em> sequence but rather treat it as containing 8-bit codeunits.</p>
+<p style="text-align: justify;">The header <em>&lt;string&gt; </em>provides useful typedefs to work with specializations of the base string class template:</p>
+<table class="t-dsc-begin">
+<tbody>
+<tr class="t-dsc">
+<td><span class="t-lc"><strong class="selflink">std::string</strong></span></td>
+<td><span class="t-c"><span class="mw-geshi cpp source-cpp">std<span class="sy4">::</span><span class="me2">basic_string</span><span class="sy1">&lt;</span><span class="kw4">char</span><span class="sy1">&gt;</span></span></span></td>
+</tr>
+<tr class="t-dsc">
+<td><span class="t-lc"><strong class="selflink">std::wstring</strong></span></td>
+<td><span class="t-c"><span class="mw-geshi cpp source-cpp">std<span class="sy4">::</span><span class="me2">basic_string</span><span class="sy1">&lt;</span><span class="kw4">wchar_t</span><span class="sy1">&gt;</span></span></span></td>
+</tr>
+<tr class="t-dsc">
+<td><span class="t-lc"><strong class="selflink">std::u16string</strong></span> <span class="t-mark-rev t-since-cxx11">(C++11)</span></td>
+<td><span class="t-c"><span class="mw-geshi cpp source-cpp">std<span class="sy4">::</span><span class="me2">basic_string</span><span class="sy1">&lt;</span><span class="kw4">char16_t</span><span class="sy1">&gt;</span></span></span></td>
+</tr>
+<tr class="t-dsc">
+<td><span class="t-lc"><strong class="selflink">std::u32string</strong></span> <span class="t-mark-rev t-since-cxx11">(C++11)</span></td>
+<td><span class="t-c"><span class="mw-geshi cpp source-cpp">std<span class="sy4">::</span><span class="me2">basic_string</span><span class="sy1">&lt;</span><span class="kw4">char32_t</span><span class="sy1">&gt;</span></span></span></td>
+</tr>
+</tbody>
+</table>
+<p style="text-align: justify;">Converting between byte string <em>std::string</em> and wide string <em>std::basic_string&lt;wchar_t&gt;</em> (<em>std::wstring</em>) are also supported natively starting with C++11. An example follows:</p>
+<DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+#include &lt;codecvt&gt;
+#include &lt;string&gt;
+#include &lt;locale&gt;
+#include &lt;iomanip&gt;
+
+int main() {
+  using namespace std;
+
+  ios_base::sync_with_stdio(false); // Avoids synchronization with C stdio on gcc         
+                                    // (either localize both or disable sync)
+
+  wcout.imbue(locale("en_US.UTF-8")); // change default locale
+
+  unsigned char euroUTF8[] = { 0xE2, 0x82, 0xAC, 0x00 }; // Euro sign UTF8
+
+  wstring_convert&lt;codecvt_utf8&lt;wchar_t&gt;&gt; converter_UTF8_wchar;
+  wstring euroWideStr = converter_UTF8_wchar.from_bytes((char*)euroUTF8);
+  wcout &lt;&lt; euroWideStr &lt;&lt; endl;
+
+  string euroNarrowStr = converter_UTF8_wchar.to_bytes(euroWideStr);
+  cout &lt;&lt; euroNarrowStr &lt;&lt; endl;
+}
+</pre>
+<p></div>
+</DIV>
+	<INPUT id="cecompiler_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler');
+</script>
+</DIV>
+<p style="text-align: justify;">A <em>locale</em> is an immutable set of so-called <em>facets</em> that help writing localized-aware code (i.e. render some features specific for a geographic area / culture). Examples are formatting time and date in a specific format (US or EU) or currency parsing. Each feature is represented via a class facet that encapsulates the locale-specific logic.</p>
+<p style="text-align: justify;">In the code above the default locale for the <em>wcout</em> global object (output for wide strings) is changed to English &#8211; US region with <em>UTF-8</em> <a href="https://msdn.microsoft.com/en-us/library/hzz3tw78.aspx" target="_blank">code pages</a>.</p>
+<p style="text-align: justify;">After the setup, a sequence of <em>UTF-8</em> encoded bytes which represent the € euro character codepoint are stored into an array.</p>
+<p style="text-align: justify;">The class template <em><a href="http://en.cppreference.com/w/cpp/locale/wstring_convert" target="_blank">std::wstring_convert</a></em> accepts a code conversion facet to perform the conversion to a wide string. The standard facets provided by the standard library suitable to be used are <a href="http://en.cppreference.com/w/cpp/locale/codecvt_utf8" target="_blank">std::codecvt_utf8</a> and <a href="http://en.cppreference.com/w/cpp/locale/codecvt_utf8_utf16" target="_blank">std::codecvt_utf8_utf16</a>. <em>std::codecvt_utf8</em> manages conversions from/to <em>UTF-8</em> to/from <em>UCS2</em> and from/to <em>UTF-8</em> to/from <em>UCS4</em>. In order to understand why these conversions are available, recall that the fundamental type <em>wchar_t</em> is usually 32 bit with the exception of Windows systems (16 bit). <em>std::codecvt_utf8_utf16</em> provides conversion from/to <em>UTF-8</em> to/from <em>UTF-16</em>.</p>
+<p style="text-align: justify;">Starting from C++11 new <a href="http://en.cppreference.com/w/cpp/language/string_literal" target="_blank">string literals</a> were also added to specify encoding and type of a literal: <em>L</em> for <em>wchar_t</em>, <em>u8</em> for <em>UTF-8</em> encoded, <em>u</em> for <em>UTF-16</em> encoded and <em>U</em> for <em>UTF-32</em> encoded. <a href="http://en.cppreference.com/w/cpp/language/escape" target="_blank">Escape sequences</a> for 16 bit and 32 bit codepoints were also added.</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet class='ace_coliru_editor'></p>
+<pre>unsigned char euroUTF8_1[] = { 0xE2, 0x82, 0xAC, 0x00 };
+unsigned char euroUTF8_2[] = u8"\U000020AC"; // Null character is always appended to the literal          
+assert(memcmp(euroUTF8_1, euroUTF8_2, sizeof(euroUTF8_2) / sizeof(unsigned char)) == 0);
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet');</script>
+</DIV>
+<p style="text-align: justify;">Using a 32 bit escape sequence to encode a 32 bit codepoint into a <em>UTF-16</em> sequence will generate a sequence of <em>UTF-16</em> code units that can be later converted or used:</p>
+<DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler1 class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+#include &lt;codecvt&gt;
+#include &lt;string&gt;
+#include &lt;locale&gt;
+#include &lt;iomanip&gt;
+
+void hex_print(const std::string&amp; s) {
+  std::cout &lt;&lt; std::hex &lt;&lt; std::setfill('0');
+  for(unsigned char c : s)
+    std::cout &lt;&lt; std::setw(2) &lt;&lt; static_cast&lt;int&gt;(c) &lt;&lt; ' ';
+  std::cout &lt;&lt; std::dec &lt;&lt; '\n';
+}
+
+int main() {
+  using namespace std;
+  ios_base::sync_with_stdio(false);
+  cout.imbue(locale("C.UTF-8"));
+
+  u16string globeUTF16 = u"\U0001F30D"; // Globe                                             
+
+  wstring_convert&lt;codecvt_utf8_utf16&lt;char16_t&gt;, char16_t&gt; convert_UTF16_UTF8;
+
+  string utf8Str = convert_UTF16_UTF8.to_bytes(globeUTF16);
+  cout &lt;&lt; "UTF-8 code units: ";
+  hex_print(utf8Str);
+
+  cout &lt;&lt; utf8Str &lt;&lt; endl;
+}
+</pre>
+<p></div>
+</DIV>
+	<INPUT id="cecompiler1_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler1_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler1');
+</script>
+</DIV>
+<p style="text-align: justify;">It has to be noted that even when string literals are used, compile-time error checking isn&#8217;t available and failures should be expected when doing nonsensical operations like converting to <em>UTF-8</em> a <em>UCS-2</em> sequence of code units mapped in the range <em>0xD800-0xDFFF</em> which, by design, are used by <em>UCS-2</em> to map <a href="https://en.wikipedia.org/wiki/UTF-16#U.2B10000_to_U.2B10FFFF" target="_blank">surrogate pairs</a> to codepoints outside the <em>BMP</em> plane:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet1 class='ace_coliru_editor'></p>
+<pre>char16_t globeUTF16[] = u"\U0001F34C";
+wstring_convert&lt;codecvt_utf8&lt;char16_t&gt;, char16_t&gt; convert_UTF8_UCS2;
+// std::string u8Str = convert_UTF8_UCS2.to_bytes(globeUTF16); // range_error                  
+
+auto globeCodepoint = (globeUTF16[0] - 0xD800) * 0x400 + globeUTF16[1] - 0xDC00 + 0x10000;
+
+cout &lt;&lt; hex &lt;&lt; globeCodepoint &lt;&lt; endl; // 1F34C
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet1');</script>
+</DIV>
+<p style="text-align: justify;">At the time of writing this few compilers actually implement this behavior while others either completely lack the facet features or allow for an illegal conversion.</p>
+<h3>Compilers settings</h3>
+<p style="text-align: justify;">A few words might be worth spending talking about compiler behaviors on different systems and architectures. Some compilers might document their default execution charset (gcc has the <a href="https://gcc.gnu.org/onlinedocs/cpp/Invocation.html" target="_blank"><em>-fexec-charset</em> option</a> while MSVC has no command-line equivalent but rather a preprocessor directive</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet2 class='ace_coliru_editor'></p>
+<pre>#pragma execution_character_set("utf-8")
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet2');</script>
+</DIV>
+<p style="text-align: justify;">). This setting is not affected in MSVC by the &#8220;multi-byte character set&#8221; or &#8220;unicode&#8221; option in the project property pane that instructs the compiler whether to use <a href="https://msdn.microsoft.com/en-us/library/microsoft.visualstudio.vcproject.vcprojectconfigurationproperties.characterset.aspx">wide APIs or not</a>.</p>
+<p style="text-align: justify;">Although there are still some rough edges, an ongoing effort to fix standard library implementations and provide more features and algorithms to operate with Unicode is being carried out and will continue to improve with future C++ versions.</p>
+<p style="text-align: justify;"><em>A big thanks to Stefano Saraulli, Alessandro Vergani and the reddit community for reviewing this article.</em></p>
+]]></content:encoded>
+			<wfw:commentRss>https://www.italiancpp.org/2016/04/20/unicode-localization-and-cpp-support/feed/</wfw:commentRss>
+		<slash:comments>5</slash:comments>
+	<post-id xmlns="com-wordpress:feed-additions:1">5941</post-id>	</item>
+	</channel>
+</rss>

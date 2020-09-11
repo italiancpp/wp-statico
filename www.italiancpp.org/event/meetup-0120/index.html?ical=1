@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20200109T200000
+DTEND;TZID=Europe/Rome:20200109T223000
+DTSTAMP:20200908T150217
+CREATED:20191205T144056Z
+LAST-MODIFIED:20200110T091511Z
+UID:9283-1578600000-1578609000@www.italiancpp.org
+SUMMARY:Meetup Gennaio / Modena - Framework per applicazioni 3D basate su Qt
+DESCRIPTION: \nFramework per applicazioni 3D basate su Qt\nFederico Barbieri\nUn nuovo appuntamento a Modena dedicato al C++ organizzato in collaborazione con l&#8217;associazione ConoscereLinux. \n  \n20:00 \nArrivo e saluti iniziali &#8211; Marco Arena \n20:05 \nFramework per applicazioni 3D basate su Qt &#8211; Federico Barbieri \nPresentazione dei motivi che hanno portato allo sviluppo da zero del framework e delle sue potenzialità.\nA seguire\, overview dell&#8217;architettura software e descrizione in dettaglio delle sue componenti con discussione delle principali soluzioni realizzative adottate. \n22:00 \nPizza e networking \nIscrizioni \n\nEvento Passato\n\nMateriale \n\nSlides\nVideo\n\n\nCome sono strutturati i nostri meetup serali: \n\npresentazione tecnica con formato a scelta dello speaker (talk frontale\, workshop\, live coding\, ecc)\nspazio fare domande e confrontarsi\nuna pizza tutti insieme per fare networking e\, perché no\, parlare d&#8217;altro\n\nIn regalo a tutti i partecipanti i nostri mitici stickers 🙂 \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-0120/
+LOCATION:Via Strada Barchetta\, 77\, Modena\, 41123\, Italia
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

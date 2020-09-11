@@ -1,0 +1,1657 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>stefano &#8211; Italian C++ Community</title>
+	<atom:link href="https://www.italiancpp.org/author/stefano/feed/" rel="self" type="application/rss+xml" />
+	<link>https://www.italiancpp.org</link>
+	<description></description>
+	<lastBuildDate>Mon, 24 Aug 2020 13:03:53 +0000</lastBuildDate>
+	<language>it-IT</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.7.18</generator>
+<site xmlns="com-wordpress:feed-additions:1">106700034</site>	<item>
+		<title>Spiare il consumo di memoria con l&#8217;operatore new</title>
+		<link>https://www.italiancpp.org/2017/01/27/spiare-il-consumo-di-memoria-con-loperatore-new/</link>
+		<pubDate>Fri, 27 Jan 2017 18:42:17 +0000</pubDate>
+		<dc:creator><![CDATA[stefano]]></dc:creator>
+				<category><![CDATA[Hands-on]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=7318</guid>
+		<description><![CDATA[Un grazie speciale a Marco Alesiani per le sue correzioni e suggerimenti. International reader? Read the post in English. Quando diciamo “efficienza”, quasi sempre pensiamo “tempo”. Prima il codice fa il suo lavoro, più è efficiente. E la memoria? Certo, oggi anche un portatile da quattro soldi arriva con “un secchio di RAM“… ma non [&#8230;]]]></description>
+				<content:encoded><![CDATA[<style>
+.inlineNote {border-style: solid; border-radius: 5px; border-color: rgb(39,​ 48,​ 57); border-width: 2px;}
+p {text-align: justify !important;}
+.inlineCode {font-family: "Courier New", Courier, monospace;}
+</style>
+<p><em>Un grazie speciale a </em><strong><em>Marco Alesiani</em></strong> <em>per le sue correzioni e suggerimenti.</em></p>
+<p><em>International reader? Read <a href="http://www.italiancpp.org/?p=7387">the post in English</a>.</em></p>
+<hr />
+<p>Quando diciamo “efficienza”, quasi sempre pensiamo “tempo”. Prima il codice fa il suo lavoro, più è efficiente.</p>
+<p>E la memoria? Certo, oggi anche un portatile da quattro soldi arriva con “un secchio di RAM“… ma non basta mai. Il mio PC “sperpera” 1.4GB solo per restare acceso. Apro un browser, altri 300MB che se ne vanno<a href="javascript:void(0);" data-target="#nota1" data-toggle="collapse">*</a>.</p>
+<div id="nota1" class="collapse inlineNote" data-target="#nota1" data-toggle="collapse">&#8230;e chiediamo scusa per gli errori “Allowed memory size of &#8230; bytes exhausted “ o le pagine bianche che potreste vedere ogni tanto su ++It. Capite perchè il tema “memoria” ci sta a cuore.</div>
+<p>Oltre il danno, la beffa: usare la memoria è anche una delle operazioni più lente sui sistemi attuali<a href="javascript:void(0);" data-target="#nota2" data-toggle="collapse">*</a>.</p>
+<div id="nota2" class="collapse inlineNote" data-target="#nota2" data-toggle="collapse">
+Daniele Maccioni: <a href="http://www.italiancpp.org/sessioni-cppday16/#cpp17">Data Oriented Design: alte performance in C++</a>
+</div>
+<p>Ma non è semplice capire a quale riga del codice dare la colpa. Le new che scriviamo noi stessi? Qualche allocazione nascosta in una libreria? O è colpa di oggetti temporanei?</p>
+<p><em>Come trovare facilemente la parte di codice che usa più memoria?</em></p>
+<p>Questo articolo raccoglie qualche esperimento personale. Tutti gli errori sono &#8220;merito&#8221; dell&#8217;autore.</p>
+<h4>Usiamo un po&#8217; di memoria</h4>
+<p>Il programma-giocattolo di oggi non ha nulla di particolare, se non una gran varietà di allocazioni di memoria con operator new.</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet class='ace_coliru_editor'><br />
+/* Programma che alloca memoria a casaccio.<br />
+   Niente delete, questo non e&#8217; un articolo sui memory leak.*/<br />
+#include &lt;string&gt;<br />
+#include &lt;memory&gt;<br />
+#include &lt;boost/shared_ptr.hpp&gt;<br />
+#include &lt;boost/make_shared.hpp&gt;<br />
+#include &quot;UnaClasseDelProgramma.h&quot;</p>
+<p>//<br />
+void h() {<br />
+  UnaClasseDelProgramma * t = new UnaClasseDelProgramma();<br />
+}<br />
+void g() {  h(); }<br />
+void f() {  g(); }<br />
+void CreaUnaClasseDelProgramma() {  f(); }</p>
+<p>//<br />
+int main(int argc, char **argv) {<br />
+    int * numero = new int(89);<br />
+    std::string * test = new std::string(&quot;abc&quot;);<br />
+//<br />
+    UnaClasseDelProgramma * oggetto = new UnaClasseDelProgramma();<br />
+    CreaUnaClasseDelProgramma();<br />
+//<br />
+    boost::shared_ptr&lt;UnaClasseDelProgramma&gt; smartPointer = boost::make_shared&lt;UnaClasseDelProgramma&gt;();<br />
+    std::shared_ptr&lt;UnaClasseDelProgramma&gt; stdSmartPointer = std::make_shared&lt;UnaClasseDelProgramma&gt;();<br />
+    return 0;<br />
+}<br />
+</div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet');</script>
+</DIV>
+<p>Compila, apri e… circa 42MB (misurati &#8220;alla buona&#8221; con <span class="inlineCode">/usr/bin/time -v</span>).</p>
+<p><em>Chi consuma tutta questa memoria?</em></p>
+<h4>Il modo corretto: memory profiler</h4>
+<p>Il concetto è familiare: il profiler “classico” indica per quanto tempo gira ogni funzione. Il memory profiler invece indica dove, quando e quanta memoria usa il programma.<br />
+Per esempio, ecco una parte di quello che Massif <a href="javascript:void(0);" data-target="#nota3" data-toggle="collapse">*</a> dice del nostro programma.</p>
+<div id="nota3" class="collapse inlineNote" data-target="#nota3" data-toggle="collapse">
+<a href="http://valgrind.org/docs/manual/ms-manual.html">http://valgrind.org/docs/manual/ms-manual.html</a><br />
+Ma se lavorate in Windows: <a href="https://blogs.msdn.microsoft.com/vcblog/2015/10/21/memory-profiling-in-visual-c-2015/">https://blogs.msdn.microsoft.com/vcblog/2015/10/21/memory-profiling-in-visual-c-2015/</a>
+</div>
+<p>Per iniziare, otteniamo (in ASCII art!) come l’uso della memoria cresce nel “tempo” &#8211; in realtà come cresce col numero di istruzioni eseguite:</p>
+<pre>
+    MB
+38.23^                                                           ::::::::::::#
+     |                                                           :           #
+     |                                                           :           #
+     |                                                           :           #
+     |                                                           :           #
+     |                                               :::::::::::::           #
+     |                                               :           :           #
+     |                                               :           :           #
+     |                                               :           :           #
+     |                                               :           :           #
+     |                                   @@@@@@@@@@@@:           :           #
+     |                                   @           :           :           #
+     |                                   @           :           :           #
+     |                                   @           :           :           #
+     |                                   @           :           :           #
+     |                       ::::::::::::@           :           :           #
+     |                       :           @           :           :           #
+     |                       :           @           :           :           #
+     |                       :           @           :           :           #
+     |                       :           @           :           :           #
+   0 +----------------------------------------------------------------------->Mi
+     0                                                                   6.203
+</pre>
+<p>Poi dei resoconti più dettagliati (le annotazioni &#8220;A&#8221;, &#8220;B&#8221; e &#8220;C&#8221; sono nostre):</p>
+<pre>
+--------------------------------------------------------------------------------
+  n        time(i)         total(B)   useful-heap(B) extra-heap(B)    stacks(B)
+--------------------------------------------------------------------------------
+...
+  9      4,313,116       30,080,056       30,072,844         7,212            0
+99.98% (30,072,844B) (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+-&gt;99.73% (30,000,000B) 0x407F68: __gnu_cxx::new_allocator&lt;char&gt;::allocate(unsigned long, void const*) (new_allocator.h:104)
+| -&gt;99.73% (30,000,000B) 0x407EDA: std::allocator_traits&lt;std::allocator&lt;char&gt; &gt;::allocate(std::allocator&lt;char&gt;&, unsigned long) (alloc_traits.h:491)
+|   -&gt;99.73% (30,000,000B) 0x407E80: std::_Vector_base&lt;char, std::allocator&lt;char&gt; &gt;::_M_allocate(unsigned long) (stl_vector.h:170)
+|     -&gt;99.73% (30,000,000B) 0x407DFB: std::_Vector_base&lt;char, std::allocator&lt;char&gt; &gt;::_M_create_storage(unsigned long) (stl_vector.h:185)
+|       -&gt;99.73% (30,000,000B) 0x407D27: std::_Vector_base&lt;char, std::allocator&lt;char&gt; &gt;::_Vector_base(unsigned long, std::allocator&lt;char&gt; const&) (stl_vector.h:136)
+|         -&gt;99.73% (30,000,000B) 0x407CB6: std::vector&lt;char, std::allocator&lt;char&gt; &gt;::vector(unsigned long, std::allocator&lt;char&gt; const&) (stl_vector.h:278)
+|           -&gt;99.73% (30,000,000B) 0x407C45: UnaClasseDelProgramma::UnaClasseDelProgramma() (UnaClasseDelProgramma.cpp:4)
+|   A ===>   -&gt;33.24% (10,000,000B) 0x406611: main (main.cpp:20)
+|             | 
+|   B ===>    -&gt;33.24% (10,000,000B) 0x406541: h() (main.cpp:10)
+|             | -&gt;33.24% (10,000,000B) 0x40656F: g() (main.cpp:12)
+|             |   -&gt;33.24% (10,000,000B) 0x40657B: f() (main.cpp:13)
+|             |     -&gt;33.24% (10,000,000B) 0x406587: CreaUnaClasseDelProgramma() (main.cpp:14)
+|             |       -&gt;33.24% (10,000,000B) 0x40661A: main (main.cpp:21)
+|             |         
+|   C ===>    -&gt;33.24% (10,000,000B) 0x406A72: _ZN5boost11make_sharedI21UnaClasseDelProgrammaIEEENS_6detail15sp_if_not_arrayIT_E4typeEDpOT0_ (make_shared_object.hpp:254)
+|               -&gt;33.24% (10,000,000B) 0x406626: main (main.cpp:23)
+|                 
+->00.24% (72,844B) in 1+ places, all below ms_print's threshold (01.00%)
+</pre>
+<p>Vediamo subito  che un terzo della memoria si spende alla riga 20 del main (A), dove c&#8217;è uno dei nostri new. Un altro 30% (B) lo alloca h() &#8211; che Massif mostra nello stack delle chiamate registrato al momento dell’allocazione. Seguendolo arriviamo alla chiamata a CreaUnaClasseDelProgramma() nel main. Massif cattura anche le allocazioni con shared pointer (C).</p>
+<p>L&#8217;allocazione alla riga 24 non si vede perchè non è stata ancora eseguita e “intercettata” da Massif. Potrebbe comparire in uno snapshot successivo. Le altre allocazioni nel main sono &#8220;piccole&#8221; e aggregate nell&#8217;ultima riga.</p>
+<p>Si vede subto che è il caso di dare un&#8217;occhiata al costruttore di UnaClasseDelProgramma. Che farà mai con uno std::vector che occupa il 99% della memoria?</p>
+<p>Questo è già un ottimo aiuto, con poco sforzo. Volendo, Massif può fare di più. Può misurare la memoria usata &#8220;di nascosto&#8221; dal sistema per gestire l’heap (extra-heap – 7,212 byte nell’esempio), misurare lo stack&#8230;</p>
+<h4>Il metodo fai-da-te: override di operator new</h4>
+<p>In C++ si può sostituire l’operazione di creazione di un oggetto (new) con la propria.<a href="javascript:void(0);" data-target="#nota4" data-toggle="collapse">*</a></p>
+<div id="nota4" class="collapse inlineNote" data-target="#nota4" data-toggle="collapse">
+<a href="http://en.cppreference.com/w/cpp/memory/new/operator_new">http://en.cppreference.com/w/cpp/memory/new/operator_new</a>
+</div>
+<p>Quasi nessuno ha una buona ragione per farlo, ma noi si: <span style="text-decoration: line-through;">non sappiamo usare il profiler</span> intercettare le allocaioni nello heap.</p>
+<p>Semplificando, basta definire la nostra versione di operator new (e dei suoi overload) in qualunque file del programma.</p>
+<p>Se il memory profiler equivale al “time” profiler, questo trucco è paragonabile al classico snippet <span class="inlineCode">cout << tempoFine - tempoInizio;</span>. Non magnificamente dettagliato e accurato, ma semplice e comunque utile.</p>
+<p>Bastano poche righe di codice per avere qualcosa di rozzo, ma utilizzabile. E’ meglio compilare con i simboli di debug. Il codice per scrivere lo stack trace è valido probabilmente solo su Linux<a href="javascript:void(0);" data-target="#nota5" data-toggle="collapse">*</a>.</p>
+<div id="nota5" class="collapse inlineNote"> <!-- No collapse on click, altrimenti non si può cliccare per fare copia e incolla del codice. --><br />
+Non c&#8217;è niente di portabile a così basso livello.</p>
+<p>Per chi lavora nel mondo Microsoft: <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb204633%28v=vs.85%29.aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/bb204633%28v=vs.85%29.aspx</a>.</p>
+<p>Sarebbe a dire:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet1 class='ace_coliru_editor'><br />
+#include &lt;iostream&gt;<br />
+//<br />
+#include &lt;Windows.h&gt;  // Cattura degli stack trace.<br />
+#include &lt;Dbghelp.h&gt;  // Lettura simboli di debug.</p>
+<p>//<br />
+void StackTrace() {<br />
+	/* Cattura lo stack trace vero e proprio. */<br />
+	const ULONG doNotSkipAnyFrame = 0;<br />
+	const ULONG takeTenFrames = 10;<br />
+	const PULONG doNotHash = nullptr;<br />
+	PVOID stackTrace[takeTenFrames];<br />
+	const USHORT framesCaptured = CaptureStackBackTrace(<br />
+								doNotSkipAnyFrame,<br />
+								takeTenFrames,<br />
+								stackTrace,<br />
+								doNotHash<br />
+							);<br />
+//<br />
+	/* Prepara la tabella dei simboli per tradurre da indirizzi a righe di codice. */<br />
+	const HANDLE thisProcess = GetCurrentProcess();<br />
+	SymInitialize(thisProcess, NULL, TRUE);  // Linkare Dbghelp.lib<br />
+//<br />
+	for (ULONG i = 0; i &lt; framesCaptured; i++) {<br />
+		/*Estrae il nome della funzione. */<br />
+		const size_t nameStringSize = 256;<br />
+		SYMBOL_INFO * functionData = (SYMBOL_INFO*)malloc(sizeof(SYMBOL_INFO) + (nameStringSize + 1) * sizeof(char)); // +1 per il \0<br />
+		functionData-&gt;MaxNameLen = nameStringSize;<br />
+		functionData-&gt;SizeOfStruct = sizeof(SYMBOL_INFO);<br />
+		SymFromAddr(thisProcess, (DWORD64)(stackTrace[i]), 0, functionData);<br />
+//<br />
+		/* Va a cercare il file corrispondende alla chiamata.*/<br />
+		DWORD displacementInLine;<br />
+		IMAGEHLP_LINE64 lineOfCode;<br />
+		lineOfCode.SizeOfStruct = sizeof(IMAGEHLP_LINE64);<br />
+		SymGetLineFromAddr64(thisProcess, (DWORD)(stackTrace[i]), &#038;displacementInLine, &#038;lineOfCode);<br />
+//<br />
+		std::cout &lt;&lt; functionData-&gt;Name &lt;&lt; &quot; at &quot;<br />
+			      &lt;&lt; lineOfCode.FileName &lt;&lt; &quot;:&quot; &lt;&lt; lineOfCode.LineNumber &lt;&lt; std::endl;<br />
+	}<br />
+}<br />
+</div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet1');</script>
+</DIV>
+</div>
+<p>.</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet2 class='ace_coliru_editor'><br />
+// Il nostro new deve poter allocare la memoria…<br />
+#include &lt;cstdio&gt;<br />
+#include &lt;cstdlib&gt;<br />
+// &#8230;ma anche ispezionare lo stack e salvarlo in output.<br />
+#include &lt;execinfo.h&gt;<br />
+#include &lt;unistd.h&gt;<br />
+#include &lt;fstream&gt;<br />
+// Contiene std::bad_alloc &#8211; da lanciare in caso di errori.<br />
+#include &lt;new&gt;<br />
+//<br />
+/* Apre (una sola volta) e restituisce il file stream per salvare<br />
+   gli stack. */<br />
+std::ofstream&#038; filePerRisultati() {<br />
+  static std::ofstream memoryProfile;<br />
+  static bool open = false;  // Init on 1st use, classico.<br />
+    if (! open) {<br />
+      memoryProfile.open (&quot;allocations.txt&quot;);<br />
+      open = true;<br />
+    }<br />
+    // Else, gestire gli errori, chiudere il file…<br />
+    // Omettiamo per semplicità.<br />
+   return memoryProfile;<br />
+}<br />
+//<br />
+/* Questa funzione &#8220;fa la magia&#8221; e scrive nel file lo stack trace al momento della chiamata<br />
+   (compreso il suo stesso frame). */<br />
+void segnaLoStackTrace(std::ofstream&#038; memoryProfile) {<br />
+  // Registriamo 15 puntatori agli stack frame (bastano per il programma di prova).<br />
+  const int massimaDimensioneStack = 15;<br />
+  void *callStack[massimaDimensioneStack];<br />
+  size_t frameInUso = backtrace(callStack, massimaDimensioneStack);<br />
+  // A questo punto callStack è pieno di puntatori. Chiediamo i nomi delle<br />
+  // funzioni corrispondenti a ciascun frame.<br />
+  char ** nomiFunzioniMangled = backtrace_symbols(callStack, frameInUso);<br />
+  // Scrive tutte le stringhe con i nomi delle funzioni nello stream per il debug.<br />
+  for (int i = 0; i &lt; frameInUso; ++i)<br />
+    memoryProfile &lt;&lt; nomiFunzioniMangled[i] &lt;&lt; std::endl;<br />
+  // A essere precisi, dovremmo rilasciare nomiFunzioniMangled con free…<br />
+}<br />
+//<br />
+/* Finalmente abbiamo tutti gli elementi per costruire il nostro operator new. */<br />
+void* operator new(std::size_t sz) {<br />
+    // Allochiamo la memoria che serve al chiamante.<br />
+    void * memoriaRichiesta = std::malloc(sz);<br />
+    if (! memoriaRichiesta)<br />
+      throw std::bad_alloc();</p>
+<p>    // Raccontiamo al mondo intero le nostre allocaioni.<br />
+    std::ofstream&#038; memoryProfile = filePerRisultati();<br />
+    memoryProfile &lt;&lt; &quot;Allocation, size = &quot; &lt;&lt; sz &lt;&lt; &quot; at &quot; &lt;&lt; static_cast&lt;void*&gt;(memoriaRichiesta) &lt;&lt; std::endl;<br />
+    segnaLoStackTrace(memoryProfile);<br />
+    memoryProfile &lt;&lt; &quot;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&quot; &lt;&lt; std::endl;  // Separatore dei poveri&#8230;<br />
+    return memoriaRichiesta;<br />
+}<br />
+</div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet2');</script>
+</DIV>
+<p>Aggiungiamo l&#8217;operator new &#8220;taroccato&#8221; al nostro programma di prova. Questo è un esempio del risultato &#8211; riuscite a capire quale riga di codice alloca la memoria?</p>
+<pre>
+Allocation, size = 40 at 0x18705b0
+./overridenew(_Z14dumpStackTraceRSt14basic_ofstreamIcSt11char_traitsIcEE+0x3c) [0x40672c]
+./overridenew(_Znwm+0xaf) [0x406879]
+./overridenew(_ZN9__gnu_cxx13new_allocatorISt23_Sp_counted_ptr_inplaceI9SomeClassSaIS2_ELNS_12_Lock_policyE2EEE8allocateEmPKv+0x4a) [0x405d9e]
+./overridenew(_ZNSt16allocator_traitsISaISt23_Sp_counted_ptr_inplaceI9SomeClassSaIS1_ELN9__gnu_cxx12_Lock_policyE2EEEE8allocateERS6_m+0x28) [0x405bef]
+./overridenew(_ZSt18__allocate_guardedISaISt23_Sp_counted_ptr_inplaceI9SomeClassSaIS1_ELN9__gnu_cxx12_Lock_policyE2EEEESt15__allocated_ptrIT_ERS8_+0x21) [0x4059e2]
+./overridenew(_ZNSt14__shared_countILN9__gnu_cxx12_Lock_policyE2EEC2I9SomeClassSaIS4_EJEEESt19_Sp_make_shared_tagPT_RKT0_DpOT1_+0x59) [0x4057e1]
+./overridenew(_ZNSt12__shared_ptrI9SomeClassLN9__gnu_cxx12_Lock_policyE2EEC2ISaIS0_EJEEESt19_Sp_make_shared_tagRKT_DpOT0_+0x3c) [0x4056ae]
+./overridenew(_ZNSt10shared_ptrI9SomeClassEC2ISaIS0_EJEEESt19_Sp_make_shared_tagRKT_DpOT0_+0x28) [0x40560e]
+./overridenew(_ZSt15allocate_sharedI9SomeClassSaIS0_EIEESt10shared_ptrIT_ERKT0_DpOT1_+0x37) [0x405534]
+./overridenew(_ZSt11make_sharedI9SomeClassJEESt10shared_ptrIT_EDpOT0_+0x3b) [0x405454]
+./overridenew(main+0x9c) [0x4052e8]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xf0) [0x7f83fe991830]
+./overridenew(_start+0x29) [0x405079]
+-----------
+Allocation, size = 10000000 at 0x7f83fc9c3010
+./overridenew(_Z14dumpStackTraceRSt14basic_ofstreamIcSt11char_traitsIcEE+0x3c) [0x40672c]
+./overridenew(_Znwm+0xaf) [0x406879]
+./overridenew(_ZN9__gnu_cxx13new_allocatorIcE8allocateEmPKv+0x3c) [0x406538]
+./overridenew(_ZNSt16allocator_traitsISaIcEE8allocateERS0_m+0x28) [0x4064aa]
+./overridenew(_ZNSt12_Vector_baseIcSaIcEE11_M_allocateEm+0x2a) [0x406450]
+./overridenew(_ZNSt12_Vector_baseIcSaIcEE17_M_create_storageEm+0x23) [0x4063cb]
+./overridenew(_ZNSt12_Vector_baseIcSaIcEEC1EmRKS0_+0x3b) [0x4062f7]
+./overridenew(_ZNSt6vectorIcSaIcEEC2EmRKS0_+0x2c) [0x406286]
+./overridenew(_ZN9SomeClassC1Ev+0x3d) [0x406215]
+./overridenew(_ZN9__gnu_cxx13new_allocatorI9SomeClassE9constructIS1_JEEEvPT_DpOT0_+0x36) [0x405e3a]
+./overridenew(_ZNSt16allocator_traitsISaI9SomeClassEE9constructIS0_JEEEvRS1_PT_DpOT0_+0x23) [0x405d51]
+./overridenew(_ZNSt23_Sp_counted_ptr_inplaceI9SomeClassSaIS0_ELN9__gnu_cxx12_Lock_policyE2EEC2IJEEES1_DpOT_+0x8c) [0x405b4a]
+./overridenew(_ZNSt14__shared_countILN9__gnu_cxx12_Lock_policyE2EEC2I9SomeClassSaIS4_EJEEESt19_Sp_make_shared_tagPT_RKT0_DpOT1_+0xaf) [0x405837]
+./overridenew(_ZNSt12__shared_ptrI9SomeClassLN9__gnu_cxx12_Lock_policyE2EEC2ISaIS0_EJEEESt19_Sp_make_shared_tagRKT_DpOT0_+0x3c) [0x4056ae]
+./overridenew(_ZNSt10shared_ptrI9SomeClassEC2ISaIS0_EJEEESt19_Sp_make_shared_tagRKT_DpOT0_+0x28) [0x40560e]
+
+...
+</pre>
+<p>&#8230;io non ci riesco. Dove sta &#8220;main+0xa8&#8221; nel mio programma? Fortunatamente, nel &#8220;mondo gnu/Linux&#8221; ci sono strumenti per fare il de-mangling e trovare i punti del codice corrispondenti agli indirizzi. Possiamo usarli, per esempio, in un semplice <a href="javascript:void(0);" data-target="#nota6" data-toggle="collapse">script</a>.</p>
+<div id="nota6" class="collapse inlineNote">
+<DIV class="page-snippet-container">
+	<div id=cesnippet3 class='ace_coliru_editor'><br />
+#!/usr/bin/python<br />
+#<br />
+# C++filt fa il demangling dei nomi.<br />
+#<br />
+# addr2line converte i puntatori a codice (es. indirizzi di funzioni)<br />
+# alla coppia file:riga col codice corrispondente (se ci sono i simboli di debug).<br />
+#<br />
+# Il codice python dovrebbe essere portabile, ma non le utility a riga di comando.<br />
+#</p>
+<p>import re<br />
+import subprocess<br />
+#</p>
+<p># Apre un sottoprocesso e gli passa dei comandi per la shell, poi ritorna il risultato in una stringa.<br />
+# Non molto efficiente, ma semplice.<br />
+def run_shell(command):<br />
+	return subprocess.Popen(command, stdout=subprocess.PIPE).communicate()[0]<br />
+#<br />
+#<br />
+if __name__ == &#8220;__main__&#8221;:<br />
+	total_size = 0;<br />
+#<br />
+	# L&#8217;output ha 2 tipi di righe: quella con la dimensione dell&#8217;allocazione, e quella con uno stack frame.<br />
+	size_line  = re.compile(&#8220;Allocation, size = (\d+) at (\d+)&#8221;)  # Allocation, size = &lt;bytes&gt; at &lt;punto dell&#8217;heap&gt;<br />
+	stack_line = re.compile(&#8220;.*\((.*)\+.*\) \[(.*)\]&#8221;)  # &lt;immondizia&gt;(nome mangled) [&lt;puntatore al codice&gt;]<br />
+#<br />
+	allocations_file = open(&#8220;allocations.txt&#8221;)<br />
+	for line in allocations_file:<br />
+		match_size = size_line.match(line)<br />
+		match_stack = stack_line.match(line)<br />
+#<br />
+		# A scopo dimostrativo, accumulo il totale della memoria allocata.<br />
+		# Un esempio di quello che si puo&#8217; fare quando si controlla new!<br />
+		if (match_size):<br />
+			allocation_size = int(match_size.group(1))<br />
+			total_size += allocation_size<br />
+			print &#8220;Allocati &#8221; + str(allocation_size)<br />
+#<br />
+		elif (match_stack):<br />
+			mangled_name = match_stack.group(1)<br />
+			line_address = match_stack.group(2)<br />
+			demangled_name = run_shell([&quot;c++filt&quot;,  &quot;-n&quot;, mangled_name])<br />
+			line_number = run_shell([&#8220;addr2line&quot;,  &#8220;-e&#8221;,   &#8220;./overridenew&#8221;,  line_address])<br />
+#<br />
+			# La formattazione non e&#8217; molto professionale. Il -1 &quot;gratuito&quot; e&#8217; per togliere un newline.<br />
+			print&#8221;\t&#8221; + demangled_name[:-1] + &#8220;\n\t\t&#8221; + line_number,<br />
+#<br />
+		# Rimette i separatori esattamente dov&#8217;erano.<br />
+		else:<br />
+			print line<br />
+#<br />
+	print &#8220;\n total allocated size &#8221;  + str(total_size)<br />
+</div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet3');</script>
+</DIV>
+</p></div>
+<p>In alternativa, si può fare tutto a run time, con le utility di demangling dei compilatori. Per esempio <a href="https://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html">quella di gcc</a>. Personalmente preferisco tenere il codice di misurazione il più semplice possibile e &#8220;sbrigarmela&#8221; off-line. Con il mio script ottengo:</p>
+<pre>
+Allocati 40
+    segnaLoStackTrace(std::basic_ofstream&lt;char, std::char_traits&lt;char&gt; &gt;&)
+        /home/stefano/projects/overrideNew/InstrumentedNew.cpp:31
+    operator new(unsigned long)
+        /home/stefano/projects/overrideNew/InstrumentedNew.cpp:51
+    __gnu_cxx::new_allocator&lt;std::_Sp_counted_ptr_inplace&lt;UnaClasseDelProgramma, std::allocator&lt;UnaClasseDelProgramma&gt;, (__gnu_cxx::_Lock_policy)2&gt; &gt;::allocate(unsigned long, void const*)
+        /usr/include/c++/5/ext/new_allocator.h:105
+
+   ... stack delle chiamate "interne" di shared_ptr...
+
+    std::shared_ptr&lt;UnaClasseDelProgramma&gt; std::allocate_shared&lt;UnaClasseDelProgramma, std::allocator&lt;UnaClasseDelProgramma&gt;&gt;(std::allocator&lt;UnaClasseDelProgramma&gt; const&)
+        /usr/include/c++/5/bits/shared_ptr.h:620
+    std::shared_ptr&lt;UnaClasseDelProgramma&gt; std::make_shared&lt;UnaClasseDelProgramma&gt;()
+        /usr/include/c++/5/bits/shared_ptr.h:636
+    main
+        /home/stefano/projects/overrideNew/main.cpp:25
+    __libc_start_main
+        ??:0
+    _start
+        ??:?
+-----------
+
+Allocati 10000000
+    segnaLoStackTrace(std::basic_ofstream&lt;char, std::char_traits&lt;char&gt; &gt;&)
+        /home/stefano/projects/overrideNew/InstrumentedNew.cpp:31
+    operator new(unsigned long)
+        /home/stefano/projects/overrideNew/InstrumentedNew.cpp:51
+    __gnu_cxx::new_allocator&lt;char&gt;::allocate(unsigned long, void const*)
+        /usr/include/c++/5/ext/new_allocator.h:105
+
+         ... stack delle chiamate interne di vector...
+
+    std::vector&lt;char, std::allocator&lt;char&gt; &gt;::vector(unsigned long, std::allocator&lt;char&gt; const&)
+        /usr/include/c++/5/bits/stl_vector.h:279
+    UnaClasseDelProgramma::UnaClasseDelProgramma()
+        /home/stefano/projects/overrideNew/UnaClasseDelProgramma.cpp:4 (discriminator 2)
+...
+</pre>
+<p>La prima allocazione sono 40 byte chiesti da make_shared. 24 per UnaClasseDelProgramma (che contiene un vector come membro &#8211; sizeof(vector) è 24), i restanti dovrebbero essere il control block dello shared pointer. La seconda allocazione sono i 10MB del famigerato costruttore di UnaClasseDelProgramma.</p>
+<p>Bisogna faticare un po&#8217; per decifrare gli stack, ma si riesce a capire che la riga misteriosa era <span class="inlineCode">std::shared_ptr<UnaClasseDelProgramma> stdSmartPointer = std::make_shared&lt;UnaClasseDelProgramma&gt;();</span> &#8211;  dalle parti del return a main.cpp:25.</p>
+<p>Compito per casa: quante allocazioni ci sarebbero con <span class="inlineCode">std::shared_ptr&lt;UnaClasseDelProgramma&gt; notSoSmartPointer(new UnaClasseDelProgramma());<br />
+?</span><a href="javascript:void(0);" data-target="#nota7" data-toggle="collapse">*</a></p>
+<div id="nota7" class="collapse inlineNote" data-target="#nota7" data-toggle="collapse">
+Tre, e si usano 8 byte in più.<br />
+In un test ho misurato:<br />
+24 byte per l&#8217;istanza di UnaClasseDelProgramma<br />
+10 MB per il contenuto del vector<br />
+24 byte per lo shared pointer.</p>
+<p>Giudiacando dalle <a href="en.cppreference.com/w/cpp/memory/shared_ptr">implementation notes</a>, penso che la differenza sia nel contenuto del control_block dello shared pointer.
+</div>
+<hr />
+<h4>Riassumendo&#8230;</h4>
+<p>I programmatori combattono da sempre con la memoria, vuoi perché è poca, vuoi perché è lenta. Come per tutti i colli di bottiglia, non ci si può fidare dell’istinto. Abbiamo visto che esistono strumenti appropriati (i memory profiler) per misurare il consumo di memoria. Abbiamo scoperto che, male che vada, esistono strumenti &#8220;casarecci&#8221; che possiamo costruirci da soli con il &#8220;classico hack da C++&#8221;, manipolando operator new.</p>
+<p><em>Trovate il codice degli esempi &#8220;pronto da compilare&#8221; <a href="https://github.com/italiancpp/code/tree/master/spy-memory-with-new">sul repo GitHub di ++It<a>.</em></p>
+]]></content:encoded>
+		<post-id xmlns="com-wordpress:feed-additions:1">7318</post-id>	</item>
+		<item>
+		<title>Spy your memory usage with operator new</title>
+		<link>https://www.italiancpp.org/2017/01/27/spy-your-memory-usage-with-operator-new/</link>
+		<pubDate>Fri, 27 Jan 2017 18:18:53 +0000</pubDate>
+		<dc:creator><![CDATA[stefano]]></dc:creator>
+				<category><![CDATA[Hands-on]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=7387</guid>
+		<description><![CDATA[Special thanks to Marco Alesiani for many corrections and suggestions. Anche tu campi a spaghetti e pizza? Leggi l&#8217;articolo in italiano. When we say &#8220;efficiency&#8221;, we often think &#8220;time&#8221;. The sooner the code does its job, the more it is efficient. What about memory? Granted, today even the lousiest laptop comes with &#8220;a bucket load&#8221; [&#8230;]]]></description>
+				<content:encoded><![CDATA[<style>
+.inlineNote {border-style: solid; border-radius: 5px; border-color: rgb(39,​ 48,​ 57); border-width: 2px;}
+p {text-align: justify !important;}
+.inlineCode {font-family: "Courier New", Courier, monospace;}
+</style>
+<p><em>Special thanks to </em><strong><em>Marco Alesiani</em></strong> <em>for many corrections and suggestions.</em></p>
+<p><em>Anche tu campi a spaghetti e pizza? Leggi <a href="http://www.italiancpp.org/?p=7318">l&#8217;articolo in italiano</a>.</em></p>
+<hr />
+<p>When we say &#8220;efficiency&#8221;, we often think &#8220;time&#8221;. The sooner the code does its job, the more it is efficient.</p>
+<p>What about memory? Granted, today even the lousiest laptop comes with &#8220;a bucket load&#8221; of RAM which… is never enough. My PC &#8220;wastes&#8221; 1.4GB just to idle. I open a browser, 300 more MB are gone.<a href="javascript:void(0);" data-target="#nota1" data-toggle="collapse">*</a>.</p>
+<div id="nota1" class="collapse inlineNote" data-target="#nota1" data-toggle="collapse">&#8230;we take the occasion to apologize for the “Allowed memory size of &#8230; bytes exhausted “ errors and the white pages that you may occasionally see on ++It. There is a reason why we care so much about memory.</div>
+<p>Adding insult to injury, using memory is one of the slowest operations on current systems<a href="javascript:void(0);" data-target="#nota2" data-toggle="collapse">*</a>.</p>
+<div id="nota2" class="collapse inlineNote" data-target="#nota2" data-toggle="collapse">
+(Italian only) Daniele Maccioni: <a href="http://www.italiancpp.org/sessioni-cppday16/#cpp17">Data Oriented Design: alte performance in C++</a>
+</div>
+<p>Moreover, finding the culprit line among the code is not easy. Was it a &#8220;new&#8221; we wrote? Some allocation hidden inside a library? Are temporary objects to blame?</p>
+<p><em>How to easily find the part of the code that uses most of the memory?</em></p>
+<p>This post collects some personal experiments. You can &#8220;thank&#8221; the author for any mistake.</p>
+<h4>Let&#8217;s use some memory</h4>
+<p>Today&#8217;s toy-code is nothing special, but it does many an allocation using operator new.</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet4 class='ace_coliru_editor'><br />
+/* Program that allocates some memory when it feels like.<br />
+   No delete &#8211; today&#8217;s essay is not about memory leaks.*/<br />
+#include &lt;string&gt;<br />
+#include &lt;memory&gt;<br />
+#include &lt;boost/shared_ptr.hpp&gt;<br />
+#include &lt;boost/make_shared.hpp&gt;<br />
+#include &quot;SomeClass.h&quot;<br />
+//<br />
+void h() {<br />
+  SomeClass* t = new SomeClass();<br />
+}<br />
+void g() {  h(); }<br />
+void f() {  g(); }<br />
+void MakeSomeClass() {  f(); }<br />
+//<br />
+int main(int argc, char **argv) {<br />
+    int * number = new int(89);<br />
+    std::string * test = new std::string(&quot;abc&quot;);<br />
+//<br />
+    SomeClass * oggetto = new SomeClass();<br />
+    MakeSomeClass();<br />
+//<br />
+    boost::shared_ptr&lt;SomeClass&gt; smartPointer = boost::make_shared&lt;SomeClass&gt;();<br />
+    std::shared_ptr&lt;SomeClass&gt; stdSmartPointer = std::make_shared&lt;SomeClass&gt;();<br />
+    return 0;<br />
+}<br />
+</div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet4');</script>
+</DIV>
+<p>Compile, run and&#8230; almost 42MB (measured &#8220;on the cheap&#8221; with <span class="inlineCode">/usr/bin/time -v</span>).</p>
+<p><em>Who is using all that memory?</em></p>
+<h4>The right way: memory profiler</h4>
+<p>The idea should be familiar: the &#8220;classic&#8221; profiler tells for how long each function executes. The memory profiler instead tells where and when the program uses memory, and how much.<br />
+For example, here is some of the information that Massif <a href="javascript:void(0);" data-target="#nota3" data-toggle="collapse">*</a> returns about our program.</p>
+<div id="nota3" class="collapse inlineNote" data-target="#nota3" data-toggle="collapse">
+<a href="http://valgrind.org/docs/manual/ms-manual.html">http://valgrind.org/docs/manual/ms-manual.html</a><br />
+Should you work on Windows: <a href="https://blogs.msdn.microsoft.com/vcblog/2015/10/21/memory-profiling-in-visual-c-2015/">https://blogs.msdn.microsoft.com/vcblog/2015/10/21/memory-profiling-in-visual-c-2015/</a>
+</div>
+<p>We can start with the memory growth (in ASCII art!) over &#8220;time&#8221; &#8211; actually its growth over the number of executed instructions:</p>
+<pre>
+    MB
+38.23^                                                           ::::::::::::#
+     |                                                           :           #
+     |                                                           :           #
+     |                                                           :           #
+     |                                                           :           #
+     |                                               :::::::::::::           #
+     |                                               :           :           #
+     |                                               :           :           #
+     |                                               :           :           #
+     |                                               :           :           #
+     |                                   @@@@@@@@@@@@:           :           #
+     |                                   @           :           :           #
+     |                                   @           :           :           #
+     |                                   @           :           :           #
+     |                                   @           :           :           #
+     |                       ::::::::::::@           :           :           #
+     |                       :           @           :           :           #
+     |                       :           @           :           :           #
+     |                       :           @           :           :           #
+     |                       :           @           :           :           #
+   0 +----------------------------------------------------------------------->Mi
+     0                                                                   6.203
+</pre>
+<p>Then we can get detailed snapshots (the &#8220;A&#8221;, &#8220;B&#8221; and &#8220;C&#8221; tags are ours):</p>
+<pre>
+--------------------------------------------------------------------------------
+  n        time(i)         total(B)   useful-heap(B) extra-heap(B)    stacks(B)
+--------------------------------------------------------------------------------
+...
+  9      4,311,691       30,080,056       30,072,844         7,212            0
+99.98% (30,072,844B) (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+-&gt;99.73% (30,000,000B) 0x4078E8: __gnu_cxx::new_allocator&lt;char&gt;::allocate(unsigned long, void const*) (new_allocator.h:104)
+| -&gt;99.73% (30,000,000B) 0x40785A: std::allocator_traits&lt;std::allocator&lt;char&gt; &gt;::allocate(std::allocator&lt;char&gt;&, unsigned long) (alloc_traits.h:491)
+|   -&gt;99.73% (30,000,000B) 0x407800: std::_Vector_base&lt;char, std::allocator&lt;char&gt; &gt;::_M_allocate(unsigned long) (stl_vector.h:170)
+|     -&gt;99.73% (30,000,000B) 0x40777B: std::_Vector_base&lt;char, std::allocator&lt;char&gt; &gt;::_M_create_storage(unsigned long) (stl_vector.h:185)
+|       -&gt;99.73% (30,000,000B) 0x4076A7: std::_Vector_base&lt;char, std::allocator&lt;char&gt; &gt;::_Vector_base(unsigned long, std::allocator&lt;char&gt; const&) (stl_vector.h:136)
+|         -&gt;99.73% (30,000,000B) 0x407636: std::vector&lt;char, std::allocator&lt;char&gt; &gt;::vector(unsigned long, std::allocator&lt;char&gt; const&) (stl_vector.h:278)
+|           -&gt;99.73% (30,000,000B) 0x4075C5: SomeClass::SomeClass() (SomeClass.cpp:4)
+|  A ====>   -&gt;33.24% (10,000,000B) 0x405F91: main (main.cpp:20)
+|             | 
+|  B ====>    -&gt;33.24% (10,000,000B) 0x405EC1: h() (main.cpp:10)
+|             | -&gt;33.24% (10,000,000B) 0x405EEF: g() (main.cpp:12)
+|             |   -&gt;33.24% (10,000,000B) 0x405EFB: f() (main.cpp:13)
+|             |     -&gt;33.24% (10,000,000B) 0x405F07: MakeSomeClass() (main.cpp:14)
+|             |       -&gt;33.24% (10,000,000B) 0x405F9A: main (main.cpp:21)
+|             |         
+|  C ====>    -&gt;33.24% (10,000,000B) 0x4063F2: _ZN5boost11make_sharedI9SomeClassIEEENS_6detail15sp_if_not_arrayIT_E4typeEDpOT0_ (make_shared_object.hpp:254)
+|               -&gt;33.24% (10,000,000B) 0x405FA6: main (main.cpp:23)
+|                 
+-&gt;00.24% (72,844B) in 1+ places, all below ms_print's threshold (01.00%)
+</pre>
+<p>We quickly see that line 20 of the main uses one third of the memory (A) where we wrote a new. The next 30% of the memory (B) is allocated in h() &#8211; Massif recorded all the call stack at the point of allocation. We can trace it down to the call to MakeSomeClass() in the main. Massif also works with shared pointers (C).</p>
+<p>We can&#8217;t see the allocation at line 24 because it has not yet been executed and &#8220;intercepted&#8221; by Massif. We may spot it in a later snapshot. The remaining allocations are &#8220;small&#8221; and summarized in the last line.</p>
+<p>A quick glance at the report tells us to go check the constructor of SomeClass. What the heck is it doing with a std::vector that takes 99% of the memory?</p>
+<p>This is already a good result, obtained with little effort. Be aware that Massif can do more. It can measure the memory used &#8220;behind the scenes&#8221; by the system to make the heap work (extra-heap – 7,212 bytes in the example), track the stack&#8230;</p>
+<h4>The do-it-yourself way: override operator new</h4>
+<p>C++ allows to replace the operator to create objects (new) with a custom one.<a href="javascript:void(0);" data-target="#nota4" data-toggle="collapse">*</a></p>
+<div id="nota4" class="collapse inlineNote" data-target="#nota4" data-toggle="collapse">
+<a href="http://en.cppreference.com/w/cpp/memory/new/operator_new">http://en.cppreference.com/w/cpp/memory/new/operator_new</a>
+</div>
+<p>Almost nobody has a good reason to do so, but we do: <span style="text-decoration: line-through;">I could not figure out how to use the profiler</span> intercept heap allocations.</p>
+<p>By and large, all we have to do is define a custom new (and its overloads) in any file of a program.</p>
+<p>If the memory profiler is an equivalent of the “time” profiler, then you can compare this trick to the classic snippet <span class="inlineCode">cout << endTime - startTime;</span>. Not really detailed or accurate, but simple and useful.</p>
+<p>A few lines of code can give us something raw, but usable. You should compile with debug symbols. The code that outputs the stack trace can probably work only on Linux.<a href="javascript:void(0);" data-target="#nota5" data-toggle="collapse">*</a>.</p>
+<div id="nota5" class="collapse inlineNote"> <!-- No collapse on click, altrimenti non si può cliccare per fare copia e incolla del codice. --><br />
+There is nothing portable when you work at low level.</p>
+<p>If you are in the Microsoft world: <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb204633%28v=vs.85%29.aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/bb204633%28v=vs.85%29.aspx</a>.</p>
+<p>That means:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet5 class='ace_coliru_editor'><br />
+#include &lt;iostream&gt;<br />
+//<br />
+#include &lt;Windows.h&gt;  // Capture stack traces.<br />
+#include &lt;Dbghelp.h&gt;  // Read debug symbols.</p>
+<p>//<br />
+void StackTrace() {<br />
+	/* Capture the stack trace. */<br />
+	const ULONG doNotSkipAnyFrame = 0;<br />
+	const ULONG takeTenFrames = 10;<br />
+	const PULONG doNotHash = nullptr;<br />
+	PVOID stackTrace[takeTenFrames];<br />
+	const USHORT framesCaptured = CaptureStackBackTrace(<br />
+								doNotSkipAnyFrame,<br />
+								takeTenFrames,<br />
+								stackTrace,<br />
+								doNotHash<br />
+							);<br />
+//<br />
+	/*Prepare the symbol table to convert from addresses to lines of code. */<br />
+	const HANDLE thisProcess = GetCurrentProcess();<br />
+	SymInitialize(thisProcess, NULL, TRUE);  // Linkare Dbghelp.lib<br />
+//<br />
+	for (ULONG i = 0; i &lt; framesCaptured; i++) {<br />
+		/*Estrae il nome della funzione. */<br />
+		const size_t nameStringSize = 256;<br />
+		SYMBOL_INFO * functionData = (SYMBOL_INFO*)malloc(sizeof(SYMBOL_INFO) + (nameStringSize + 1) * sizeof(char)); // +1 because there is \0<br />
+		functionData-&gt;MaxNameLen = nameStringSize;<br />
+		functionData-&gt;SizeOfStruct = sizeof(SYMBOL_INFO);<br />
+		SymFromAddr(thisProcess, (DWORD64)(stackTrace[i]), 0, functionData);<br />
+//<br />
+		/* Find the file matching the function call.*/<br />
+		DWORD displacementInLine;<br />
+		IMAGEHLP_LINE64 lineOfCode;<br />
+		lineOfCode.SizeOfStruct = sizeof(IMAGEHLP_LINE64);<br />
+		SymGetLineFromAddr64(thisProcess, (DWORD)(stackTrace[i]), &#038;displacementInLine, &#038;lineOfCode);<br />
+//<br />
+		std::cout &lt;&lt; functionData-&gt;Name &lt;&lt; &quot; at &quot;<br />
+			      &lt;&lt; lineOfCode.FileName &lt;&lt; &quot;:&quot; &lt;&lt; lineOfCode.LineNumber &lt;&lt; std::endl;<br />
+	}<br />
+}<br />
+</div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet5');</script>
+</DIV>
+</div>
+<p>.</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet6 class='ace_coliru_editor'><br />
+// Our special new must allocate memory as expected&#8230;<br />
+#include &lt;cstdio&gt;<br />
+#include &lt;cstdlib&gt;<br />
+// &#8230;but also inspect the stack and print some results.<br />
+#include &lt;execinfo.h&gt;<br />
+#include &lt;unistd.h&gt;<br />
+#include &lt;fstream&gt;<br />
+// Import bad_alloc, expected in case of errors.<br />
+#include &lt;new&gt;<br />
+//<br />
+/* Opens (once) and return the file to save the results.. */<br />
+static std::ofstream&#038; resultFile() {<br />
+  static std::ofstream memoryProfile;<br />
+  static bool open = false;  // Init on 1st use, as usual.<br />
+    if (! open) {<br />
+      memoryProfile.open (&quot;allocations.txt&quot;);<br />
+      open = true;<br />
+    }<br />
+    // Else, handle errors, close the file&#8230;<br />
+    // We won&#8217;t do it, to keep the example simple.<br />
+   return memoryProfile;<br />
+}<br />
+//<br />
+/* This is the &quot;magic&quot; function that inspect the stack and writes it in a file. */<br />
+static void dumpStackTrace(std::ofstream&#038; memoryProfile) {<br />
+  // Record 15 pointers to stack frame &#45; enough for the example program.<br />
+  const int maximumStackSize = 15;<br />
+  void *callStack[maximumStackSize];<br />
+  size_t framesInUse = backtrace(callStack, maximumStackSize);<br />
+  // Now callStack is full of pointers. Request the names of the functions matching each frame.<br />
+  char ** mangledFunctionNames = backtrace_symbols(callStack, framesInUse);<br />
+  // Writes all the function names in the stream.<br />
+  for (size_t i = 0; i &lt; framesInUse; ++i)<br />
+    memoryProfile &lt;&lt; mangledFunctionNames[i] &lt;&lt; std::endl;<br />
+  // To be fair, we should release mangledFunctionNames with free&#8230;<br />
+}<br />
+//<br />
+/* Now we have all the elements to build the custom operator new. */<br />
+void* operator new(std::size_t sz) {<br />
+    // Allocate the requested memory for the caller.<br />
+    void * requestedMemory = std::malloc(sz);<br />
+    if (! requestedMemory)<br />
+      throw std::bad_alloc();<br />
+    // Share our allocations with the world.<br />
+    std::ofstream&#038; memoryProfile = resultFile();<br />
+    memoryProfile &lt;&lt; &quot;Allocation, size = &quot; &lt;&lt; sz &lt;&lt; &quot; at &quot; &lt;&lt; static_cast&lt;void*&gt;(requestedMemory) &lt;&lt; std::endl;<br />
+    dumpStackTrace(memoryProfile);<br />
+    memoryProfile &lt;&lt; &quot;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&quot; &lt;&lt; std::endl;  // Poor man&#8217;s separator.</p>
+<p>    return requestedMemory;<br />
+}<br />
+</div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet6');</script>
+</DIV>
+<p>Let&#8217;s add the &#8220;tricked out&#8221; operator new to our test program. This is an example of the result &#8211; can you guess the line of code behind it?</p>
+<pre>
+Allocation, size = 40 at 0x18705b0
+./overridenew(_Z14dumpStackTraceRSt14basic_ofstreamIcSt11char_traitsIcEE+0x3c) [0x40672c]
+./overridenew(_Znwm+0xaf) [0x406879]
+./overridenew(_ZN9__gnu_cxx13new_allocatorISt23_Sp_counted_ptr_inplaceI9SomeClassSaIS2_ELNS_12_Lock_policyE2EEE8allocateEmPKv+0x4a) [0x405d9e]
+./overridenew(_ZNSt16allocator_traitsISaISt23_Sp_counted_ptr_inplaceI9SomeClassSaIS1_ELN9__gnu_cxx12_Lock_policyE2EEEE8allocateERS6_m+0x28) [0x405bef]
+./overridenew(_ZSt18__allocate_guardedISaISt23_Sp_counted_ptr_inplaceI9SomeClassSaIS1_ELN9__gnu_cxx12_Lock_policyE2EEEESt15__allocated_ptrIT_ERS8_+0x21) [0x4059e2]
+./overridenew(_ZNSt14__shared_countILN9__gnu_cxx12_Lock_policyE2EEC2I9SomeClassSaIS4_EJEEESt19_Sp_make_shared_tagPT_RKT0_DpOT1_+0x59) [0x4057e1]
+./overridenew(_ZNSt12__shared_ptrI9SomeClassLN9__gnu_cxx12_Lock_policyE2EEC2ISaIS0_EJEEESt19_Sp_make_shared_tagRKT_DpOT0_+0x3c) [0x4056ae]
+./overridenew(_ZNSt10shared_ptrI9SomeClassEC2ISaIS0_EJEEESt19_Sp_make_shared_tagRKT_DpOT0_+0x28) [0x40560e]
+./overridenew(_ZSt15allocate_sharedI9SomeClassSaIS0_EIEESt10shared_ptrIT_ERKT0_DpOT1_+0x37) [0x405534]
+./overridenew(_ZSt11make_sharedI9SomeClassJEESt10shared_ptrIT_EDpOT0_+0x3b) [0x405454]
+./overridenew(main+0x9c) [0x4052e8]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xf0) [0x7f83fe991830]
+./overridenew(_start+0x29) [0x405079]
+-----------
+Allocation, size = 10000000 at 0x7f83fc9c3010
+./overridenew(_Z14dumpStackTraceRSt14basic_ofstreamIcSt11char_traitsIcEE+0x3c) [0x40672c]
+./overridenew(_Znwm+0xaf) [0x406879]
+./overridenew(_ZN9__gnu_cxx13new_allocatorIcE8allocateEmPKv+0x3c) [0x406538]
+./overridenew(_ZNSt16allocator_traitsISaIcEE8allocateERS0_m+0x28) [0x4064aa]
+./overridenew(_ZNSt12_Vector_baseIcSaIcEE11_M_allocateEm+0x2a) [0x406450]
+./overridenew(_ZNSt12_Vector_baseIcSaIcEE17_M_create_storageEm+0x23) [0x4063cb]
+./overridenew(_ZNSt12_Vector_baseIcSaIcEEC1EmRKS0_+0x3b) [0x4062f7]
+./overridenew(_ZNSt6vectorIcSaIcEEC2EmRKS0_+0x2c) [0x406286]
+./overridenew(_ZN9SomeClassC1Ev+0x3d) [0x406215]
+./overridenew(_ZN9__gnu_cxx13new_allocatorI9SomeClassE9constructIS1_JEEEvPT_DpOT0_+0x36) [0x405e3a]
+./overridenew(_ZNSt16allocator_traitsISaI9SomeClassEE9constructIS0_JEEEvRS1_PT_DpOT0_+0x23) [0x405d51]
+./overridenew(_ZNSt23_Sp_counted_ptr_inplaceI9SomeClassSaIS0_ELN9__gnu_cxx12_Lock_policyE2EEC2IJEEES1_DpOT_+0x8c) [0x405b4a]
+./overridenew(_ZNSt14__shared_countILN9__gnu_cxx12_Lock_policyE2EEC2I9SomeClassSaIS4_EJEEESt19_Sp_make_shared_tagPT_RKT0_DpOT1_+0xaf) [0x405837]
+./overridenew(_ZNSt12__shared_ptrI9SomeClassLN9__gnu_cxx12_Lock_policyE2EEC2ISaIS0_EJEEESt19_Sp_make_shared_tagRKT_DpOT0_+0x3c) [0x4056ae]
+./overridenew(_ZNSt10shared_ptrI9SomeClassEC2ISaIS0_EJEEESt19_Sp_make_shared_tagRKT_DpOT0_+0x28) [0x40560e]
+
+...
+</pre>
+<p>&#8230;I can&#8217;t. Where is &#8220;main+0xa8&#8221; in my code? Thankfully in the &#8220;gnu/Linux world&#8221; there are tools to de-mangle names and find the point in the code that corresponds to a given address. We can use them, for example, in a simple <a href="javascript:void(0);" data-target="#nota6" data-toggle="collapse">script</a>.</p>
+<div id="nota6" class="collapse inlineNote">
+<DIV class="page-snippet-container">
+	<div id=cesnippet7 class='ace_coliru_editor'><br />
+#!/usr/bin/python<br />
+#<br />
+# C++filt demangles names.<br />
+#<br />
+# addr2line converts code pointers (e. g. functions&#8217; addresses)<br />
+# into the file:line couple corresponding to the code (if there are debug symbols).<br />
+#<br />
+# The python code should be portable, but the called utilities aren&#8217;t.<br />
+#</p>
+<p>import re<br />
+import subprocess<br />
+#</p>
+<p># Opens a sub-process and passes shell commands to it. Returns the results as a string.<br />
+# Not very efficient, but easy.<br />
+def run_shell(command):<br />
+	return subprocess.Popen(command, stdout=subprocess.PIPE).communicate()[0]<br />
+#<br />
+#<br />
+if __name__ == &quot;__main__&quot;:<br />
+	total_size = 0;<br />
+#<br />
+	# There are 2 types of lines in the output: stack frames and allocation sizes.<br />
+	size_line  = re.compile(&quot;Allocation, size = (\d+) at (\d+)&quot;)  # Allocation, size = &lt;bytes&gt; at &lt;pointer somewhere in the heap&gt;<br />
+	stack_line = re.compile(&quot;.*\((.*)\+.*\) \[(.*)\]&quot;)  # &lt;rubbish&gt;(mangled name) [&lt;code pointer&gt;]<br />
+#<br />
+	allocations_file = open(&quot;allocations.txt&quot;)<br />
+	for line in allocations_file:<br />
+		match_size = size_line.match(line)<br />
+		match_stack = stack_line.match(line)<br />
+#<br />
+		# For a demo, I compute the sum of all the used memory.<br />
+		# The things you can do with an overridden new!<br />
+		if (match_size):<br />
+			allocation_size = int(match_size.group(1))<br />
+			total_size += allocation_size<br />
+			print &quot;Used &quot; + str(allocation_size)<br />
+#<br />
+		elif (match_stack):<br />
+			mangled_name = match_stack.group(1)<br />
+			line_address = match_stack.group(2)<br />
+			demangled_name = run_shell([&quot;c++filt&quot;,  &quot;-n&quot;, mangled_name])<br />
+			line_number = run_shell([&quot;addr2line&quot;,  &quot;-e&quot;,   &quot;./overridenew&quot;,  line_address])<br />
+#<br />
+			# This is not professional-grade formatting. The -1 cuts away the newlines.<br />
+			print&quot;\t&quot; + demangled_name[:-1] + &quot;\n\t\t&quot; + line_number,<br />
+#<br />
+		# Copy the separator as they were.<br />
+		else:<br />
+			print line<br />
+#<br />
+	print &quot;\n total allocated size &quot;  + str(total_size)<br />
+</div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet7');</script>
+</DIV>
+</p></div>
+<p>As an alternative, we could to everything at run time, using the compiler&#8217;s demangling utilities, such as <a href="https://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html">the gcc one</a>. Personally I prefer to keep the code instrumentation as simple as possible and do the &#8220;heavy lifting&#8221; off-line. My script returns:</p>
+<pre>
+Used 40
+    dumpStackTrace(std::basic_ofstream&lt;char, std::char_traits&lt;char&gt; &gt;&)
+        /home/stefano/projects/code/spy-memory-with-new/InstrumentedNew.cpp:29
+    operator new(unsigned long)
+        /home/stefano/projects/code/spy-memory-with-new/InstrumentedNew.cpp:48
+    __gnu_cxx::new_allocator&lt;std::_Sp_counted_ptr_inplace&lt;SomeClass, std::allocator&lt;SomeClass&gt;, (__gnu_cxx::_Lock_policy)2&gt; &gt;::allocate(unsigned long, void const*)
+        /usr/include/c++/5/ext/new_allocator.h:105
+    
+    ... internal calls of the shared pointer...
+    
+    std::shared_ptr&lt;SomeClass&gt; std::allocate_shared&lt;SomeClass, std::allocator&lt;SomeClass&gt;&gt;(std::allocator&lt;SomeClass&gt; const&)
+        /usr/include/c++/5/bits/shared_ptr.h:620
+    _ZSt11make_sharedI9SomeClassIEESt10shared_ptrIT_EDpOT0_
+        /usr/include/c++/5/bits/shared_ptr.h:636
+    main
+        /home/stefano/projects/code/spy-memory-with-new/main.cpp:25
+    __libc_start_main
+        ??:0
+    _start
+        ??:?
+-----------
+
+Used 10000000
+    dumpStackTrace(std::basic_ofstream&lt;char, std::char_traits&lt;char&gt; &gt;&)
+        /home/stefano/projects/code/spy-memory-with-new/InstrumentedNew.cpp:29
+    operator new(unsigned long)
+        /home/stefano/projects/code/spy-memory-with-new/InstrumentedNew.cpp:48
+    __gnu_cxx::new_allocator&lt;char&gt;::allocate(unsigned long, void const*)
+        /usr/include/c++/5/ext/new_allocator.h:105
+    
+    ...internal calls of vector...
+    
+    std::vector&lt;char, std::allocator&lt;char&gt; &gt;::vector(unsigned long, std::allocator&lt;char&gt; const&)
+        /usr/include/c++/5/bits/stl_vector.h:279
+    SomeClass::SomeClass()
+        /home/stefano/projects/code/spy-memory-with-new/SomeClass.cpp:4 (discriminator 2)
+    ...
+</pre>
+<p>The first allocation are the 40 bytes requested by make_shared. 24 for SomeClass (its only member is a vector &#8211; sizeof(vector) is 24), the rest should be the control block of the shared pointer. The second allocation are the 10MB in the notorious constructor of SomeClass.</p>
+<p>It takes some effort to navigate the stacks, but it is possible to understand that the mistery line was <span class="inlineCode">std::shared_ptr<SomeClass> stdSmartPointer = std::make_shared&lt;SomeClass&gt;();</span> &#8211;  close to the return at main.cpp:25.</p>
+<p>Homework: how many allocations would there be with <span class="inlineCode">std::shared_ptr&lt;SomeClass&gt; notSoSmartPointer(new SomeClass());<br />
+?</span><a href="javascript:void(0);" data-target="#nota7" data-toggle="collapse">*</a></p>
+<div id="nota7" class="collapse inlineNote" data-target="#nota7" data-toggle="collapse">
+Three, and using 8 more bytes.<br />
+In a test I found:<br />
+24 bytes for SomeClass&#8217;s instance<br />
+10 MB to fill the vector<br />
+24 bytes for the shared pointer.</p>
+<p>Looking at the <a href="en.cppreference.com/w/cpp/memory/shared_ptr">implementation notes</a>, I believe that the difference is in the content of the shared pointer&#8217;s control block.
+</div>
+<hr />
+<h4>In the end&#8230;</h4>
+<p>Programmers have been fighting against memory since the dawn of time, because it is slow and too small. As for every bottleneck, one can&#8217;t trust his instincts. We saw that there are proper tools (memory profilers) to measure the memory usage. We discovered that, in a pinch, there are &#8220;home made&#8221; tools we can build ourselves with a &#8220;stereotypical C++ hack&#8221;, the override of operator new.</p>
+<p><em>You can find the &#8220;ready-to-compile&#8221; code <a href="https://github.com/italiancpp/code/tree/master/spy-memory-with-new">in the ++It GitHub repo<a>.</em></p>
+]]></content:encoded>
+		<post-id xmlns="com-wordpress:feed-additions:1">7387</post-id>	</item>
+		<item>
+		<title>Primi passi con Boost.Python</title>
+		<link>https://www.italiancpp.org/2015/12/02/primi-passi-con-boost-python/</link>
+		<comments>https://www.italiancpp.org/2015/12/02/primi-passi-con-boost-python/#comments</comments>
+		<pubDate>Wed, 02 Dec 2015 18:12:00 +0000</pubDate>
+		<dc:creator><![CDATA[stefano]]></dc:creator>
+				<category><![CDATA[Tecnologie]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=5411</guid>
+		<description><![CDATA[&#8220;Finalmente un linguaggio più moderno e funzionale&#8221; Chi fra noi non vorrebbe programmare in un linguaggio multiparadigma, altamente espressivo, in piena evoluzione e con una vastissima libreria standard? Stiamo parlando, ovviamente, di&#8230; Python. Ci sono casi in cui il nostro solito campione (C++11), non è la scelta migliore. Per un prototipo da sviluppare in fretta, [&#8230;]]]></description>
+				<content:encoded><![CDATA[<h3>&#8220;Finalmente un linguaggio più moderno e funzionale&#8221;</h3>
+<p>Chi fra noi non vorrebbe programmare in un linguaggio multiparadigma, altamente espressivo, in piena evoluzione e con una vastissima libreria standard? Stiamo parlando, ovviamente, di&#8230; Python.</p>
+<p>Ci sono casi in cui il nostro solito campione (C++11), non è la scelta migliore. Per un prototipo da sviluppare in fretta, uno script “usa e getta”, il server di un&#8217;applicazione web, del codice di ricerca&#8230; la complessità del C++ è più un peso che un vantaggio.</p>
+<p>Come possiamo continuare a sfruttare l&#8217;efficienza del C++ o riutilizzare codice già esistente senza passare per cavernicoli fuori moda?</p>
+<p>L&#8217;interprete Python può caricare moduli scritti in C, compilati in librerie dinamiche. Boost.Python ci aiuta, enormemente, a prepararli. Uniamo la potenza di Boost e C++ alla semplicità di Python.</p>
+<p>Attenzione: anche se tutti gli esempi compilano, girano e passano i test questa non è la guida definiva su Boost.Python. Il codice è illustrativo, riflette solo la nostra (scarsa) esperienza con Boost.Python. Non esitate a segnalarci errori.</p>
+<h4>Un problema di velocità</h4>
+<p>Vediamo un caso (non troppo) pratico. Ci sono numeri uguali alla somma dei loro divisori (6 = 3 + 2 + 1; <a href="https://it.wikipedia.org/wiki/Numero_perfetto">numeri perfetti</a>). Il reparto marketing ha fiutato l&#8217;affare, ma è fondamentale calcolarne il più possibile prima della concorrenza. La velocità di sviluppo di Python è l&#8217;arma vincente, dopo 5 minuti rilasciamo Pefect 1.0<span style="font-family: Liberation Serif,serif;">®:</span></p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet8 class='ace_coliru_editor'></p>
+<pre>def trova_divisori(numero):
+	divisori = []
+	for i in range(1, numero):
+		if numero % i == 0:
+			divisori.append(i)
+	return divisori
+
+
+def perfetto(numero):
+	divisori = trova_divisori(numero)
+	return numero == sum(divisori)
+
+
+def trova_perfetti(quanti_ne_vuoi):
+	trovati = 0
+	numero_da_provare = 1
+	while (trovati &lt; quanti_ne_vuoi):
+		if perfetto(numero_da_provare):
+			print numero_da_provare
+			trovati += 1
+		numero_da_provare += 1
+
+
+if __name__ == "__main__":
+	trova_perfetti(4) # Cercatene di più a vostro rischio e pericolo.
+                        # L'attesa sarà lunga...
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet8');</script>
+</DIV>
+<p>Questo codice non è perfettamente “pythonico” (<a href="https://www.python.org/dev/peps/pep-0008/">https://www.python.org/dev/peps/pep-0008/</a>), ma è stato veramente creato, testato e debuggato nel tempo che di solito spendiamo a leggere un&#8217;errore di compilazione<a class="sdfootnoteanc" href="#sdfootnote1sym" name="sdfootnote1anc"><sup>1</sup></a>.</p>
+<p>Peccato che il tempo di esecuzione sia paragonabile: 6,5 secondi sulla mia macchina di prova (che non è la vostra, non è il server di produzione, non è il PC del Python-boy che a lui gira tutto in un picosecondo&#8230; è un esempio!).</p>
+<p>Da bravi ingegneri cerchiamo il collo di bottiglia con il profiler:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet9 class='ace_coliru_editor'></p>
+<pre>import cProfile
+
+... stesso codice di prima ...
+
+if __name__ == "__main__":
+	cProfile.run('trova_perfetti(4)')
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet9');</script>
+</DIV>
+<p>Ed ecco il risultato:</p>
+<pre>   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    7.420    7.420 &lt;string&gt;:1()
+     8128    0.709    0.000    7.326    0.001 purePython-profiler.py:15(perfetto)
+        1    0.095    0.095    7.420    7.420 purePython-profiler.py:19(trova_perfetti)
+     8128    5.190    0.001    6.523    0.001 purePython-profiler.py:8(trova_divisori)
+    66318    0.819    0.000    0.819    0.000 {method 'append' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+     8128    0.514    0.000    0.514    0.000 {range}
+     8128    0.094    0.000    0.094    0.000 {sum}
+</pre>
+<p>trova_divisori &#8220;ruba&#8221; quasi tutti i 6,5 secondi!</p>
+<h4>boost::python</h4>
+<p>Nessuno nega che si possa scrivere codice efficiente in Python (Java, VisualQualcosa, il linguaggio funzionale di questa settimana&#8230;), ma ottimizzare l&#8217;algoritmo di trova_divisori è fuori discussione: vogliamo mostrare Boost.Python, non fare una lezione di Algebra.</p>
+<p>Per prima cosa, ci procuriamo Boost.Python. Su una macchina Linux è semplice quanto usare:</p>
+<pre>sudo apt-get install libboost-all-dev</pre>
+<p>Potreste dover installare anche i package “dev” di Python. Non è difficile trovare su internet istruzioni per tutte le piattaforme, ma installare (e compilare) può essere la parte più difficile. Non scoraggiatevi.</p>
+<p>Questo è il codice C++:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet10 class='ace_coliru_editor'></p>
+<pre>#include "boost/python.hpp"  // (1)
+
+boost::python::list trovaDivisori(uint64_t numero) // (2)
+{
+	boost::python::list divisori;
+	for (uint64_t i = 1; i &lt; numero; ++i)  // (3)
+		if (numero % i == 0)
+			divisori.append(i);
+	return divisori;
+}
+
+BOOST_PYTHON_MODULE(divisori)
+{
+    using namespace boost::python;
+    def("trova_divisori", trovaDivisori);  // (4)
+}
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet10');</script>
+</DIV></p>
+<ol>
+<li>Includiamo Boost.Python. Deve essere incluso prima di ogni altro eventuale header per evitare warning alla compilazione.</li>
+<li>La funzione equivalente a quella che vogliamo sostituire in Python. Manteniamo la stessa segnatura (prende un intero, ritorna una lista) dell&#8217;originale in Python per rendere la sostituzione &#8220;trasparente&#8221;.</li>
+<li>Anche l&#8217;algoritmo è esattamente lo stesso. Cambia solo la sintassi, e neanche di molto. In questo caso tutta la differenza la fa, probabilmente, il runtime C++.</li>
+<li>Dichiariamo la funzione nel modulo python con “def” (&#8230;come in Python).</li>
+</ol>
+<p>La guida (<a href="http://www.boost.org/doc/libs/1_59_0/libs/python/doc/">http://www.boost.org/doc/libs/1_59_0/libs/python/doc/</a>) spiega molto chiaramente tutti dettagli.</p>
+<p>La compilazione, purtroppo, non è esattamente elementare, dovrete probabilmente adattarla caso per caso. Vediamo l&#8217;esempio un passo alla volta (si tratta di una sola riga di comando, naturalmente):</p>
+<pre>g++ divisori.cpp			    compilo un file C++, qui tutto normale
+ -o divisori.so  			    nome del file: Python esige sia lo stesso del modulo
+-I /usr/include/python2.7/	            includo gli header di Python (ho Boost già nel path)
+-l python2.7 -lboost_python -lboost_system  includo Python, Boost
+-shared -fPIC -Wl,-export-dynamic           chiedo di creare una libreria dinamica
+</pre>
+<p>stackoverflow.com farà il resto. Notare che, per “par condicio”, non stiamo usando le opzioni di ottimizzazione di g++.</p>
+<p>Una volta che la nostra libreria è nel path di sistema (altrimenti Python non la trova) possiamo includerla nel codice Python:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet11 class='ace_coliru_editor'></p>
+<pre>from divisori import trova_divisori
+
+def perfetto(numero):
+	divisori = trova_divisori(int(numero)) # Adesso chiama quella in C++
+	return numero == sum(divisori)
+
+… stesso codice di prima …
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet11');</script>
+</DIV></p>
+<p>Tempo di esecuzione: poco meno di un secondo. Siamo testimoni del classico “l&#8217;80% del tempo si spreca nel 20% del codice”. Lo stesso algoritmo è 6 volte più veloce, ma l&#8217;unica parte su cui abbiamo perso tempo con la programmazione a basso livello (dopotutto, è ancora C++98!) è una sola funzione. Per tutto il resto possiamo ancora approfittare della praticità di Python.</p>
+<h4>Qualche possibilità in più</h4>
+<p>Boost.Python non si limita a convertire i tipi primitivi e a incapsulare le liste di Python in un adapter C++. Ecco una selezione dei casi “tipici” per chi programma nel “C con classi”:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet12 class='ace_coliru_editor'></p>
+<pre>class RiutilizzabileInPython 
+{
+	public:
+		RiutilizzabileInPython() {};
+		RiutilizzabileInPython(int x, const std::string&amp; y) {};
+		int variabileIstanza;
+		static void metodoStatico() {};
+		void metodo() {}
+};
+
+BOOST_PYTHON_MODULE(oop)
+{
+    using namespace boost::python;
+    class_&lt;RiutilizzabileInPython&gt;("implementata_in_CPP")	//(1)
+	.def(init&lt;int, std::string&gt;())				//(2)
+	.def_readwrite("variabile_istanza", &amp;RiutilizzabileInPython::variabileIstanza)//(3)
+	.def("metodo_statico", &amp;RiutilizzabileInPython::metodoStatico).staticmethod("metodo_statico") //(4)
+	.def("metodo", &amp;RiutilizzabileInPython::metodo)		// (5)
+    ;
+}
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet12');</script>
+</DIV></p>
+<ol>
+<li>&gt;Apriamo la dichiarazione della classe, passando la stringa con il nome Python.</li>
+<li>Traduzione del costruttore in Python (&#8230;init, ricorda niente?).</li>
+<li>La “tradizione” Python non disdegna le variabili di oggetto pubbliche. Eccone una.</li>
+<li>Solo una ripetizione del nome Python per esporre un metodo statico.</li>
+<li>Il classico, semplice metodo d&#8217;istanza.</li>
+</ol>
+<p>Una volta compilato (&#8230;tra il dire e il fare&#8230;) possiamo usare la classe C++ in Python:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet13 class='ace_coliru_editor'></p>
+<pre>from oop import implementata_in_CPP
+
+x = implementata_in_CPP()
+y = implementata_in_CPP(3, "ciao")
+x.variabil_istanza = 23
+implementata_in_CPP.metodo_statico()
+x.metodo()
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet13');</script>
+</DIV>
+<p>Boost si preoccupa di convertire parametri, tipi di ritorno eccetera. Ci sono opzioni per l&#8217;“esportazione” diretta delle classi della STL (e se non ci sono è possibile definirle) e per le policy dei tipi ritornati (per reference, per copia&#8230;). Le possibilità sono moltissime, affidatevi alla guida ufficiale.</p>
+<p>Quando il gioco si fa duro, Boost continua a giocare. Un assaggio:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet14 class='ace_coliru_editor'></p>
+<pre>class Problems
+{
+	public:
+		void stampa() {
+			std::cout &lt;&lt; "cout continua a funzionare" &lt;&lt; std::endl;
+		}
+
+		void eccezione() {
+			throw std::runtime_error("Oh, no!!!");
+		}
+
+		void coreDump() {
+			int * nullPointer = 0;
+			*nullPointer = 24;
+		}
+};
+
+BOOST_PYTHON_MODULE(oop)
+{
+    using namespace boost::python;
+
+     class_&lt;Problems&gt;("Problems")
+	.def("stampa", &amp;Problems::stampa)
+	.def("eccezione", &amp;Problems::eccezione)
+	.def("coreDump", &amp;Problems::coreDump)
+    ;
+}
+
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet14');</script>
+</DIV>
+<p>Il “test-driver” in Python, con un esempio di output:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet15 class='ace_coliru_editor'></p>
+<pre>from oop import Problems
+p = Problems()
+p.stampa()
+try:
+	p.eccezione()
+except RuntimeError as e:
+	print "Il codice C++ non ha funzionato: " + str(e);
+p.coreDump()
+
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet15');</script>
+</DIV></p>
+<pre>cout continua a funzionare				(1)
+Il codice C++ non ha funzionato: Oh, no!!!	        (2)
+Segmentation fault (core dumped)			(3)
+</pre>
+<ol>
+<li>Debuggare a colpi di std::cout non è una buona pratica&#8230; ma funziona!</li>
+<li>Le eccezioni sono perfettamente “inoltrate” al runtime Python.</li>
+<li>&#8230;pensavate di salvarvi, eh?</li>
+</ol>
+<h4>Multithreading</h4>
+<p>Boost.Python non è l&#8217;unica arma per affrontare problemi che richiedono efficienza. Il codice multi thread è un modo comune di aumentare le prestazioni, tanto per per trovare divisori che per minare Bitcoin o craccare password. Ecco una classe C++ che sta per saltare in un thread Python.</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet16 class='ace_coliru_editor'></p>
+<pre>class JobTrovaDivisori {
+
+	public:
+		JobTrovaDivisori(uint64_t numero, uint64_t begin, uint64_t end) :
+			numero(numero), begin(begin), end(end) {}
+		
+		boost::python::list trovaDivisori()
+		{
+			std::cout &lt;&lt; "Start" &lt;&lt; std::endl;
+
+			boost::python::list divisori;
+			for (uint64_t i = begin; i &lt; end; ++i)
+				 if (numero % i == 0)
+					divisori.append(i);
+
+			std::cout &lt;&lt; "end" &lt;&lt; std::endl;
+			return divisori;
+		}
+
+	private:
+		uint64_t numero;
+		uint64_t begin;
+ 		uint64_t end;
+};
+
+BOOST_PYTHON_MODULE(fattorizzare)
+{
+    using namespace boost::python;
+    class_&lt;JobTrovaDivisori&gt;("JobTrovaDivisori", init&lt;uint64_t, uint64_t, uint64_t&gt;())
+	.def("trova_divisori", &amp;JobTrovaDivisori::trovaDivisori)
+    ;
+}
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet16');</script>
+</DIV>
+<p>L&#8217;oggetto “JobTrovaDivisori” controlla se i numeri tra “begin” e “end” sono divisori di “numero”. Parallelizziamo il problema di trovare tutti i divisori in più “job” usando ogni oggetto su un intervallo diverso. Non ci sono dati condivisi, non abbiamo alcun problema di concorrenza. Questa è l&#8217;unica nota positiva di questa soluzione, ma ancora una volta tralasciamo la matematica (e l&#8217;ingegneria del software).</p>
+<p>La chiamata in Python:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet17 class='ace_coliru_editor'></p>
+<pre>from threading import Thread
+from fattorizzare import JobTrovaDivisori
+
+class Job():							# (1)
+	def __init__(self, numero, begin, end):
+		self.cppJob = JobTrovaDivisori(numero, begin, end)
+		self.divisori = []
+	
+	def __call__(self):
+		self.divisori = self.cppJob.trova_divisori()
+
+		
+def trova_divisori_parallelo(numero):			# (2)
+	limite = numero / 2
+
+	job1 = Job(numero, 1, limite)
+	job2 = Job(numero, limite, numero)
+
+	t1 = Thread(None, job1)
+	t2 = Thread(None, job2)
+	
+	t1.start()
+	t2.start()
+	t1.join()
+	t2.join()
+
+	return [job1.divisori, job2.divisori]
+
+
+if __name__ == "__main__":
+	print trova_divisori_parallelo(223339244);	#(3)
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet17');</script>
+</DIV></p>
+<ol>
+<li>Incapsuliamo il Job C++ per “non complicarci la vita” cercando di esportare un callable C++.</li>
+<li>Questo metodo crea 2 job, esegue il “fork e join” (o, come dicono oggi, &#8220;map e reduce&#8221;), poi stampa il risultato.</li>
+<li>Fattorizziamo un numero qualunque.</li>
+</ol>
+<p>Ecco l&#8217;output: ricordate le stampe di “Start” e “end” nella classe C++? Dopo circa 8 secondi e mezzo il calcolo termina, senza nessun parallelismo:</p>
+<pre>Start
+end
+Start
+end
+[[1L, 2L, 4L, 53L, 106L, 212L, 1053487L, 2106974L, 4213948L, 55834811L], [111669622L]]
+</pre>
+<p>Non è un caso. Gli oggetti Python sono protetti dal Global Interpreter Lock (GIL). Spetta al programmatore di ciascun thread rilasciarlo per dare il “via libera” agli altri thread. L&#8217;accortezza è di non chiamare codice puramente Python quando non si possiede il lock.</p>
+<p>Come al solito in C++ controlliamo le risorse col metodo RAII. L&#8217;idioma per il GIL è (<a href="https://wiki.python.org/moin/boost.python/HowTo#Multithreading_Support_for_my_function">https://wiki.python.org/moin/boost.python/HowTo#Multithreading_Support_for_my_function</a>):<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet18 class='ace_coliru_editor'></p>
+<pre>class ScopedGILRelease
+{
+public:
+    inline ScopedGILRelease(){
+        m_thread_state = PyEval_SaveThread();
+    }
+    inline ~ScopedGILRelease()    
+        PyEval_RestoreThread(m_thread_state);
+        m_thread_state = NULL;
+    }
+private:
+    PyThreadState * m_thread_state;
+};
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet18');</script>
+</DIV></p>
+<p>Rilasciamo il lock nella classe C++:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet19 class='ace_coliru_editor'></p>
+<pre>boost::python::list trovaDivisori() {
+	ScopedGILRelease noGil = ScopedGILRelease(); // (1)
+	std::cout &lt;&lt; "Start" &lt;&lt; std::endl;
+		
+	boost::python::list divisori;
+	for (uint64_t i = begin; i &lt; end; ++i)
+		 if (numero % i == 0)  
+			divisori.append(i); // (2) Possibile Core Dump!
+	std::cout &lt;&lt; "end" &lt;&lt; std::endl;
+	return divisori;
+}
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet19');</script>
+</DIV></p>
+<ol>
+<li>Quando questa variabile esce dallo scope, il lock è ri-acquisito, come se fosse uno smart pointer &#8220;al contrario&#8221;.</li>
+<li>Qui è dove prenderemo il core dump. Ma solo in produzione.</li>
+</ol>
+<p>Ricordate la clausola <em>“l&#8217;accortezza è di non chiamare codice puramente Python quando non si possiede il lock”</em>? La riga (2) potrebbe fare esattamente quello. Provate a far crescere la lista a dismisura (ad esempio, elimiate la “if (numero&#8230;” e salvate tutti i numeri nella lista). Credo che, probabilmente (affidatevi alle guide ufficiali per conoscere la vera risposta!) l&#8217;interprete Python deve allocare una lista più grossa, ma non avendo il lock qualcosa si corrompe.</p>
+<p>Racchiudiamo la sezione parallelizzabile in uno scope a parte, salvando i numeri in una variabile non condivisa con Python:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet20 class='ace_coliru_editor'></p>
+<pre>boost::python::list trovaDivisori() {
+	std::cout &lt;&lt; "Start" &lt;&lt; std::endl;
+	std::vector&lt;uint64_t&gt; divisoriTemp;
+	{
+	ScopedGILRelease noGil = ScopedGILRelease();
+		for (uint64_t i = begin; i &lt; end; ++i)
+			 if (numero % i == 0) 
+				divisoriTemp.push_back(i);
+		std::cout &lt;&lt; "end" &lt;&lt; std::endl;
+	} // noGil esce dallo scope. Riprendiamo il lock.
+	boost::python::list divisori;
+	BOOST_FOREACH(uint64_t n, divisoriTemp) {
+		divisori.append(n);
+	}
+	return divisori;
+}
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet20');</script>
+</DIV><br />
+Dopo 6 secondi e mezzo (-2 rispetto alla versione “accidentalmente sequenziale”) otteniamo l&#8217;interleaving previsto (Start Start &#8211; end end). Quei 2 secondi possiamo spenderli per pensare a una soluzione meno rimediata.</p>
+<p>Questo conclude l&#8217;introduzione a Boost.Python. Ora conosciamo un modo per “incastrare” moduli C++ nelle applicazioni Python, sia per riutilizzarli che per ragioni di efficienza. Boost.Python connette i due mondi senza sacrificare la semplicità di Python e senza limitare le possibilità in C++, pur se è necessaria qualche accortezza. <em>Soprattutto, d&#8217;ora in avanti avremo l&#8217;ultima parola nel classico flame “Python vs C++” su tutti i forum del mondo!</em></p>
+<div id="sdfootnote1">
+<p class="sdfootnote"><a class="sdfootnotesym" href="#sdfootnote1anc" name="sdfootnote1sym">1</a>E&#8217; vero che si fa prima a fare un programma in Python che aggiustare un solo bug C++.</p>
+<p>Fate la prova. Pronti, partenza, via: </p>
+<pre>
+/usr/include/c++/4.8/bits/stl_map.h:646:7: note: no known conversion for argument 1 from 
+‘int’ to ‘std::map&lt;int, std::map&lt;std::basic_string&lt;char&gt;, std::basic_string&lt
+;char&gt; &gt; &gt;::iterator {aka std::_Rb_tree_iterator&lt;std::pair&lt;const int, std::map&lt;std::basic_string&lt;char&gt;, std::basic_string&lt;char&gt; &gt; &gt; &gt;}’
+<p class="sdfootnote">/usr/include/c++/4.8/bits/stl_map.h:670:9: note: template&lt;class 
+_InputIterator&gt; void std::map&lt;_Key, _Tp, _Compare, _Alloc&gt;::insert(_InputIterator, 
+_InputIterator) [with _InputIterator = _InputIterator; _Key = int; _Tp = 
+std::map&lt;std::basic_string&lt;char&gt;, std::basic_string&lt;char&gt; &gt;; _Compare 
+= std::less&lt;int&gt;; _Alloc = std::allocator&lt;std::pair&lt;const int, std::map&lt;std::basic_string&lt;char&gt;, std::basic_string&lt;char&gt; &gt; &gt; &gt;
+</pre>
+</div>
+]]></content:encoded>
+			<wfw:commentRss>https://www.italiancpp.org/2015/12/02/primi-passi-con-boost-python/feed/</wfw:commentRss>
+		<slash:comments>2</slash:comments>
+	<post-id xmlns="com-wordpress:feed-additions:1">5411</post-id>	</item>
+		<item>
+		<title>First steps with Boost.Python</title>
+		<link>https://www.italiancpp.org/2015/12/02/first-steps-with-boost-python/</link>
+		<pubDate>Wed, 02 Dec 2015 18:11:41 +0000</pubDate>
+		<dc:creator><![CDATA[stefano]]></dc:creator>
+				<category><![CDATA[Tecnologie]]></category>
+		<category><![CDATA[boost]]></category>
+		<category><![CDATA[python]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=5479</guid>
+		<description><![CDATA[&#8220;Finally a modern, pragmatic language.&#8221; Who among us wants to work with a multi-paradigm, highly-expressive, fast-evolving language with a huge standard library? We are talking, as usual, about&#8230; Python. There are scenarios where our trusty champion (C++11) doesn&#8217;t cut it. For a prototype to rush out in a hurry, a &#8220;single use&#8221; script, the server [&#8230;]]]></description>
+				<content:encoded><![CDATA[<h3>&#8220;Finally a modern, pragmatic language.&#8221;</h3>
+<p>Who among us wants to work with a multi-paradigm, highly-expressive, fast-evolving language with a huge standard library? We are talking, as usual, about&#8230; Python.</p>
+<p>There are scenarios where our trusty champion (C++11) doesn&#8217;t cut it. For a prototype to rush out in a hurry, a &#8220;single use&#8221; script, the server side of a web application, research code&#8230; the complexity of C++ is more a problem than an asset.</p>
+<p>How can we continue to take advantage of C++ efficiency or re-use some already available code without looking like old-fashioned cavemen?</p>
+<p>The Python interpreter can load modules written in C, compiled as dynamic libraries. Boost.Python helps, a lot, to prepare them. It joins the power of Boost and C++ with the ease of use of Python.</p>
+<p>Danger: even if all the examples compile, run and pass the tests this is not the ultimate guide about Boost.Python. The code is meant to be an example, it mirrors our (minimal) experience with Boost.Python. Do not hesitate to report any error we made.</p>
+<h4>A speed problem</h4>
+<p>Let&#8217;s see a (not too) practical use case. There are numbers which are equal to the sum of their divisors (6 = 3 + 2 + 1; <a href="https://en.wikipedia.org/wiki/Perfect_number">perfect numbers</a>). The marketing department believes it is something hot, but we must compute as many perfect numbers as possible and release them before our competitors. The development speed enabled by Python is key, after 5 minutes we release Pefect 1.0<span style="font-family: Liberation Serif,serif;">®:</span></p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet21 class='ace_coliru_editor'></p>
+<pre>def find_divisors(number):
+	divisors = []
+	for i in range(1, number):
+		if number % i == 0:
+			divisors.append(i)
+	return divisors
+
+
+def perfect(number):
+	divisors = find_divisors(number)
+	return number == sum(divisors)
+
+
+def find_perfect_numbers(how_many):
+	found = 0
+	number_to_try = 1
+	while (found &lt; how_many):
+		if perfect(number_to_try):
+			print number_to_try
+			found += 1
+		number_to_try += 1
+
+
+if __name__ == "__main__":
+	find_perfect_numbers(4)  # Look for more at your own risk.
+							 # And prepare for a long wait.
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet21');</script>
+</DIV>
+<p>This code is not really &#8220;pythonic&#8221; (<a href="https://www.python.org/dev/peps/pep-0008/">https://www.python.org/dev/peps/pep-0008/</a>), but it really was created, tested and debugged in less time that it takes to read a C++ compilation error.<a class="sdfootnoteanc" href="#sdfootnote1sym" name="sdfootnote1anc"><sup>1</sup></a>.</p>
+<p>Unfortunately the execution time is similar: 6.5 seconds on my test machine (which is not your test machine, nor the production server, nor the Python fanboy&#8217;s PC which can run everything in a picosecond&#8230; it&#8217;s an example!).</p>
+<p>Let&#8217;s look for the bottleneck with the profiler, like the savvy engineers we are.</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet22 class='ace_coliru_editor'></p>
+<pre>import cProfile
+
+... same code as before ...
+
+if __name__ == "__main__":
+	cProfile.run("find_perfect_numbers(4)")
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet22');</script>
+</DIV>
+<p>Here is the outcome:</p>
+<pre>   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    5.657    5.657 &lt;string&gt;:1()
+     8128    0.283    0.000    5.582    0.001 purePython.py:16(perfect)
+        1    0.075    0.075    5.657    5.657 purePython.py:21(find_perfect_numbers)
+     8128    4.294    0.001    5.229    0.001 purePython.py:8(find_divisors)
+    66318    0.528    0.000    0.528    0.000 {method 'append' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+     8128    0.406    0.000    0.406    0.000 {range}
+     8128    0.070    0.000    0.070    0.000 {sum}
+</pre>
+<p>find_divisors &#8220;steals&#8221; almost all of the 5.6 seconds it took to run this test!</p>
+<h4>boost::python</h4>
+<p>No-one denies that it is possible to write efficient code in Python (Java, VisualWhatever, this week&#8217;s functional language&#8230;), but optimize the algorithm of find_divisors is out of the question: we are here to show off Boost.Python, not to give an Algebra lesson.</p>
+<p>First of all, we get our hands on Boost.Python. On a Linux box this is as easy as typing:</p>
+<pre>sudo apt-get install libboost-all-dev</pre>
+<p>You may need to install Python&#8217;s &#8220;dev&#8221; packages. It is easy to find instructions for any platform over the web, but installing (and compiling) the library may be the most difficult step. Do not lose heart.</p>
+<p>This is the C++ code:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet23 class='ace_coliru_editor'></p>
+<pre>#include "boost/python.hpp"  // (1)
+
+boost::python::list findDivisors(uint64_t number) // (2)
+{
+	boost::python::list divisors;
+	for (uint64_t i = 1; i &lt; number; ++i)  // (3)
+		if (number % i == 0)
+			divisors.append(i);
+	return divisors;
+}
+
+BOOST_PYTHON_MODULE(divisors)
+{
+    using namespace boost::python;
+    def("find_divisors", findDivisors);  // (4)
+}
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet23');</script>
+</DIV></p>
+<ol>
+<li>Include Boost.Python. It must be included before any other header to avoid compilation warning.</li>
+<li>The function corresponding to the one we want to replace in Python. It keeps the same signature (takes an integer, returns a list) as the Python original to achieve a &#8220;transparent&#8221; replacement.</li>
+<li>Even the logic is exactly the same. Just a few syntax differences. The C++ runtime should make the difference in this case.</li>
+<li>Declare the function with “def” (&#8230;hey, it&#8217;s just like Python).</li>
+</ol>
+<p>The guide (<a href="http://www.boost.org/doc/libs/1_59_0/libs/python/doc/">http://www.boost.org/doc/libs/1_59_0/libs/python/doc/</a>) has a clear explanation with all the details.</p>
+<p>Compiling, sadly, is not so easy, we will have to adapt to your case. Let&#8217;s check a step-by-step example (naturally, this is a single line on the console):</p>
+<pre>g++ divisors.cpp			    compile a C++ file, as usual
+ -o divisors.so  			    file name: Python demands it is the same as the module name
+-I /usr/include/python2.7/	            to include Python's headers (I already set boost in the path)
+-l python2.7 -lboost_python -lboost_system  include python, boost
+-shared -fPIC -Wl,-export-dynamic           request to create a dynamic library
+</pre>
+<p>stackoverflow.com will cover the rest. Notice that &#8220;to level the play field&#8221;, I do not use optimization options in g++.</p>
+<p>Once our library is in the system path (some place where Python can find it) we can include it in Python:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet24 class='ace_coliru_editor'></p>
+<pre>from divisors import find_divisors
+
+def perfect(number):
+	divisors = find_divisors(int(number))  # Calls the C++ implementation
+	return number == sum(divisors)
+
+… same code as before …
+
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet24');</script>
+</DIV></p>
+<p>Run time: a bit less than a second. We are witnessing the classic &#8220;80% of time is wasted by 20% of the code&#8221;. The same algorithm is 6 times faster, but the part where we had to deal with low level programming (yes, still C++98!) is just one function. Everywhere else we can still take advantage of Python&#8217;s practicality.</p>
+<h4>Some more opportunities</h4>
+<p>Boost.Python is not limited to primitive types conversion or adapters to pass Python lists in C++. Here is a selection of &#8220;common&#8221; cases often met when doing “C with classes&#8221;:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet25 class='ace_coliru_editor'></p>
+<pre>class ReuseInPython 
+{
+	public:
+		ReuseInPython() {};
+		ReuseInPython(int x, const std::string&amp; y) {};
+		int instanceVariable;
+		static void staticMethod() {};
+		void method() {}
+};
+
+BOOST_PYTHON_MODULE(oop)
+{
+    using namespace boost::python;
+    class_&lt;ReuseInPython&gt;("implemented_in_CPP")		// (1)
+	.def(init&lt;int, std::string&gt;())  // (2)
+	.def_readwrite("instance_variable", &amp;ReuseInPython::instanceVariable)  // (3)
+	.def("static_method", &amp;ReuseInPython::staticMethod).staticmethod("static_method")  // (4)        
+	.def("method", &amp;ReuseInPython::method)  // (5)
+    ;
+}
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet25');</script>
+</DIV></p>
+<ol>
+<li>Open a class declaration, passing a string with its alias in Python.</li>
+<li>Translate the constructor in Python (&#8230;init, does that ring a bell?).</li>
+<li>The Python &#8220;translation&#8221; won&#8217;t balk at public instance variables. Here is one.</li>
+<li>Only repeat the Python name to expose a static method.</li>
+<li>The run-of-the mill, basic instance method.</li>
+</ol>
+<p>Once it is compiled (&#8230;sounds easy, but&#8230;) we can use the C++ class in Python:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet26 class='ace_coliru_editor'></p>
+<pre>from oop import implemented_in_CPP
+
+x = implemented_in_CPP()
+y = implemented_in_CPP(3, "hello")
+x.instance_variable = 23
+implemented_in_CPP.static_method()
+x.method()
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet26');</script>
+</DIV>
+<p>Boost takes care of converting parameters, return types etcetera. There are options to &#8220;export&#8221; directly STL classes (and more can be defined if something is missing) and for the return type policy (by reference, by copy&#8230;). There are really many options, trust the official guide.</p>
+<p>When the going gets tough, Boost keeps going. A sample:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet27 class='ace_coliru_editor'></p>
+<pre>class Problems
+{
+	public:
+		void print() {
+			std::cout &lt;&lt; "cout still works" &lt;&lt; std::endl;
+		}
+
+		void exception() {
+			throw std::runtime_error("Oh, no!!!");
+		}
+
+		void coreDump()	{
+			int * nullPointer = 0;
+			*nullPointer = 24;
+		}
+};
+
+BOOST_PYTHON_MODULE(oop)
+{
+    using namespace boost::python;
+
+    class_&lt;Problems&gt;("Problems")
+	.def("print_something", &amp;Problems::print  // Print is a Python keyword.    
+	.def("exception", &amp;Problems::exception)
+	.def("coreDump", &amp;Problems::coreDump)
+    ;
+}
+
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet27');</script>
+</DIV>
+<p>The Python &#8220;test-driver&#8221;, with an example of the output:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet28 class='ace_coliru_editor'></p>
+<pre>from oop import Problems
+p = Problems()
+p.print_something()
+try:
+	p.exception()
+except RuntimeError as e:
+	print "The C++ code bombed: " + str(e);
+p.coreDump()
+
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet28');</script>
+</DIV></p>
+<pre>cout still works	(1)
+The C++ code bombed: Oh, no!!!	(2)
+Segmentation fault (core dumped)	(3)
+</pre>
+<ol>
+<li>Debugging with std::cout is not a recommended practice&#8230; but it works!</li>
+<li>Exception are perfectly &#8220;thrown&#8221; to the Python runtime.</li>
+<li>&#8230;well, what did you expect?</li>
+</ol>
+<h4>Multithreading</h4>
+<p>Boost.Python is not the only weapon to tackle problems that demand efficiency.. Multithreading is a common way to improve performance, as good when computing divisors as to mine bitcoins or crack passwords. Here is a C++ class which is about to jump in a Python thread:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet29 class='ace_coliru_editor'></p>
+<pre>class JobFindDivisors {
+
+	public:
+		JobFindDivisors(uint64_t number, uint64_t begin, uint64_t end) :
+			number(number), begin(begin), end(end) {}
+		
+		boost::python::list findDivisors()
+		{
+			std::cout &lt;&lt; "Start" &lt;&lt; std::endl;
+
+			boost::python::list divisors;
+			for (uint64_t i = begin; i &lt; end; ++i)
+				 if (number % i == 0)
+					divisors.append(i);
+
+			std::cout &lt;&lt; "end" &lt;&lt; std::endl;
+			return divisors;
+		}
+
+	private:
+		uint64_t number;
+		uint64_t begin;
+ 		uint64_t end;
+};
+
+BOOST_PYTHON_MODULE(factor)
+{
+    using namespace boost::python;
+    class_&lt;JobFindDivisors&gt;("JobFindDivisors", init&lt;uint64_t, uint64_t, uint64_t&gt;())
+	.def("find_divisors", &amp;JobFindDivisors::findDivisors)
+    ;
+}
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet29');</script>
+</DIV>
+<p>The &#8220;JobFindDivisors&#8221; object checks if the numbers between &#8220;begin&#8221; and &#8220;end&#8221; are divisors of &#8220;number&#8221;. We parallelize the problem of finding all the divisors in many “jobs”, dedicating each object to a different interval. No data is shared between jobs, there are no concurrency problems. This is the only advantage of such a solution, but once again let&#8217;s forget about math (and proper software engineering).</p>
+<p>The Python call:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet30 class='ace_coliru_editor'></p>
+<pre>from threading import Thread
+from factor import JobFindDivisors
+
+class Job():									# (1)
+	def __init__(self, number, begin, end):
+		self.cppJob = JobFindDivisors(number, begin, end)
+		self.divisors = []
+	
+	def __call__(self):
+		self.divisors = self.cppJob.find_divisors()
+
+		
+def find_divisors_in_parallel(number):			# (2)
+	limit = number / 2
+
+	job1 = Job(number, 1, limit)
+	job2 = Job(number, limit, number)
+
+	t1 = Thread(None, job1)
+	t2 = Thread(None, job2)
+	
+	t1.start()
+	t2.start()
+	t1.join()
+	t2.join()
+
+	return [job1.divisors, job2.divisors]
+
+
+if __name__ == "__main__":
+	print  find_divisors_in_parallel(223339244); # (3)
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet30');</script>
+</DIV></p>
+<ol>
+<li>Encapsulate the C++ Job to &#8220;keep it simple&#8221;, without exporting a C++ callable.</li>
+<li>This method creates 2 jobs, does &#8220;fork and join&#8221; (or, as they say nowadays, &#8220;map and reduce&#8221;), then prints the results.</li>
+<li>Factoring any number would do.</li>
+</ol>
+<p>The output: do you remember the &#8220;Start&#8221; and &#8220;end&#8221; printouts in the C++ class? After around 8 seconds the computation terminates, with no parallelism whatsoever:</p>
+<pre>Start
+end
+Start
+end
+[[1L, 2L, 4L, 53L, 106L, 212L, 1053487L, 2106974L, 4213948L, 55834811L], [111669622L]]
+</pre>
+<p>Working as designed. Python&#8217;s objects are protected by the Global Interpreter Lock (GIL). It is up to the programmer to release it in each thread to &#8220;give way&#8221; to the other threads. The trick is to call pure Python code only when holding the lock.</p>
+<p>As usual in C++ we control resources with RAII. The idiom for the GIL is (<a href="https://wiki.python.org/moin/boost.python/HowTo#Multithreading_Support_for_my_function">https://wiki.python.org/moin/boost.python/HowTo#Multithreading_Support_for_my_function</a>):<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet31 class='ace_coliru_editor'></p>
+<pre>class ScopedGILRelease
+{
+public:
+    inline ScopedGILRelease(){
+        m_thread_state = PyEval_SaveThread();
+    }
+    inline ~ScopedGILRelease()    
+        PyEval_RestoreThread(m_thread_state);
+        m_thread_state = NULL;
+    }
+private:
+    PyThreadState * m_thread_state;
+};
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet31');</script>
+</DIV></p>
+<p>Release the lock in the C++ class:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet32 class='ace_coliru_editor'></p>
+<pre>boost::python::list findDivisors() {
+	ScopedGILRelease noGil = ScopedGILRelease();  // (1)
+	std::cout &lt;&lt; "Start" &lt;&lt; std::endl;
+
+	boost::python::list divisors;
+	for (uint64_t i = begin; i &lt; end; ++i)
+		 if (number % i == 0)
+			divisors.append(i);  // (2) Possible core dump!
+
+	std::cout &lt;&lt; "end" &lt;&lt; std::endl;
+	return divisors;
+}
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet32');</script>
+</DIV></p>
+<ol>
+<li>When this variable goes out of scope, the lock is taken again. Like a &#8220;reversed&#8221; smart pointer.</li>
+<li>Here is where we will certainly take a core dump. But only in production.</li>
+</ol>
+<p>Do you remember that <em>&#8220;the trick is to call pure Python code only when holding the lock&#8221;</em>? Line (2) may do just that, without the lock. You can try to massively grow the list (say erase the “if (number&#8230;” and save all the number in the list). I believe that, maybe (please read the official documents for the real answer!) the Python interpreter must allocate a bigger list, but without the lock all it gets is corrupted memory.</p>
+<p>Let&#8217;s encapsulate the parallelizable section in a dedicated scope, saving the numbers in a variable which we do not share with Python:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet33 class='ace_coliru_editor'></p>
+<pre>boost::python::list findDivisors()
+{
+	std::cout &lt;&lt; "Start" &lt;&lt; std::endl;
+	std::vector divisorsTemp;
+	boost::python::list divisors;
+	{
+		ScopedGILRelease noGil = ScopedGILRelease();
+		for (uint64_t i = begin; i &lt; end; ++i)
+			if (number % i == 0)
+				divisorsTemp.push_back(i);
+	} // noGil goes out of scope, we take the lock again.
+	BOOST_FOREACH(uint64_t n, divisorsTemp) {
+		divisors.append(n);
+	}
+	std::cout &lt;&lt; "end" &lt;&lt; std::endl;
+	return divisors;
+}
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet33');</script>
+</DIV><br />
+After six and a half seconds (-2 compared with the &#8220;accidentally sequential&#8221; version) we get the expected interleaving (Start Start &#8211; end end). We can invest those 2 seconds to think to a less duck-tape-and-chewing-gum-oriented solution.</p>
+<p>This completes the introduction to Boost.Python. Now we know how to &#8220;push&#8221; C++ modules in Python applications either to re-use, either for efficiency reasons. Boost.Python connects the two worlds without sacrificing Python&#8217;s simplicity and without adding constraints to C++, even if some spots do need care. <em>Above all, from now on we are going to always have the last word in the unavoidable &#8220;Python vs C++&#8221; flame in every forum of the world.</em></p>
+<div id="sdfootnote1">
+<p class="sdfootnote"><a class="sdfootnotesym" href="#sdfootnote1anc" name="sdfootnote1sym">1</a>It is true: it takes less time to create a whole program in Python than to fix a single bug in C++.</p>
+<p>Try it. Ready, steady, go:</p>
+<pre>/usr/include/c++/4.8/bits/stl_map.h:646:7: note: no known conversion for argument 1 from 
+‘int’ to ‘std::map&lt;int, std::map&lt;std::basic_string&lt;char&gt;, std::basic_string&amp;lt
+;char&gt; &gt; &gt;::iterator {aka std::_Rb_tree_iterator&lt;std::pair&lt;const int, std::map&lt;std::basic_string&lt;char&gt;, std::basic_string&lt;char&gt; &gt; &gt; &gt;}’
+</pre>
+<p class="sdfootnote">/usr/include/c++/4.8/bits/stl_map.h:670:9: note: template&lt;class _InputIterator&gt; void std::map&lt;_Key, _Tp, _Compare, _Alloc&gt;::insert(_InputIterator, _InputIterator) [with _InputIterator = _InputIterator; _Key = int; _Tp = std::map&lt;std::basic_string&lt;char&gt;, std::basic_string&lt;char&gt; &gt;; _Compare = std::less&lt;int&gt;; _Alloc = std::allocator&lt;std::pair&lt;const int, std::map&lt;std::basic_string&lt;char&gt;, std::basic_string&lt;char&gt; &gt; &gt; &gt;</p>
+</div>
+]]></content:encoded>
+		<post-id xmlns="com-wordpress:feed-additions:1">5479</post-id>	</item>
+	</channel>
+</rss>

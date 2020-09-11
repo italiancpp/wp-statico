@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20170419T210000
+DTEND;TZID=Europe/Rome:20170419T230000
+DTSTAMP:20200908T153307
+CREATED:20170329T070749Z
+LAST-MODIFIED:20180215T112730Z
+UID:7871-1492635600-1492642800@www.italiancpp.org
+SUMMARY:Coding Gym Aprile / Modena
+DESCRIPTION:I nostri &#8220;Coding Dojo&#8221; cambiano nome in &#8220;Coding Gym&#8221;! \nConsueto appuntamento dedicato all&#8217;arte della programmazione ospitato dall&#8217;Associazione Conoscere Linux di Modena. \n \nSito ufficiale: http://coding-gym.org\nLeggi di più su questa iniziativa\nModera la serata: Marco Arena \nLe regole sono semplici: \n\nscegli il linguaggio con cui lavorare\ntrova un compagno\nrisolvete assieme un problema\ndopo un po&#8217; ne parliamo tutti insieme\ncambiamo le coppie e via con un nuovo esercizio!\n\nSe ci prendi gusto\, risolvi a casa le altre prove e dillo ai tuoi amici\, così la prossima volta saremo di più! \nPerché partecipare: \n\nper divertirsi\nper imparare cose nuove\nper valutare la propria preparazione\nè collaborativo\, non è una sfida\nper prendere dimestichezza con le programming interviews\, il modo più usato per fare colloqui di lavoro nel mondo dell&#8217;informatica\n\nE se non so programmare? \n\nVieni lo stesso! Puoi fare coppia con chi sa programmare e lavorare insieme\n\nI dojo che abbiamo già fatto? \n\nQualche foto e l&#8217;elenco di tutte le serate\n\nCosa serve: \n\ntutto quello di cui hai bisogno è un computer con un browser (non hai bisogno di portare il tuo perché la serata si tiene in una sala computer)\nRisparmia tempo! Prima della serata iscriviti su:\nhttps://www.hackerrank.com/modena-coding-april-2017\n\nCosto: \n\nLa serata è gratuita\nLa tessera associativa annuale di Conoscere Linux costa € 10\,00\n\nIscrizione: \nImportante: solo per questa volta non saremo nella solita sala computer. In genere oltre la metà dei partecipanti ha sempre il proprio laptop ma\, se puoi\, per sicurezza porta il tuo! \n\n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/gym-apr17/
+LOCATION:Via Strada Barchetta\, 77\, Modena\, 41123\, Italia
+CATEGORIES:Coding Gym
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,22 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20141115T143500
+DTEND;TZID=Europe/Rome:20141115T173500
+DTSTAMP:20200908T152920
+CREATED:20141024T070253Z
+LAST-MODIFIED:20170824T064828Z
+UID:3619-1416062100-1416072900@www.italiancpp.org
+SUMMARY:Agile Day 2014
+DESCRIPTION:Da sx: Marco Foco\, Marco Arena\, Gianluca Padovani \n  \nGianluca Padovani\, Marco Arena e Marco Foco hanno facilitato il workshop:\nC++ From &#8217;90 to &#8217;14\nal quale hanno preso parte circaÂ 15 persone.\n  \nLeggi com&#8217;Ã¨ andata!\n  \n \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/agile-day-2014/
+LOCATION:Piazzale Martelli\, 8\, Ancona\, 60121\, Italia
+CATEGORIES:Partecipazione,Workshop
+END:VEVENT
+END:VCALENDAR

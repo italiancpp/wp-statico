@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>stream &#8211; Italian C++ Community</title>
+	<atom:link href="https://www.italiancpp.org/tag/stream/feed/" rel="self" type="application/rss+xml" />
+	<link>https://www.italiancpp.org</link>
+	<description></description>
+	<lastBuildDate>Mon, 24 Aug 2020 13:03:53 +0000</lastBuildDate>
+	<language>it-IT</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.7.18</generator>
+<site xmlns="com-wordpress:feed-additions:1">106700034</site>	<item>
+		<title>Serializing access to Streams</title>
+		<link>https://www.italiancpp.org/2015/04/29/serializing-access-to-streams/</link>
+		<pubDate>Wed, 29 Apr 2015 13:41:54 +0000</pubDate>
+		<dc:creator><![CDATA[Marco Foco]]></dc:creator>
+				<category><![CDATA[Hands-on]]></category>
+		<category><![CDATA[stream]]></category>
+		<category><![CDATA[thread]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=3869</guid>
+		<description><![CDATA[Last december, I was at Meeting C++ in Berlin and I attended &#8211; among others &#8211; the talk Multithreading done right? by Rainer Grimm. In most of the examples, two or more threads were writing to cout using the form: And one of the problems was that data sent from one thread often interrupted another thread, so the output [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p style="text-align: justify;">Last december, I was at <a href="http://meetingcpp.com" target="_blank">Meeting C++</a> in Berlin and I attended &#8211; among others &#8211; the talk <a href="https://www.youtube.com/watch?v=paK38WAq8WY" target="_blank">Multithreading done right?</a> by <em>Rainer Grimm</em>.</p>
+<p style="text-align: justify;">In most of the examples, two or more threads were writing to cout using the form:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet class='ace_coliru_editor'></p>
+<pre>cout &lt;&lt; someData &lt;&lt; "some string" &lt;&lt; someObject &lt;&lt; endl;</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet');</script>
+</DIV>
+<p style="text-align: justify;">And one of the problems was that data sent from one thread often interrupted another thread, so the output was always messed up.<br />
+You can see the problem in this example:</p>
+<DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;thread&gt;
+
+using namespace std;
+
+int main() {
+    vector&lt;thread&gt; thr;
+    for(int i = 0; i &lt; 10; i++) {
+        thr.emplace_back([i]() { cout &lt;&lt; "thread " &lt;&lt; i &lt;&lt; endl; });
+    }
+    for(int i = 0; i &lt; 10; i++) {
+        thr[i].join();
+    }
+}
+</pre>
+<p></div>
+</DIV>
+	<INPUT id="cecompiler_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler');
+</script>
+</DIV>
+<p style="text-align: justify;">Which on a test execution produces things like this on CLang:</p>
+<pre>tththrhrereaeadad d  201</pre>
+<p style="text-align: justify;">And this on Visual Studio:</p>
+<pre style="text-align: justify;">thread 0 thread thread 2 1</pre>
+<p style="text-align: justify;">I speculated with Marco Arena about possible solutions to the problem, and tried to find a simple and elegant solution in my way back.</p>
+<p style="text-align: justify;">I started designing a solution by giving myself some guidelines, here listed in order of importance:</p>
+<ol style="text-align: justify;">
+<li>Opt-in: The user doesn&#8217;t have to pay (no performance penalty if the feature is not used).</li>
+<li>Readability: The user code must be self-explaining.</li>
+<li>Simplicity of use: I wanted to provide the end-user with something that worked &#8220;out of the box&#8221; requiring as less code as possible.</li>
+<li>Predictability: I wanted to maintain all the features and feature the standard streams have.</li>
+<li>Concise solution: I didn&#8217;t want to write tons of code, I&#8217;m too lazy.</li>
+</ol>
+<p style="text-align: justify;">An intrusive solution (e.g. adding a mutex to each stream) would have violated the first principle, and quite definitely the fifth too.</p>
+<h2>Wrapping streams</h2>
+<p style="text-align: justify;">The first solution I tried was a simple stream wrapper that locks the stream using <strong>RAII</strong> idiom:</p>
+<p style="text-align: justify;"><DIV class="page-snippet-container">
+	<div id=cesnippet1 class='ace_coliru_editor'></p>
+<pre>class stream_locker {
+    ostream&amp; stream;
+    lock_guard&lt;mutex&gt; guard;
+public:
+    stream_locker(ostream &amp;s, mutex &amp;m) : stream(s), guard(m) {}
+
+    template&lt;typename T&gt; stream_locker&amp; operator &lt;&lt; (const T &amp;x) {
+        stream &lt;&lt; x;
+        return *this;
+    }
+};</pre>
+<p style="text-align: justify;"></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet1');</script>
+</DIV></p>
+<p style="text-align: justify;">Here&#8217;s the intended usage:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet2 class='ace_coliru_editor'></p>
+<pre>mutex m;
+stream_locker(cout, m) &lt;&lt; someData &lt;&lt; "some string" &lt;&lt; someObject &lt;&lt; endl;</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet2');</script>
+</DIV>
+<p style="text-align: justify;">This didn&#8217;t work, because the type is not getting deduced for manipulators like endl (since it&#8217;s an overloaded function).</p>
+<p style="text-align: justify;">A solution to this problem could have been manually providing overloads for operator &lt;&lt; for manipulators, such as:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet3 class='ace_coliru_editor'></p>
+<pre>class stream_locker {
+    ...
+    stream_locker&amp; operator &lt;&lt; (ostream&amp; (*pf)(ostream&amp;)) {
+        stream &lt;&lt; pf;
+        return *this;
+    }
+ };</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet3');</script>
+</DIV>
+<p style="text-align: justify;">The big drawback with this solution was that we needed to provide an overload for every std manipulator type, like the ones declared in <em><strong>&lt;ostream&gt;</strong></em> and also any other manipulator contained in <em>&lt;iomanip&gt;</em>. Moreover, any overloaded <em>operator &lt;&lt;</em> in other libraries or user code would have require additional effort (it violates both simplicity and predictability guidelines I gave myself). This was not getting anywhere.</p>
+<p style="text-align: justify;">Another possible solution was to return back using the <em>ostream&amp;</em> as soon as possible, like after the first execution of <em>operator &lt;&lt;</em>.</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet4 class='ace_coliru_editor'></p>
+<pre>class stream_locker {
+    ostream&amp; stream;
+    lock_guard&lt;mutex&gt; guard;
+public:
+    stream_locker(ostream &amp;s, mutex &amp;m) : stream(s), guard(m) {}
+
+    template&lt;typename T&gt; ostream&amp; operator &lt;&lt; (const T &amp;x) {
+        return stream &lt;&lt; x;
+    }
+};</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet4');</script>
+</DIV>
+<p style="text-align: justify;">This was slightly better, but it would require, sometimes, to insert empty strings to achieve correct results. Consider the following:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet5 class='ace_coliru_editor'></p>
+<pre>stream_locker(cout, m) &lt;&lt; value &lt;&lt; " in octal is " &lt;&lt; oct &lt;&lt; value &lt;&lt; dec &lt;&lt; endl; // OK
+stream_locker(cout, m) &lt;&lt; oct &lt;&lt; value &lt;&lt; " in octal is " &lt;&lt; dec &lt;&lt; value &lt;&lt; " in decimal." &lt;&lt; endl; // ERROR
+stream_locker(cout, m) &lt;&lt; "" &lt;&lt; oct &lt;&lt; value &lt;&lt; " in octal is " &lt;&lt; dec &lt;&lt; value &lt;&lt; " in decimal." &lt;&lt; endl; // OK
+
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet5');</script>
+</DIV>
+<p style="text-align: justify;">The second line won&#8217;t compile, since there&#8217;s no overload for <em>operator &lt;&lt;</em> between a stream_locker and a manipulator like <em>oct</em>. The third will work, because inserting the empty string will result in calling our member <em>operator &lt;&lt;</em>, which now returns an <em>ostream&amp;</em>.</p>
+<p style="text-align: justify;">We could definitely solve the problem by making the stream variable public, and changing the usage syntax slightly:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet6 class='ace_coliru_editor'></p>
+<pre>class stream_locker {
+    lock_guard&lt;mutex&gt; guard;
+public:
+    ostream&amp; stream;
+    stream_locker(ostream &amp;s, mutex &amp;m) : stream(s), guard(m) {}
+};
+
+stream_locker(cout, m).stream &lt;&lt; value &lt;&lt; " in octal is " &lt;&lt; oct &lt;&lt; value &lt;&lt; dec &lt;&lt; endl; // OK
+stream_locker(cout, m).stream &lt;&lt; oct &lt;&lt; value &lt;&lt; " in octal is " &lt;&lt; dec &lt;&lt; value &lt;&lt; " in decimal." &lt;&lt; endl; // OK
+stream_locker(cout, m).stream &lt;&lt; "" &lt;&lt; oct &lt;&lt; value &lt;&lt; " in octal is " &lt;&lt; dec &lt;&lt; value &lt;&lt; " in decimal." &lt;&lt; endl; // OK
+
+</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet6');</script>
+</DIV>
+<p style="text-align: justify;">This works, but the syntax looks horrible.</p>
+<h2>Lifetime of temporaries</h2>
+<p style="text-align: justify;">Wait a second, why does this works? If we are return back to the <em>ostream&amp;</em>, doesn&#8217;t our temporary <em>stream_locker</em> get destroyed right away, releasing the lock?</p>
+<p style="text-align: justify;">The answer is no. Any temporary variable created in a sub-expression have its lifetime extended to the &#8220;full-expression&#8221;, which in our case ends at the <em>semicolon</em>.</p>
+<p style="text-align: justify;">The stream_locker object is now just behaving exactly like a normal <em>lock_guard&lt;mutex&gt;</em>. Can&#8217;t we just use a <em>lock_guard&lt;mutex&gt;</em> directly?</p>
+<p style="text-align: justify;"><DIV class="page-snippet-container">
+	<div id=cesnippet7 class='ace_coliru_editor'></p>
+<pre>cout &lt;&lt; lock_guard&lt;mutex&gt;(m) &lt;&lt; ... ;</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet7');</script>
+</DIV></p>
+<p>To provide this syntax we just need to overload the<em> operator &lt;&lt;:</em></p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet8 class='ace_coliru_editor'></p>
+<pre>inline ostream&amp; operator&lt;&lt;(ostream&amp; out, const lock_guard&lt;mutex&gt; &amp;) {
+    return out;
+}</pre>
+<p style="text-align: justify;"></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet8');</script>
+</DIV>
+<p style="text-align: justify;">This solution doesn&#8217;t have the drawbacks of wrapper object, since no wrapper is created anywhere. The stream is returned right away, and the lock guard parameter is there for the only sake of including it in the streaming chain.</p>
+<p style="text-align: justify;">This definitely looks promising, but the syntax is still a bit too complex. Could we possibly simplify it?</p>
+<p>I would definitely prefer something like:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet9 class='ace_coliru_editor'></p>
+<pre>cout &lt;&lt; lock_with(m) &lt;&lt; ... ;</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet9');</script>
+</DIV>
+<p>Basically, lock_with should return a fresh new lock_guard locking our mutex m. Something like this:</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet10 class='ace_coliru_editor'></p>
+<pre>template &lt;typename T&gt; lock_guard&lt;T&gt; lock_with(T &amp;mutex) {
+    return lock_guard&lt;T&gt;(mutex);
+}</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet10');</script>
+</DIV>
+<p>Unluckily, this doesn&#8217;t work, as you can see yourself by trying to compile the following snippet.</p>
+<DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler1 class='ace_coliru_editor'></p>
+<pre>#include &lt;mutex&gt;
+#include &lt;iostream&gt;
+
+using namespace std;
+
+inline ostream&amp; operator&lt;&lt;(ostream&amp; out, const lock_guard&lt;mutex&gt; &amp;) {
+    return out;
+}
+
+template &lt;typename T&gt; lock_guard&lt;T&gt; lock_with(T &amp;mutex) {
+    return lock_guard&lt;T&gt;(mutex);
+}
+
+int main() {
+    mutex m;
+    cout &lt;&lt; lock_with(m) &lt;&lt; "test" &lt;&lt; endl;
+}</pre>
+<p></div>
+</DIV>
+	<INPUT id="cecompiler1_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler1_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler1');
+</script>
+</DIV>
+<p style="text-align: justify;">Problem is, lock_guard is not copyable. Moving is also deleted, because this class implements the concept of &#8220;scoped ownership&#8221;. Moreover, the constructor taking a mutex is explicit, so we can&#8217;t exploit <em>copy-list-initialization</em> in our solution. Not with that constructor, at least.</p>
+<p style="text-align: justify;">As often happens, the solution to my problem was already on <a title="Stack Overflow" href="http://stackoverflow.com/questions/22502606/why-is-stdlock-guard-not-movable" target="_blank">stack overflow</a>, The link explains why lock_guard is not moveable, and it provides a nice workaround, using another constructor, taking two parameters (so we can use <em>copy-list-initialization</em> on that).</p>
+<DIV class="page-snippet-container">
+	<div id=cesnippet11 class='ace_coliru_editor'></p>
+<pre>template &lt;typename T&gt; inline lock_guard&lt;T&gt; lock_with(T &amp;mutex) {
+    mutex.lock();
+    return { mutex, adopt_lock };
+}</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet11');</script>
+</DIV>
+<h2>The solution</h2>
+<p>Finally, we can test our original code with the final structure:</p>
+<DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler2 class='ace_coliru_editor'></p>
+<pre>#include &lt;mutex&gt;
+#include &lt;vector&gt;
+#include &lt;thread&gt;
+#include &lt;iostream&gt;
+
+using namespace std;
+
+inline ostream&amp; operator&lt;&lt;(ostream&amp; out, const lock_guard&lt;mutex&gt; &amp;) {
+    return out;
+}
+
+template &lt;typename T&gt; inline lock_guard&lt;T&gt; lock_with(T &amp;mutex) {
+    mutex.lock();
+    return { mutex, adopt_lock };
+}
+
+int main() {
+    mutex m;
+    vector&lt;thread&gt; thr;
+    for(int i = 0; i &lt; 10; i++) {
+        thr.emplace_back([i, &amp;m]() { cout &lt;&lt; lock_with(m) &lt;&lt; "thread " &lt;&lt; i &lt;&lt; endl; });
+    }
+    for(int i = 0; i &lt; 10; i++) {
+        thr[i].join();
+    }
+}
+</pre>
+<p></div>
+</DIV>
+	<INPUT id="cecompiler2_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler2_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler2');
+</script>
+</DIV>
+]]></content:encoded>
+		<post-id xmlns="com-wordpress:feed-additions:1">3869</post-id>	</item>
+	</channel>
+</rss>

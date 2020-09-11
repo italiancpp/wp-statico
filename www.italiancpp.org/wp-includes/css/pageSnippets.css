@@ -1,0 +1,43 @@
+/*
+/italiancpp.org/htdocs/wp-includes/css
+http://www.italiancpp.org/wp-includes/css/pageSnippets.css
+
+MIT License, copyright ++It, the Italian C++ Community.
+*/
+
+.page-snippet-container {
+	border: 1px solid;
+	border-radius: 5px;
+	padding: 5px;
+	margin-bottom: 5px;
+	overflow: hidden;
+}
+
+
+.page-snippet-button {
+	padding: 5px;
+	border: 1px solid;
+    border-radius: 5px;
+	margin-bottom: 5px;
+	margin-top: 5px;
+}
+
+.page-snippet-container  pre {
+    margin-bottom: 0px;
+	font-size: 14px;
+}
+
+.page-snippet-select-compiler {
+	font-family: Helvetica;
+	font-size: 14px;
+	border-radius: 5px;
+}
+
+
+body .ace_scrollbar-v {
+    overflow-y: auto;
+}
+
+body .ace_scrollbar-h {
+    overflow-x: auto;
+}

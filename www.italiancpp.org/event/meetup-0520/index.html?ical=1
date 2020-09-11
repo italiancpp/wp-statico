@@ -1,0 +1,22 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20200514T190000
+DTEND;TZID=Europe/Rome:20200514T210000
+DTSTAMP:20200908T150258
+CREATED:20200407T094404Z
+LAST-MODIFIED:20200517T181914Z
+UID:9395-1589482800-1589490000@www.italiancpp.org
+SUMMARY:Meetup ONLINE - TDD is not about testing
+DESCRIPTION: \nTDD is not about testing\nGianluca Padovani\nUn nuovo appuntamento a Modena dedicato al C++ organizzato in collaborazione con l&#8217;associazione ConoscereLinux. \n⚠️Evento online a causa del COVID-19⚠️ \n  \n19:00 \nSaluti iniziali &#8211; Marco Arena \n19:05 \nTDD is not about testing &#8211; Gianluca Padovani \nWhy should we use TDD to develop in C++ an also in generla? When we are applying it correctly? What are the differences that we can find in a code developed with TDD and in code not developed with it? Is it TDD about testing? Really? In this talk\, I&#8217;ll show what is TDD and how can be used in a language like Elixir to design the small and the big parts of your system\, showing what are the difference and the similarities between some different languages. Showing what is the values of applying a technique like TDD in C++ and what we should obtain applying it. \nMateriale \n\nSlides\nVideo\n\n\nCome sono strutturati i nostri meetup serali: \n\npresentazione tecnica con formato a scelta dello speaker (talk frontale\, workshop\, live coding\, ecc)\nspazio fare domande e confrontarsi\nuna pizza tutti insieme per fare networking e\, perché no\, parlare d&#8217;altro\n\nIn regalo a tutti i partecipanti i nostri mitici stickers 🙂 \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-0520/
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20140628T100000
+DTEND;TZID=Europe/Rome:20140628T153000
+DTSTAMP:20200908T151335
+CREATED:20140522T202907Z
+LAST-MODIFIED:20170824T064759Z
+UID:3196-1403949600-1403969400@www.italiancpp.org
+SUMMARY:Meetup a Milano
+DESCRIPTION: \nTutte le foto\nQuesto meetup è piaciuto?\n \nPost con riferimenti a slides e demo\n \n  \nIl primo meetup dell&#8217;Italian C++ Community!\n \n30+ partecipanti.\n \n \n\nMilano\, Spazio Blend Tower\, a due passi dalla Stazione Centrale\n\nSessioni dalle 10 alle 13.30\, poi pranzo tutti insieme!\n  \n\n\n\norario\ntalk\n\n\n\n10.00 &#8211; 10.15\nIntroduzione (Marco Arena)\n\n\n10.30 &#8211; 11.00\nLambda Recipes (Gian Lorenzo Meocci)\n\n\n11.05 &#8211; 11.35\nAsync-Await in C++ (Paolo Severini)\n\n\n11.45 &#8211; 12.15\nStatic Polymorphism and Type Classes in C++ (Nicola Bonelli)\n\n\n12.20 &#8211; 12.50\nActor-Model in C++ (Gianluca Padovani)\n\n\n12.55 &#8211; 13.25\nAsk Us Everything (tutti)\n\n\n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-milano/
+LOCATION:Piazza IV Novembre\, 7\, Milano\, Milano\, 20125\, Italia
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

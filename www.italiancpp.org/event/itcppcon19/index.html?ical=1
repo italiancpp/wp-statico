@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20190615T090000
+DTEND;TZID=Europe/Rome:20190615T180000
+DTSTAMP:20200908T152659
+CREATED:20190122T162755Z
+LAST-MODIFIED:20190716T062615Z
+UID:8933-1560589200-1560621600@www.italiancpp.org
+SUMMARY:Italian C++ Conference 2019
+DESCRIPTION:\nThe C++ Conference\, made in Italy\nSaturday June 15\, Milan\n \n240 attendees\nWrap-Up Post\n� \n\nVideos\n \nPictures\n� \nKeynote by:\nAndrei Alexandrescu\n \n \n\nSchedule\n\n\ntime\nduration\nroom S.0.1\nroom S.0.2\n\n\n\n08.30 &#8211; 09.30\n60'\nCheck-in\n\n\n09.30 &#8211; 10.00\n30'\nWelcome MessageMarco Arena\n\n\n\n10.00 &#8211; 11.30\n90'\nAllegro Means Both Fast and Happy. Coincidence?(ENG)Andrei Alexandrescu\n-\n\n\n11.30 &#8211; 12.00\n30'\nBreak\n\n\n12:00 &#8211; 12.50\n50'\nConcepts in C++20: A Revolution(ENG)Rainer Grimm\nThe joys and trials of writing cross-platform C++ code – let tools help!(ENG)Marc Goodner\n\n\n13.00 &#8211; 13.30\n30'\nVector++17(ENG)Davide Bianchi\nOptimizing after the optimizer: Link Time and Profile Guided Optimization(ENG)Nicolò Valigi\n\n\n13.30 &#8211; 14.45\n75'\nLunch Break\n\n\n14.00 &#8211; 14.20\n20'\nBonus talk by AIV\n\n\n14.45 &#8211; 15.35\n50'\nABI compatibility is not a MAJOR problem(ENG)Javier Garcia Sogo\nThe Future of C++ with Modules(ENG)Dmitry Kozhevnikov\n\n\n15.40 &#8211; 16.30\n50'\nCustom tooling for frameworks libraries and projects using Clang &#8211; getting Clazy(ENG)James Turner\nCoroutines in practice(ENG)Alberto Barbati\n\n\n16.30 &#8211; 17.00\n30'\nBreak\n\n\n17.00 &#8211; 17.50\n50'\nClean(er) Code for Large Scale Legacy Applications(ENG)Arne Mertz\nECS back and forth(ENG)Michele Caini\n\n\n17.55 &#8211; 18.15\n20'\nClosing MessageMarco ArenaAlessandro Vergani\n\n\n\n� \nThe Italian C++ Conference is the biggest not-for-profit Italian event about C++ development where professionals\, companies and students meet and share experience.\nThe conference is organized by the Italian C++ Community and is subject to the Italian C++ Community Code of Conduct\nFor an overview of the previous edition\, including statistics and technical contents\, read the wrap-up post.\n  \n\n� \nHost\n \n� \nThe event is patronized by Community Crumbs\, not-for-profit association:\n \n  \nThe event is realized in collaboration with:\n \n \n \n \n \n \n \n� \n \nBecome active part of this conference! \nDrop an email to info [at] italiancpp [dot] org\nThe event is totally not-for-profit. \n� \nMedia partners\n \n \n \n\n   \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/itcppcon19/
+LOCATION:Piazza Leonardo da Vinci\, 32\, Milano\, MI\, 20133\, Italia
+CATEGORIES:Conferenza
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

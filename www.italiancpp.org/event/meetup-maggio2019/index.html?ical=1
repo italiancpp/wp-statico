@@ -1,0 +1,22 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20190509T200000
+DTEND;TZID=Europe/Rome:20190509T223000
+DTSTAMP:20200908T152629
+CREATED:20190418T072019Z
+LAST-MODIFIED:20190511T140508Z
+UID:9060-1557432000-1557441000@www.italiancpp.org
+SUMMARY:Meetup Maggio / Modena - Programming GPUs with modern C++
+DESCRIPTION: \nLook mom\, no CUDA: Programming GPUs with modern C++\nFederico Ficarelli\nUn nuovo appuntamento a Modena dedicato al C++ organizzato in collaborazione con l&#8217;associazione ConoscereLinux. \n  \n20:00 \nArrivo e saluti iniziali &#8211; Marco Arena \n20:05 \nLook mom\, no CUDA: Programming GPUs with modern C++ &#8211; Federico Ficarelli \nCon il tramonto dell&#8217;epoca d&#8217;oro della Legge di Moore stiamo assistendo al proliferare di nuove ed esotiche architetture\, tutte nate con l&#8217;obiettivo di aumentare la potenza di calcolo a nostra disposizione senza obbligarci ad accendere un mutuo per pagare la bolletta elettrica. \nCosì\, mentre GPU\, FPGA\, CPU manycore invadono i data center e i nostri dispositivi personali\, insieme a loro ci troviamo di fronte ad una folta schiera di nuovi paradigmi\, librerie\, linguaggi e compilatori che nascono (e\, spesso\, muoiono) per supportare l&#8217;invasione. Purtroppo\, quasi sempre l&#8217;adozione di uno di questi ci obbliga a riscrivere da zero gli algoritmi che avevamo pensato e ottimizzato per quello precedente o\, di contro\, legarci ad un singolo produttore di hardware per evitarlo. \nSYCL è un nuovo modello di programmazione nato e standardizzato con l&#8217;obiettivo di permettere di scrivere codice C++ puro\, idiomatico\, senza estensioni\, aderente allo standard del linguaggio e che possa\, nel modo più portabile possibile\, essere eseguito contemporaneamente su architetture di accelerazione differenti. Vedremo cos&#8217;è\, a cosa serve\, i suoi pregi e difetti\, come usarlo. \n22:00 \nPizza e networking \nMateriale \n\nSlides e demo &#8211; TBD\nVideo\n\n\nCome sono strutturati i nostri meetup serali: \n\npresentazione tecnica con formato a scelta dello speaker (talk frontale\, workshop\, live coding\, ecc)\nspazio fare domande e confrontarsi\nuna pizza tutti insieme per fare networking e\, perché no\, parlare d&#8217;altro\n\nIn regalo a tutti i partecipanti i nostri mitici stickers 🙂 \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-maggio2019/
+LOCATION:Via Strada Barchetta\, 77\, Modena\, 41123\, Italia
+CATEGORIES:Meetup
+END:VEVENT
+END:VCALENDAR

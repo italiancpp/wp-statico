@@ -1,0 +1,21 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20151121
+DTEND;VALUE=DATE:20151122
+DTSTAMP:20200908T153629
+CREATED:20151105T155759Z
+LAST-MODIFIED:20170824T064941Z
+UID:5399-1448064000-1448150399@www.italiancpp.org
+SUMMARY:Codemotion Milano 2015
+DESCRIPTION:\nMarco Arena ha presentato:\n&#8220;Perché nel 2015 parliamo ancora di C++?&#8221;\n  \n \nFeedback alla sessione\n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/codemotion-milano-2015/
+CATEGORIES:Partecipazione
+END:VEVENT
+END:VCALENDAR

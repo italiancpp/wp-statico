@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Commenti a: Puntatori? Vivi senza!</title>
+	<atom:link href="https://www.italiancpp.org/2013/08/23/puntatori-vivi-senza/feed/" rel="self" type="application/rss+xml" />
+	<link>https://www.italiancpp.org/2013/08/23/puntatori-vivi-senza/</link>
+	<description></description>
+	<lastBuildDate>Mon, 20 Mar 2017 21:21:21 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.7.18</generator>
+	<item>
+		<title>Di: C++11 in Azione (CDays14) &#124; Italian C++ Community</title>
+		<link>https://www.italiancpp.org/2013/08/23/puntatori-vivi-senza/#comment-55</link>
+		<dc:creator><![CDATA[C++11 in Azione (CDays14) &#124; Italian C++ Community]]></dc:creator>
+		<pubDate>Sat, 01 Mar 2014 17:26:10 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1070#comment-55</guid>
+		<description><![CDATA[[...] e ownership &#8220;manuale&#8221;. Questo implicherebbe una serie di problemi discussi anche qui. Ma come unire i benefici delle variabili automatiche (e della RAII) con l&#8217;allocazione [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] e ownership &#8220;manuale&#8221;. Questo implicherebbe una serie di problemi discussi anche qui. Ma come unire i benefici delle variabili automatiche (e della RAII) con l&#8217;allocazione [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: paolo</title>
+		<link>https://www.italiancpp.org/2013/08/23/puntatori-vivi-senza/#comment-42</link>
+		<dc:creator><![CDATA[paolo]]></dc:creator>
+		<pubDate>Sat, 07 Sep 2013 08:52:35 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1070#comment-42</guid>
+		<description><![CDATA[Ciao,
+
+a me sembra un buon articolo dall&#039;evidente taglio basic. Lo trasformerei in una serie.
+Credo che sarebbe utile.
+Puntatori 1, basic
+Puntatori 2, cominciamo a vedere polimorfismo (es. una factory che restituisce un StdoutLogger piuttosto che un FileLogger), vediamo anche qualche differenza sul campo fra unique e shared (es: personalmente preferisco che la factory restituisca unique)
+poi in altri episodi...vediamo gli altri smart pointers, smart pointers nei container, smart pointers e threading ecc. ecc.
+
+P]]></description>
+		<content:encoded><![CDATA[<p>Ciao,</p>
+<p>a me sembra un buon articolo dall&#8217;evidente taglio basic. Lo trasformerei in una serie.<br />
+Credo che sarebbe utile.<br />
+Puntatori 1, basic<br />
+Puntatori 2, cominciamo a vedere polimorfismo (es. una factory che restituisce un StdoutLogger piuttosto che un FileLogger), vediamo anche qualche differenza sul campo fra unique e shared (es: personalmente preferisco che la factory restituisca unique)<br />
+poi in altri episodi&#8230;vediamo gli altri smart pointers, smart pointers nei container, smart pointers e threading ecc. ecc.</p>
+<p>P</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: franco</title>
+		<link>https://www.italiancpp.org/2013/08/23/puntatori-vivi-senza/#comment-41</link>
+		<dc:creator><![CDATA[franco]]></dc:creator>
+		<pubDate>Mon, 02 Sep 2013 09:12:32 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1070#comment-41</guid>
+		<description><![CDATA[Ciao CodeVisio,
+
+l&#039;esempio che ti ho postato è accademico in un senso: nessuno alloca SOLO per allocare. Tutt&#039;altro è nel mondo reale, t&#039;assicuro. Magari non ne hai mai sentito il bisogno, ma una mole di dati elevata è all&#039;ordine del giorno soprattutto ora (&quot;big data&quot; è la nuova buzzword). Proprio ora ho scritto un software che utilizza qualche giga di RAM, fai tu! 
+
+Fosse una mia opinione, ti lascio con il dubbio: perché hanno usato &quot;new&quot;? Bastava l&#039;allocazione statica sullo stack?
+
+Non voglio poi aggiungere nulla sul fatto che, se usi solo lo stack, non puoi avere una lista (come già detto da altri), ad esempio, di oggetti derivanti da un unico padre. Se pensi alle GUI, al FEM, alle mesh, insomma ci sono milioni di modi in cui dovresti usare l&#039;heap.
+
+à plus!
+
+PS. Non vedi &quot;beginner&quot;, quindi confermi che non vedi alla fine dell&#039;articolo la scritta &lt;b&gt;Tags:basic, containers, puntatori, stl&lt;/b&gt;. Puoi dare un riscontro?]]></description>
+		<content:encoded><![CDATA[<p>Ciao CodeVisio,</p>
+<p>l&#8217;esempio che ti ho postato è accademico in un senso: nessuno alloca SOLO per allocare. Tutt&#8217;altro è nel mondo reale, t&#8217;assicuro. Magari non ne hai mai sentito il bisogno, ma una mole di dati elevata è all&#8217;ordine del giorno soprattutto ora (&#8220;big data&#8221; è la nuova buzzword). Proprio ora ho scritto un software che utilizza qualche giga di RAM, fai tu! </p>
+<p>Fosse una mia opinione, ti lascio con il dubbio: perché hanno usato &#8220;new&#8221;? Bastava l&#8217;allocazione statica sullo stack?</p>
+<p>Non voglio poi aggiungere nulla sul fatto che, se usi solo lo stack, non puoi avere una lista (come già detto da altri), ad esempio, di oggetti derivanti da un unico padre. Se pensi alle GUI, al FEM, alle mesh, insomma ci sono milioni di modi in cui dovresti usare l&#8217;heap.</p>
+<p>à plus!</p>
+<p>PS. Non vedi &#8220;beginner&#8221;, quindi confermi che non vedi alla fine dell&#8217;articolo la scritta <b>Tags:basic, containers, puntatori, stl</b>. Puoi dare un riscontro?</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: marco</title>
+		<link>https://www.italiancpp.org/2013/08/23/puntatori-vivi-senza/#comment-40</link>
+		<dc:creator><![CDATA[marco]]></dc:creator>
+		<pubDate>Sat, 31 Aug 2013 13:49:33 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1070#comment-40</guid>
+		<description><![CDATA[&quot;In qualsiasi mestiere si sbaglia. E anche le persone con esperienza sbagliano, meno frequetemente, se si suppone che imparino dai propri sbagli, ma sicuramente sbagliano anche loro.&quot;
+
+Ok, ha senso, ma quindi vuol dire &quot;lasciamo che tutti sbaglino così imparano dai loro errori&quot;? Quindi meglio curare che prevenire? Sono d&#039;accordo che sbagliando si impara, ma penso anche che in contesti con responsabilità e quattrini (e nel software ne girano parecchi) gli errori a volte si pagano caro e a seconda dei settori possono accadere anche cose parecchio spiacevoli (ops, crash del software per la dialisi). Se alcuni strumenti aiutano a prevenire perché non usarli? E quando dico &quot;alcuni&quot; intendo che molte cose, spesso, &quot;fanno brodo&quot;.
+
+Produttività: visto che scrivere software non è una scienza esatta, la produttività (termine di fabbricazione economica) applicata al software è un concetto vago, hai ragione. Mi piace pensare alla produttività come una misura di efficienza, ovvero quanto valore riesci a ottenere in quanto tempo. Cos&#039;è il valore? Questo è l&#039;elemento &quot;vago&quot; del concetto di produttività. Può essere il numero di linee prodotte, può essere il numero di bug fixati, i task completati... Dipende dalle metriche con cui lavori, può essere deciso dall&#039;alto, può essere una convenzione, può anche non esistere proprio. In questi termini anche prevenire un errore è incluso nel fantomatico concetto di produttività. Oppure riuscire a fare una modifica in 2 ore invece che in due giorni. 
+
+Mi trovi in perfetta sintonia quando dici che scrivere software è un&#039;attività professionale. Mi paragono sempre ad un &quot;artigiano specializzato&quot;. Non dimentichiamo che con buona probabilità i sistemi software sono i più grandi manufatti di sempre. Sottolineo manufatti, cioè scritti a mano da qualcuno. Lasciamo stare generatori di codice e librerie su librerie che astraggono un po&#039; di cose. Ed essere specializzati richiede esperienza, formazione, passione (molti l&#039;hanno persa), saper sbagliare, ... 
+
+Ultima cosa: il software è comunque un business, le responsabilità sono divise, vengono creati diversi layer (tra cui quello di business) e ci lavorano diverse figure professionali. Ha probabilmente senso che esista un business layer che non sappia nulla che sotto ci sono dei puntatori, non lo so. A me piace il controllo del mio software, quindi voglio capire cosa c&#039;è sotto, però mi rendo conto che in molti contesti è complicato. &quot;Aumenterai la produttività e avrai più guadagni&quot; è molto appetitosa per chi fa business o sta su un layer più alto. Ad esempio, se la ditta X fa piccoli giochini per smartphone, forse comprare un game-engine che fa tutto quello che serve è una soluzione sensata e può garantire guadagni elevati. La domanda è sempre: dove sei? Dove vuoi arrivare?]]></description>
+		<content:encoded><![CDATA[<p>&#8220;In qualsiasi mestiere si sbaglia. E anche le persone con esperienza sbagliano, meno frequetemente, se si suppone che imparino dai propri sbagli, ma sicuramente sbagliano anche loro.&#8221;</p>
+<p>Ok, ha senso, ma quindi vuol dire &#8220;lasciamo che tutti sbaglino così imparano dai loro errori&#8221;? Quindi meglio curare che prevenire? Sono d&#8217;accordo che sbagliando si impara, ma penso anche che in contesti con responsabilità e quattrini (e nel software ne girano parecchi) gli errori a volte si pagano caro e a seconda dei settori possono accadere anche cose parecchio spiacevoli (ops, crash del software per la dialisi). Se alcuni strumenti aiutano a prevenire perché non usarli? E quando dico &#8220;alcuni&#8221; intendo che molte cose, spesso, &#8220;fanno brodo&#8221;.</p>
+<p>Produttività: visto che scrivere software non è una scienza esatta, la produttività (termine di fabbricazione economica) applicata al software è un concetto vago, hai ragione. Mi piace pensare alla produttività come una misura di efficienza, ovvero quanto valore riesci a ottenere in quanto tempo. Cos&#8217;è il valore? Questo è l&#8217;elemento &#8220;vago&#8221; del concetto di produttività. Può essere il numero di linee prodotte, può essere il numero di bug fixati, i task completati&#8230; Dipende dalle metriche con cui lavori, può essere deciso dall&#8217;alto, può essere una convenzione, può anche non esistere proprio. In questi termini anche prevenire un errore è incluso nel fantomatico concetto di produttività. Oppure riuscire a fare una modifica in 2 ore invece che in due giorni. </p>
+<p>Mi trovi in perfetta sintonia quando dici che scrivere software è un&#8217;attività professionale. Mi paragono sempre ad un &#8220;artigiano specializzato&#8221;. Non dimentichiamo che con buona probabilità i sistemi software sono i più grandi manufatti di sempre. Sottolineo manufatti, cioè scritti a mano da qualcuno. Lasciamo stare generatori di codice e librerie su librerie che astraggono un po&#8217; di cose. Ed essere specializzati richiede esperienza, formazione, passione (molti l&#8217;hanno persa), saper sbagliare, &#8230; </p>
+<p>Ultima cosa: il software è comunque un business, le responsabilità sono divise, vengono creati diversi layer (tra cui quello di business) e ci lavorano diverse figure professionali. Ha probabilmente senso che esista un business layer che non sappia nulla che sotto ci sono dei puntatori, non lo so. A me piace il controllo del mio software, quindi voglio capire cosa c&#8217;è sotto, però mi rendo conto che in molti contesti è complicato. &#8220;Aumenterai la produttività e avrai più guadagni&#8221; è molto appetitosa per chi fa business o sta su un layer più alto. Ad esempio, se la ditta X fa piccoli giochini per smartphone, forse comprare un game-engine che fa tutto quello che serve è una soluzione sensata e può garantire guadagni elevati. La domanda è sempre: dove sei? Dove vuoi arrivare?</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: raffaele</title>
+		<link>https://www.italiancpp.org/2013/08/23/puntatori-vivi-senza/#comment-39</link>
+		<dc:creator><![CDATA[raffaele]]></dc:creator>
+		<pubDate>Sat, 31 Aug 2013 13:03:56 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1070#comment-39</guid>
+		<description><![CDATA[Io non credo sia solo un problema di professionalità.
+Il software dell&#039;Ariane 5 ha mandato in fumo 500M$ a causa di una exception non gestita (http://www.savive.com/casestudy/ariane5.html)
+Il buon senso ci insegna che se si possono prendere delle precauzioni è meglio farlo perché anche il più attento dei professionisti sbaglia, tutto qui.
+Al contrario del C, C++ sceglie la strada delle eccezioni su cui si fonda tutta la Standard Library. Questo rende decisamente più infido scrivere codice intrinsecamente a prova di leak.
+La soluzione più semplice è l&#039;adozione del paradigma RAII (http://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization) che funge come la rete del trapezista. In alcuni casi può avere un minimo di overhead ma complessivamente fornisce i benefici impagabili spiegati da Franco.
+
+Il mio punto di vista è che sia necessario trasmettere il messaggio che gli strumenti di C++ sono molto diversi da quelli del linguaggio C. Io scrivo ancora assembler oggi (ormai poco su PC, molto di più su microcontrollori) ma questo non mi allontana dagli strumenti più evoluti che offre il nuovo standard con in primis unique_ptr e shared_ptr.
+
+Apprezzo l&#039;articolo di Franco proprio perché è necessario far conoscere i nuovi strumenti e dire chiaramente che C++ e C sono due linguaggi molto diversi, poi starà al lettore decidere se usarli o meno.]]></description>
+		<content:encoded><![CDATA[<p>Io non credo sia solo un problema di professionalità.<br />
+Il software dell&#8217;Ariane 5 ha mandato in fumo 500M$ a causa di una exception non gestita (<a href="http://www.savive.com/casestudy/ariane5.html" rel="nofollow">http://www.savive.com/casestudy/ariane5.html</a>)<br />
+Il buon senso ci insegna che se si possono prendere delle precauzioni è meglio farlo perché anche il più attento dei professionisti sbaglia, tutto qui.<br />
+Al contrario del C, C++ sceglie la strada delle eccezioni su cui si fonda tutta la Standard Library. Questo rende decisamente più infido scrivere codice intrinsecamente a prova di leak.<br />
+La soluzione più semplice è l&#8217;adozione del paradigma RAII (<a href="http://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization" rel="nofollow">http://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization</a>) che funge come la rete del trapezista. In alcuni casi può avere un minimo di overhead ma complessivamente fornisce i benefici impagabili spiegati da Franco.</p>
+<p>Il mio punto di vista è che sia necessario trasmettere il messaggio che gli strumenti di C++ sono molto diversi da quelli del linguaggio C. Io scrivo ancora assembler oggi (ormai poco su PC, molto di più su microcontrollori) ma questo non mi allontana dagli strumenti più evoluti che offre il nuovo standard con in primis unique_ptr e shared_ptr.</p>
+<p>Apprezzo l&#8217;articolo di Franco proprio perché è necessario far conoscere i nuovi strumenti e dire chiaramente che C++ e C sono due linguaggi molto diversi, poi starà al lettore decidere se usarli o meno.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: CodeVisio</title>
+		<link>https://www.italiancpp.org/2013/08/23/puntatori-vivi-senza/#comment-38</link>
+		<dc:creator><![CDATA[CodeVisio]]></dc:creator>
+		<pubDate>Sat, 31 Aug 2013 01:32:14 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1070#comment-38</guid>
+		<description><![CDATA[Ciao marco,
+
+&quot;Io sono sicuro che tu non abbia mai avuto problemi di questo genere,&quot;
+Io ho poche certezze, invidio te che hai certezze riguardo altri che non conosci. 
+
+&quot; il problema è quando lavori in un team perché gli altri purtroppo possono sbagliare&quot;
+In qualsiasi mestiere si sbaglia. E anche le persone con esperienza sbagliano, meno frequetemente, se si suppone che imparino dai propri sbagli, ma sicuramente sbagliano anche loro.
+
+&quot;Oppure quando lasci il tuo codice in mano a gente meno in gamba di te, che magari è molto più lenta a manutenerlo, ecc&quot;
+Non c&#039;entra il concetto di essere in gamba. C&#039;entra il concetto di quali cose sai per certo. Il team si forma con il tempo. E&#039; chiaro che un neofita commetter degli sbagli di natura indipendente dal settore e anche (ovviamente) dipendente dal settore. Ma nel team si presuppone che ci siano persone con esperienza più vasta. O, in caso negativo, si presuppone che chi commette uno sbaglio lo riconosca e impari a non ripeterlo.
+
+&quot;Questo solo per dire che nel C++11 ci sono moltissimi strumenti volti a migliorare la produttività singola e di un intero gruppo di lavoro. Se usati bene e nel contesto giusto, gli smart pointer aiutano a scrivere meno codice con anche maggiore livello di sicurezza (e.g. exception safety).&quot;
+Non è una questione dell&#039; X linguaggio, è una questione di approccio. Io so Y e non so T. Cosa consco per certo? e per averlo messo in pratica? limiti? punti di forza?
+Attenzione ad usare la parola &quot;produttività&quot;.
+
+&quot;Un’ultima nota: perché usare oggetti allocati sullo heap? Un altro motivo molto semplice: polimorfismo? Classi astratte? Dependency Injection? Puoi ottenere queste cose anche con delle reference, ma il gioco si fa più complicato.&quot;
+Stai parlando in generale o di casi particolari? Non ho mai detto che usare la memoria allocata nello heap sia sbagliato o non utile.
+
+Ritorno al concetto di &quot;produttività&quot;.
+Cosa vuol dire produttività per marco? la quantità di codice scritto per secondo?
+O quanto guadgana la tua azienda per codice scritto?
+Occhio che quella parola vuol dire tutto come vuol dire nulla, ma putroppo ha un fore senso commerciale.
+I puntatoti intelligenti aumentano la mia produvvitaà? sei sicuro? cioè riesco a produrreo molto più codice di quello che produrrei se non li usassi?
+O mi permettono di evitare alcuni errori? (e quindi c&#039;entra poco con la produvvità intesa come quantità di codice scritto).
+Se è così, allora posso non ottenere lo stesso effetto se non uso i puntatoiri intelligenti? o serve solo a non farmi pensare a rialsciare la memori allocata, cosa a cui ho pensato quando l&#039;ho allocata?
+
+Siccome il discorso si fa lungo mi limito a dire sottolineare i lseguente fatto.
+Mia personale opininone: nel tempo si è sottovalutao il concetto di professionalità nella scrittua di codice. Ci si è dimenticati che chi scrive codice in teoria è un professionista con tanto di studi &quot;universitari&quot; (o lavoro professionale) alle spalle. Non è poi così diverso da uno che progetta un ponte su cui passano migliagia di auto al giorno e quindi con tutta una serie di requisiti. Invece, si è passati da un lavoro professionale con delle responsaibilità, il software architech/designer/developer/engineer (o cioò che più ti aggrada), ad un &quot;smanettone&quot; con tutto il rispetto per gli smanettoni.
+Come in tutte le professioni ci vuole esperienza (ottenuta con anni di lavoro)per ottenre degli effetti qualitativi alti e teoria. E occorre anche una forte voglia di imparare dagli sbagli. Pensa un po&#039; al software, non del dentista sotto casa, ma a quello  real time che gira sugli aeroplani.
+Oppure ribalta il punto di vista: se ti dicessi &quot;non ti preoccupare, marco, ho notato che nel 99% tu non badi a rilasciare la memoria che esplicitamente hai rischiesto di allocare, ci penso io, tu non ti devi preoccupare, pensa ad altro, concentrati sul tuo business layer, vedrai che aumenterai la tua produttività e avrai più guadagni!&quot;. Mi sembra molto pià appetibile quest&#039;ultima ipotesi non trovi?
+
+P.S. non mi serve il preambolo diplomatico sul &quot;sicuramente tu sei bravo&quot; etc. Mi accontento dell&#039;opinione sui fatti.]]></description>
+		<content:encoded><![CDATA[<p>Ciao marco,</p>
+<p>&#8220;Io sono sicuro che tu non abbia mai avuto problemi di questo genere,&#8221;<br />
+Io ho poche certezze, invidio te che hai certezze riguardo altri che non conosci. </p>
+<p>&#8221; il problema è quando lavori in un team perché gli altri purtroppo possono sbagliare&#8221;<br />
+In qualsiasi mestiere si sbaglia. E anche le persone con esperienza sbagliano, meno frequetemente, se si suppone che imparino dai propri sbagli, ma sicuramente sbagliano anche loro.</p>
+<p>&#8220;Oppure quando lasci il tuo codice in mano a gente meno in gamba di te, che magari è molto più lenta a manutenerlo, ecc&#8221;<br />
+Non c&#8217;entra il concetto di essere in gamba. C&#8217;entra il concetto di quali cose sai per certo. Il team si forma con il tempo. E&#8217; chiaro che un neofita commetter degli sbagli di natura indipendente dal settore e anche (ovviamente) dipendente dal settore. Ma nel team si presuppone che ci siano persone con esperienza più vasta. O, in caso negativo, si presuppone che chi commette uno sbaglio lo riconosca e impari a non ripeterlo.</p>
+<p>&#8220;Questo solo per dire che nel C++11 ci sono moltissimi strumenti volti a migliorare la produttività singola e di un intero gruppo di lavoro. Se usati bene e nel contesto giusto, gli smart pointer aiutano a scrivere meno codice con anche maggiore livello di sicurezza (e.g. exception safety).&#8221;<br />
+Non è una questione dell&#8217; X linguaggio, è una questione di approccio. Io so Y e non so T. Cosa consco per certo? e per averlo messo in pratica? limiti? punti di forza?<br />
+Attenzione ad usare la parola &#8220;produttività&#8221;.</p>
+<p>&#8220;Un’ultima nota: perché usare oggetti allocati sullo heap? Un altro motivo molto semplice: polimorfismo? Classi astratte? Dependency Injection? Puoi ottenere queste cose anche con delle reference, ma il gioco si fa più complicato.&#8221;<br />
+Stai parlando in generale o di casi particolari? Non ho mai detto che usare la memoria allocata nello heap sia sbagliato o non utile.</p>
+<p>Ritorno al concetto di &#8220;produttività&#8221;.<br />
+Cosa vuol dire produttività per marco? la quantità di codice scritto per secondo?<br />
+O quanto guadgana la tua azienda per codice scritto?<br />
+Occhio che quella parola vuol dire tutto come vuol dire nulla, ma putroppo ha un fore senso commerciale.<br />
+I puntatoti intelligenti aumentano la mia produvvitaà? sei sicuro? cioè riesco a produrreo molto più codice di quello che produrrei se non li usassi?<br />
+O mi permettono di evitare alcuni errori? (e quindi c&#8217;entra poco con la produvvità intesa come quantità di codice scritto).<br />
+Se è così, allora posso non ottenere lo stesso effetto se non uso i puntatoiri intelligenti? o serve solo a non farmi pensare a rialsciare la memori allocata, cosa a cui ho pensato quando l&#8217;ho allocata?</p>
+<p>Siccome il discorso si fa lungo mi limito a dire sottolineare i lseguente fatto.<br />
+Mia personale opininone: nel tempo si è sottovalutao il concetto di professionalità nella scrittua di codice. Ci si è dimenticati che chi scrive codice in teoria è un professionista con tanto di studi &#8220;universitari&#8221; (o lavoro professionale) alle spalle. Non è poi così diverso da uno che progetta un ponte su cui passano migliagia di auto al giorno e quindi con tutta una serie di requisiti. Invece, si è passati da un lavoro professionale con delle responsaibilità, il software architech/designer/developer/engineer (o cioò che più ti aggrada), ad un &#8220;smanettone&#8221; con tutto il rispetto per gli smanettoni.<br />
+Come in tutte le professioni ci vuole esperienza (ottenuta con anni di lavoro)per ottenre degli effetti qualitativi alti e teoria. E occorre anche una forte voglia di imparare dagli sbagli. Pensa un po&#8217; al software, non del dentista sotto casa, ma a quello  real time che gira sugli aeroplani.<br />
+Oppure ribalta il punto di vista: se ti dicessi &#8220;non ti preoccupare, marco, ho notato che nel 99% tu non badi a rilasciare la memoria che esplicitamente hai rischiesto di allocare, ci penso io, tu non ti devi preoccupare, pensa ad altro, concentrati sul tuo business layer, vedrai che aumenterai la tua produttività e avrai più guadagni!&#8221;. Mi sembra molto pià appetibile quest&#8217;ultima ipotesi non trovi?</p>
+<p>P.S. non mi serve il preambolo diplomatico sul &#8220;sicuramente tu sei bravo&#8221; etc. Mi accontento dell&#8217;opinione sui fatti.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: CodeVisio</title>
+		<link>https://www.italiancpp.org/2013/08/23/puntatori-vivi-senza/#comment-37</link>
+		<dc:creator><![CDATA[CodeVisio]]></dc:creator>
+		<pubDate>Sat, 31 Aug 2013 00:50:40 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1070#comment-37</guid>
+		<description><![CDATA[Ciao franco,
+
+non mi aspettavo una risposta celere, quindi personalmente non c&#039;è niente di cui scusarti.
+Sarà l&#039;orario ma non sono riuscito a leggere la nota riguardo la natura &#039;beginner&#039; dell&#039;articolo.
+
+&quot;Saturare lo stack è molto semplice, come dice Davide! Se però lo spazio richiesto è molto esiguo, è difficile notarlo.&quot;
+Certo, se lo fai a posta come esempio è normale che lo esaurisci. Discorso diverso è l&#039;uso quotidiano dello stack. Quind, stai parlando di un caso specifico o di una prassi quotidiana?
+
+&quot;Io nel mio lavoro ho bisogno di spazi molto grandi, qualche giga, e lo stack muore (almeno nella mia piattaforma), prova anche tu&quot;
+Ripeto, a me è capito pochisseme volte su codice facente parte di un programma usato da tantissime persone.
+Il discorso è questo, franco.
+Se devi fare degli esempi accademici o estremizzare alcuni punti per spiegare un concetto mi va bene, ma se presenti la possibilità di esaurire lo stack come se fosse un cosa che può capitare, con notevole probabilità (coem da tuo articolo), nel lavoro quotidiano (in C++) allora il discorso è diverso.
+il concetto di &quot;variabili piccole o grandi&quot; è relativo. Cosa vuol dire variabili piccole o grandi per franco? e la misura è la stessa per sempronio e caio?
+Non è una questione dell&#039;articolo &#039;beginner&#039; o avanzato, è che se le cose le tieni per te è un fatt ma se vuoi trasmettere questa tua conoscenza o opinione ad un pubblico potenzialmente vasto devi fare due conti.
+Io, personlmante, non punterei sul faftto che l&#039;articolo è breve o &#039;advanced&#039;, la cosa che conta è sottolineare che l&#039;ìinformazione da te trasmessa è una tua opinione o è un fatto concretto indipendente da valutazioni soggettive.
+Io non sarei capace di scrivere un periodo di senso compiuto in italiano e non mi cimento nel farlo, ma se dovessi farlo mi aspetterei di scrivere cose certe.]]></description>
+		<content:encoded><![CDATA[<p>Ciao franco,</p>
+<p>non mi aspettavo una risposta celere, quindi personalmente non c&#8217;è niente di cui scusarti.<br />
+Sarà l&#8217;orario ma non sono riuscito a leggere la nota riguardo la natura &#8216;beginner&#8217; dell&#8217;articolo.</p>
+<p>&#8220;Saturare lo stack è molto semplice, come dice Davide! Se però lo spazio richiesto è molto esiguo, è difficile notarlo.&#8221;<br />
+Certo, se lo fai a posta come esempio è normale che lo esaurisci. Discorso diverso è l&#8217;uso quotidiano dello stack. Quind, stai parlando di un caso specifico o di una prassi quotidiana?</p>
+<p>&#8220;Io nel mio lavoro ho bisogno di spazi molto grandi, qualche giga, e lo stack muore (almeno nella mia piattaforma), prova anche tu&#8221;<br />
+Ripeto, a me è capito pochisseme volte su codice facente parte di un programma usato da tantissime persone.<br />
+Il discorso è questo, franco.<br />
+Se devi fare degli esempi accademici o estremizzare alcuni punti per spiegare un concetto mi va bene, ma se presenti la possibilità di esaurire lo stack come se fosse un cosa che può capitare, con notevole probabilità (coem da tuo articolo), nel lavoro quotidiano (in C++) allora il discorso è diverso.<br />
+il concetto di &#8220;variabili piccole o grandi&#8221; è relativo. Cosa vuol dire variabili piccole o grandi per franco? e la misura è la stessa per sempronio e caio?<br />
+Non è una questione dell&#8217;articolo &#8216;beginner&#8217; o avanzato, è che se le cose le tieni per te è un fatt ma se vuoi trasmettere questa tua conoscenza o opinione ad un pubblico potenzialmente vasto devi fare due conti.<br />
+Io, personlmante, non punterei sul faftto che l&#8217;articolo è breve o &#8216;advanced&#8217;, la cosa che conta è sottolineare che l&#8217;ìinformazione da te trasmessa è una tua opinione o è un fatto concretto indipendente da valutazioni soggettive.<br />
+Io non sarei capace di scrivere un periodo di senso compiuto in italiano e non mi cimento nel farlo, ma se dovessi farlo mi aspetterei di scrivere cose certe.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: marco</title>
+		<link>https://www.italiancpp.org/2013/08/23/puntatori-vivi-senza/#comment-36</link>
+		<dc:creator><![CDATA[marco]]></dc:creator>
+		<pubDate>Tue, 27 Aug 2013 06:54:23 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1070#comment-36</guid>
+		<description><![CDATA[Ciao CodeVisio, vorrei solo commentare la tua prima affermazione:
+
+&quot;&lt;em&gt;Personalmente non ho mai avuto problemi di memoria non rilasciata quando uso i puntatori o se vuoi i raw pointers. Ovviamente devi usarli nel modo corretto. Ma questo dipende da quanto codice scritto male hai alle spalle.&lt;/em&gt;&quot;
+
+Io sono sicuro che tu non abbia mai avuto problemi di questo genere, il problema è quando lavori in un team perché gli altri purtroppo possono sbagliare. Oppure quando lasci il tuo codice in mano a gente meno in gamba di te, che magari è molto più lenta a manutenerlo, ecc.
+
+Questo solo per dire che nel C++11 ci sono moltissimi strumenti volti a migliorare la produttività singola e di un intero gruppo di lavoro. Se usati bene e nel contesto giusto, gli smart pointer aiutano a scrivere meno codice con anche maggiore livello di sicurezza (e.g. exception safety).
+
+Un&#039;ultima nota: perché usare oggetti allocati sullo heap? Un altro motivo molto semplice: polimorfismo? Classi astratte? Dependency Injection? Puoi ottenere queste cose anche con delle reference, ma il gioco si fa più complicato.]]></description>
+		<content:encoded><![CDATA[<p>Ciao CodeVisio, vorrei solo commentare la tua prima affermazione:</p>
+<p>&#8220;<em>Personalmente non ho mai avuto problemi di memoria non rilasciata quando uso i puntatori o se vuoi i raw pointers. Ovviamente devi usarli nel modo corretto. Ma questo dipende da quanto codice scritto male hai alle spalle.</em>&#8221;</p>
+<p>Io sono sicuro che tu non abbia mai avuto problemi di questo genere, il problema è quando lavori in un team perché gli altri purtroppo possono sbagliare. Oppure quando lasci il tuo codice in mano a gente meno in gamba di te, che magari è molto più lenta a manutenerlo, ecc.</p>
+<p>Questo solo per dire che nel C++11 ci sono moltissimi strumenti volti a migliorare la produttività singola e di un intero gruppo di lavoro. Se usati bene e nel contesto giusto, gli smart pointer aiutano a scrivere meno codice con anche maggiore livello di sicurezza (e.g. exception safety).</p>
+<p>Un&#8217;ultima nota: perché usare oggetti allocati sullo heap? Un altro motivo molto semplice: polimorfismo? Classi astratte? Dependency Injection? Puoi ottenere queste cose anche con delle reference, ma il gioco si fa più complicato.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: marco</title>
+		<link>https://www.italiancpp.org/2013/08/23/puntatori-vivi-senza/#comment-35</link>
+		<dc:creator><![CDATA[marco]]></dc:creator>
+		<pubDate>Tue, 27 Aug 2013 06:45:21 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1070#comment-35</guid>
+		<description><![CDATA[Ciao a tutti e grazie per la partecipazione. Vorrei intervenire solo per fare una precisazione: come specificato nei tag di questo articolo, il livello è &quot;basic&quot; ovvero orientato ad iniziare e non ad essere molto deep. Questo perché abbiamo diversi utenti begineer o che stanno provando a ricominciare a programmare in C++ (l&#039;hanno lasciato molto prima del C++11).
+
+Sicuramente in futuro tratteremo anche argomenti più avanzati e ripasseremo per topic già discussi ma con occhio più attento e preciso. Questo articolo, ad esempio, vuole solo essere un&#039;introduzione &quot;leggera&quot; agli smart pointer, al fatto che esistono e i motivi principali per utilizzarli.
+
+Ringrazio nuovamente tutti e, tra l&#039;altro, ricordo che se avete voglia di pubblicare le vostre idee (anche molto avanzate) potete &lt;a href=&quot;http://www.italiancpp.org/articoli/diventa-un-autore/&quot; rel=&quot;nofollow&quot;&gt;diventare autori&lt;/a&gt; e inviarci i vostri contenuti!]]></description>
+		<content:encoded><![CDATA[<p>Ciao a tutti e grazie per la partecipazione. Vorrei intervenire solo per fare una precisazione: come specificato nei tag di questo articolo, il livello è &#8220;basic&#8221; ovvero orientato ad iniziare e non ad essere molto deep. Questo perché abbiamo diversi utenti begineer o che stanno provando a ricominciare a programmare in C++ (l&#8217;hanno lasciato molto prima del C++11).</p>
+<p>Sicuramente in futuro tratteremo anche argomenti più avanzati e ripasseremo per topic già discussi ma con occhio più attento e preciso. Questo articolo, ad esempio, vuole solo essere un&#8217;introduzione &#8220;leggera&#8221; agli smart pointer, al fatto che esistono e i motivi principali per utilizzarli.</p>
+<p>Ringrazio nuovamente tutti e, tra l&#8217;altro, ricordo che se avete voglia di pubblicare le vostre idee (anche molto avanzate) potete <a href="http://www.italiancpp.org/articoli/diventa-un-autore/" rel="nofollow">diventare autori</a> e inviarci i vostri contenuti!</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: franco</title>
+		<link>https://www.italiancpp.org/2013/08/23/puntatori-vivi-senza/#comment-34</link>
+		<dc:creator><![CDATA[franco]]></dc:creator>
+		<pubDate>Tue, 27 Aug 2013 06:43:10 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1070#comment-34</guid>
+		<description><![CDATA[Non posso che concordare con quello che hai scritto. L&#039;articolo non va assolutamente nei dettagli (ho usato un tag &quot;basic&quot; apposta), per questo usiamo i commenti, per mettere dettagli che l&#039;articolo non può contenere! :)]]></description>
+		<content:encoded><![CDATA[<p>Non posso che concordare con quello che hai scritto. L&#8217;articolo non va assolutamente nei dettagli (ho usato un tag &#8220;basic&#8221; apposta), per questo usiamo i commenti, per mettere dettagli che l&#8217;articolo non può contenere! 🙂</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>

@@ -1,0 +1,22 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20131130
+DTEND;VALUE=DATE:20131201
+DTSTAMP:20200908T155113
+CREATED:20140520T111507Z
+LAST-MODIFIED:20170824T064702Z
+UID:3187-1385769600-1385855999@www.italiancpp.org
+SUMMARY:Agile Day 2013
+DESCRIPTION:\nMarco Arena e Paolo Polce hanno presentato a 30+ persone:\nEffective Code Transformations in C++\n  \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/agile-day-2013/
+LOCATION:viale Allegri\, 9\, Reggio Emilia\, RE\, 42121\, Italia
+CATEGORIES:Partecipazione
+END:VEVENT
+END:VCALENDAR

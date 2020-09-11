@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20190314T200000
+DTEND;TZID=Europe/Rome:20190314T223000
+DTSTAMP:20200908T152608
+CREATED:20190226T080117Z
+LAST-MODIFIED:20190328T172753Z
+UID:8992-1552593600-1552602600@www.italiancpp.org
+SUMMARY:Meetup Marzo / Modena - Git-Powered Docs
+DESCRIPTION: \nGit-Powered Docs\nAlberto Bignotti\nUn nuovo appuntamento a Modena dedicato al C++ organizzato in collaborazione con l&#8217;associazione ConoscereLinux. \n  \n20:00 \nArrivo e saluti iniziali &#8211; Marco Arena \n20:05 \nGit-Powered Docs &#8211; Alberto Bignotti \nUno dei pilastri che accompagnano il software è la documentazione.\nDurante la sessione analizzeremo l&#8217;implementazione di un server back end scritto in C++. \nIl sistema soddisfa i seguenti requisiti: \n\ndocumentazione on-line fruibile da web browser\ndocumentazione versionata assieme al codice sorgente del progetto (repository Git)\neditor semplice che non richieda un ambiente di sviluppo installato (Web based\, markdown)\nproteggere le varie aree della documentazione\, non tutti gli utenti hanno gli stessi privilegi (Sicurezza)\nprocesso di pubblicazione automatizzato (si collega a GitHub e GitLab)\narea downloads\, per allegare files ai documenti fuori dal repository\narea admin\, per gestire utenti e permessi\n\n22:00 \nPizza e networking \n� \nIscrizioni \n\nSul sito del nostro host\n\nMateriale \n\nPresentazione\nCodice di esempio\n\n\nCome sono strutturati i nostri meetup serali: \n\npresentazione tecnica con formato a scelta dello speaker (talk frontale\, workshop\, live coding\, ecc)\nspazio fare domande e confrontarsi\nuna pizza tutti insieme per fare networking e\, perché no\, parlare d&#8217;altro\n\nIn regalo a tutti i partecipanti i nostri mitici stickers 🙂 \n \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-marzo2019/
+LOCATION:Via Strada Barchetta\, 77\, Modena\, 41123\, Italia
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

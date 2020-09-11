@@ -1,0 +1,22 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20200613T080000
+DTEND;TZID=Europe/Rome:20200613T180000
+DTSTAMP:20200908T150319
+CREATED:20191125T152407Z
+LAST-MODIFIED:20200615T083305Z
+UID:9266-1592035200-1592071200@www.italiancpp.org
+SUMMARY:Italian C++ Conference 2020 ONLINE
+DESCRIPTION:  \nThe Italian C++ Conference is a not-for-profit Italian event about C++ development where professionals\, companies and students meet and share experience.\n� \nGreetings from the conference staff!\n \n� \nThe event abides by the Italian C++ Community Code of Conduct\nFor an overview of the previous edition\, including statistics and technical contents\, read the wrap-up post.\n\nKeynote speaker: Nicolai Josuttis\n \n\nHow was the virtual event set up?\n1�90-min live keynote session (YouTube + live chat) \n7�50-min live sessions (YouTube + live chat) \n2�50-min and 1�30-min pre-recorded sessions (YouTube) \ntext/video/voice moderated and sized virtual rooms for networking (Discord) \n\n\nSome numbers of this edition: \n\n502 registrants \n415 virtual check-in \n250 keynote live viewers \n180 people entered the virtual networking server \n\n\n\n Live sessions (links to videos and slides)\n\n\n\ntime\nduration\ntrack A\ntrack B\n\n\n\n09.00 &#8211; 09.30\n30'\nWelcome MessageMarco Arena\n-\n\n\n09.30 &#8211; 11.00\n90'\n(Keynote) Let's Move &#8211; The Hidden Features and Traps of C++ Move SemanticsNicolai Josuttis\n-\n\n\n11.00 &#8211; 11.20\n20'\nBreak\n\n\n11:20 &#8211; 12.00\n50'\nC++20 Text FormattingAlberto Barbati\nThe C++20 firehose talkFabio Fracassi\n\n\n12:10 &#8211; 13:00\n50'\nMove-only types can save the APIIvan Čukić\nLightning Talks\n\n\n13.00 &#8211; 14.00\n60'\nBreak\n\n\n14.00 &#8211; 14.50\n50'\nCurrent trends in the C++ CommunityJens Weller\nThe Silicon Valley coding interviewNicolò Valigi\n\n\n15.00 &#8211; 15.50\n50'\nMy Least Favorite Anti-PatternConor Hoekstra\nLightning Strikes!Walter E Brown\n\n\n16.00 &#8211; 16.10\n10'\nClosing Message (including no starch press raffle)Marco ArenaAlessandro Vergani\n-\n\n\nfrom 16:10\n-\nThe discord server stays up for following up conversations!\n\n\n� \n Pre-recorded sessions (links to videos and slides)\n\nWriting performant C++ by Laurence Bank \nMacchina a Stati Finiti con il Functor Pattern by Franco Diaspro \nC++ Development with Visual Studio Code by Julia Reid \nA Practical Approach to Error Handling by Arno Schödl \n \n\n\nThe event is patronized by Community Crumbs\, a not-for-profit association:\n \n  \nThe event is realized in collaboration with:\n� \n \n \n \n\nMedia partners\n \n \n\n   \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/itcppcon20/
+CATEGORIES:Conferenza
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

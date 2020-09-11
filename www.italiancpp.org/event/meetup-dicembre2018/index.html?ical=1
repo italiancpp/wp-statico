@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20181213T200000
+DTEND;TZID=Europe/Rome:20181213T223000
+DTSTAMP:20200908T152549
+CREATED:20181119T082950Z
+LAST-MODIFIED:20181214T075231Z
+UID:8881-1544731200-1544740200@www.italiancpp.org
+SUMMARY:Meetup Dicembre / Modena - Google Benchmark
+DESCRIPTION: \nProfiling e micro-benchmarking con Google Benchmark\nOspite: Federico Ficarelli\nUn nuovo appuntamento a Modena dedicato al C++ organizzato in collaborazione con l&#8217;associazione ConoscereLinux. \n  \n20:00 \nArrivo e saluti iniziali &#8211; Marco Arena \n20:05 \nProfiling e micro-benchmarking con Google Benchmark &#8211; Federico Ficarelli \nPiù compilatori e processori evolvono per renderci la vita più semplice\, più diventa difficile capire dove\, perchè e cosa stia succedendo quando la nostra applicazione non presenta le performance che ci aspettiamo. Vedremo come identificare e isolare gli hotspot della nostra base di codice e\, con l&#8217;aiuto di un framework come Google Benchmark\, costruire una suite di micro-benchmark che ci permetta di tenere le prestazioni sotto controllo ed esplorare in modo consapevole nuovi approcci all&#8217;ottimizzazione. \n22:00 \nPizza e networking \n� \nMateriale \n\nGitHub Repo\n\n\nCome sono strutturati i nostri meetup serali: \n\npresentazione tecnica con formato a scelta dello speaker (talk frontale\, workshop\, live coding\, ecc)\nspazio fare domande e confrontarsi\nuna pizza tutti insieme per fare networking e\, perché no\, parlare d&#8217;altro\n\nIn regalo a tutti i partecipanti i nostri mitici stickers 🙂 \n \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-dicembre2018/
+LOCATION:Via Strada Barchetta\, 77\, Modena\, 41123\, Italia
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

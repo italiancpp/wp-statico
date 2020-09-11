@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20170515T200000
+DTEND;TZID=Europe/Rome:20170515T223000
+DTSTAMP:20200908T150911
+CREATED:20170415T134721Z
+LAST-MODIFIED:20170824T065144Z
+UID:7933-1494878400-1494887400@www.italiancpp.org
+SUMMARY:Mini-Meetup Serale / Modena
+DESCRIPTION: \nIteratori\, containers e algoritmi\nIn questa nuova serata dedicata al C++\, Marco Arena ha introdotto i concetti fondamentali della libreria standard (STL) &#8211; ovvero iteratori\, containers e algoritmi &#8211; attraverso esercizi delle Coding Gym organizzate nell&#8217;ultimo anno. \nI partecipanti si sono uniti ad una discussione completamente interattiva: queste serate sono un momento di incontro\, per conoscersi e discutere. \nIl meetup si è concluso in pizzeria con alcuni partecipanti che sono rimasti. \n\n		\n			#gallery-1 {\n				margin: auto;\n			}\n			#gallery-1 .gallery-item {\n				float: left;\n				margin-top: 10px;\n				text-align: center;\n				width: 50%;\n			}\n			#gallery-1 img {\n				border: 2px solid #cfcfcf;\n			}\n			#gallery-1 .gallery-caption {\n				margin-left: 0;\n			}\n			/* see gallery_shortcode() in wp-includes/media.php */\n		\n		\n			\n				\n			\n			\n				\n			\n			\n				\n			\n			\n				\n			\n			\n				\n			\n			\n		\n\n� \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-maggio2017/
+LOCATION:Via Strada Barchetta\, 77\, Modena\, 41123\, Italia
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20181124T083000
+DTEND;TZID=Europe/Rome:20181124T180000
+DTSTAMP:20200908T150554
+CREATED:20180625T132432Z
+LAST-MODIFIED:20190119T121820Z
+UID:8694-1543048200-1543082400@www.italiancpp.org
+SUMMARY:C++ Day 2018
+DESCRIPTION: \nC++ lands in Pavia!\nSaturday November 24\nC++ Day 2018 \n110 attendees\n  \n  \n\nTalk videos\n� \nWrap-Up Post\n\nThe C++ Day is a fall event dedicated to C++ development where professionals\, students and companies meet and share experience. The C++ Day has been co-organized with the University of Pavia\, in particular with the Physics Department. \nThe previous editions have been wrapped up here (2017) and here (2016). \n\nSchedule\n\n\ntime\nduration\nroom 102\nroom 103\n\n\n\n08.30 &#8211; 09.30\n60'\nCheck-in\n\n\n09.30 &#8211; 09.45\n15'\nWelcome MessageMarco ArenaRiccardo BrugoFederico Pasqua\n\n\n\n9.45 &#8211; 11.15\n90'\nKeynoteHPX : High performance computing in C++ with concurrency parallelism and futures(ENG)John Biddiscombe\n-\n\n\n11.15 &#8211; 11.45\n30'\nBreak\n\n\n11.45 &#8211; 12.35\n50'\nUnconvex Nesting Optimization(ENG)Fabrizio Radaelli\nA.I. dalla teoria alla pratica(ITA)Sebastiano Galazzo\n\n\n12.35 &#8211; 14.05\n90'\nLunch Break\n\n\n14.05 &#8211; 14.25\n20'\nExploring IoT with RTI DDS Connext(ENG)Giorgio Zoppi\nUnevaluated operands: the SFINAE you don't expect(ITA)Michele Caini\n\n\n14.30 &#8211; 15.20\n50'\nBuilding a scientific C++ library as front-end of a Fortran library(ENG)Alfio Lazzaro\nLessons Learned Developing Evolutionary Algorithms in C++(ITA)Manlio Morini\n\n\n15.20 &#8211; 15.50\n30'\nBreak\n\n\n15.50 &#8211; 16.40\n50'\nMacro free non intrusive runtime reflection system in C++(ENG)Michele Caini\nIl punto su C++20(ITA)Alberto Barbati\n\n\n16.45 &#8211; 17.35\n50'\nCython: Importare il C++ in Python velocemente(ITA)Federico Pasqua\nGIS in C++(ITA)Alberto Bignotti\n\n\n17.35 &#8211; 18.00\n25'\nClosing MessageMarco ArenaRiccardo BrugoFederico Pasqua\n\n\n\n\n� \n\nThe event has been patronized by ConoscereLinux\n \n Sponsors\n \nSee Accenture Job Offers on our jobs page\n� \n\nWant to get up and running with C++17? Check out C++17 in Detail\n\n\nSupporters \n� \n \n \n \n \n \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/cppday18/
+LOCATION:Via Bassi\, 6\, Pavia\, Italia
+CATEGORIES:Conferenza
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20190221T200000
+DTEND;TZID=Europe/Rome:20190221T223000
+DTSTAMP:20200908T152557
+CREATED:20190128T103442Z
+LAST-MODIFIED:20190408T072106Z
+UID:8975-1550779200-1550788200@www.italiancpp.org
+SUMMARY:Meetup Febbraio / Modena - Bruce Lee per programmatori C++
+DESCRIPTION: \nBruce Lee per programmatori C++\nMarco Arena\nUn nuovo appuntamento a Modena dedicato al C++ organizzato in collaborazione con l&#8217;associazione ConoscereLinux. \n  \n20:00 \nArrivo e saluti iniziali &#8211; Marco Arena \n20:05 \nBruce Lee per programmatori C++ &#8211; Marco Arena \nBruce Lee è noto ai più per essere stato un grande campione di arti marziali che mostrò il suo talento a tutto il mondo attraverso un nuovo genere cinematografico. Bruce Lee\, in realtà\, desiderava utilizzare il cinema per portare in Occidente un po&#8217; della sua cultura e filosofia. \nStudiando questo personaggio\, ho scoperto una filosofia semplice ma affascinante che può trovare applicazioni in qualsiasi ambito pratico della nostra vita\, incluso lo sviluppo software. Ve la racconterò dal punto di vista di un programmatore C++ che desidera migliorare il suo approccio col C++\, mostrando numerosi esempi. \nNota: la sessione è totalmente diversa dal workshop &#8220;Se Bruce Lee fosse stato un programmatore avrebbe adorato il C++&#8221; fatto\, sempre da me\, a Bologna a Gennaio. \n22:00 \nPizza e networking \n� \nIscrizioni \n\nEvento passato\n\nMateriale \n\nSlides\nVideo\n\n\nCome sono strutturati i nostri meetup serali: \n\npresentazione tecnica con formato a scelta dello speaker (talk frontale\, workshop\, live coding\, ecc)\nspazio fare domande e confrontarsi\nuna pizza tutti insieme per fare networking e\, perché no\, parlare d&#8217;altro\n\nIn regalo a tutti i partecipanti i nostri mitici stickers 🙂 \n \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-febbraio2019/
+LOCATION:Via Strada Barchetta\, 77\, Modena\, 41123\, Italia
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

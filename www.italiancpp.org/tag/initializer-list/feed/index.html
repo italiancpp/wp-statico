@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>initializer-list &#8211; Italian C++ Community</title>
+	<atom:link href="https://www.italiancpp.org/tag/initializer-list/feed/" rel="self" type="application/rss+xml" />
+	<link>https://www.italiancpp.org</link>
+	<description></description>
+	<lastBuildDate>Mon, 24 Aug 2020 13:03:53 +0000</lastBuildDate>
+	<language>it-IT</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.7.18</generator>
+<site xmlns="com-wordpress:feed-additions:1">106700034</site>	<item>
+		<title>Brace initialization inside a lambda capture list</title>
+		<link>https://www.italiancpp.org/2014/05/26/brace-initialization-inside-a-lambda-capture-list/</link>
+		<pubDate>Mon, 26 May 2014 13:24:05 +0000</pubDate>
+		<dc:creator><![CDATA[Gian Lorenzo]]></dc:creator>
+				<category><![CDATA[Hands-on]]></category>
+		<category><![CDATA[auto]]></category>
+		<category><![CDATA[initialized lambda capture]]></category>
+		<category><![CDATA[initializer-list]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=3229</guid>
+		<description><![CDATA[Mi sono inmbattuto oggi in un problema abbastanza subdolo: Se eseguite il codice, l&#8217;output del programma è (ammetto con mia sorpresa) il seguente: v size is: 1000 inside lambda =&#62; v size is: 1 La dimensione di v all&#8217;interno della lambda è 1. Ma perchè? Il problema, come vedremo, non ha nulla a che vedere [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>Mi sono inmbattuto oggi in un problema abbastanza subdolo:<br />
+<DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+#include &lt;functional&gt;
+#include &lt;vector&gt;
+using namespace std;
+function&lt;void()&gt; f()
+{
+    vector&lt;int&gt; v(1000, 0);
+    cout &lt;&lt; "v size is: " &lt;&lt; v.size() &lt;&lt; endl;
+
+    return [ v {move(v)} ]() {
+        cout &lt;&lt; "inside lambda =&gt; v size is: " &lt;&lt; v.size() &lt;&lt; endl;
+    };
+}
+
+int main()
+{
+    f() ();
+}</pre>
+<p></div>
+</DIV>
+	<INPUT id="cecompiler_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler');
+</script>
+</DIV><br />
+Se eseguite il codice, l&#8217;output del programma è (ammetto con mia sorpresa) il seguente:</p>
+<p><strong>v size is: 1000</strong><br />
+<strong>inside lambda =&gt; v size is: 1</strong></p>
+<p style="text-align: justify;">La dimensione di <strong>v</strong> all&#8217;interno della lambda è 1. Ma perchè?<br />
+Il problema, come vedremo, non ha nulla a che vedere con le lambda in se ma risiede nel modo in cui <strong>v</strong> viene dedotto nella <em>capture list</em>.</p>
+<p>Dato un vettore cosi definito:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet class='ace_coliru_editor'></p>
+<pre>vector&lt;int&gt; v(1000, 0); // crea 1000 interi inizializzati a 0</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet');</script>
+</DIV><br />
+e altri due oggetti (t, u) cosi definiti:<br />
+<DIV class="page-snippet-container">
+	<div id=cesnippet1 class='ace_coliru_editor'></p>
+<pre>vector&lt;int&gt; u{10,20,30};
+auto t{10,20,30};</pre>
+<p></div>
+<script type="text/javascript">TurnIntoSnippet('cesnippet1');</script>
+</DIV></p>
+<p style="text-align: justify;"><strong>u</strong> è un vettore come tutti ce lo aspettiamo, completamente definito ed inizializzato (tramite la uniform initialization) con tre numeri (10, 20, 30), <strong>t</strong> invece è definito tramite <em><strong>auto. </strong></em>Il compilatore deduce <strong>t</strong> come <strong>std::initializer_list&lt;decltype(v)&gt;</strong> (= <strong>std::initializer_list&lt;vector&lt;int&gt;&gt;</strong>)!.</p>
+<p style="text-align: justify;">Ecco perchè <strong>v</strong> catturata dentro la lambda, definita implicitamente come <strong>auto</strong>, ha dimensione 1 (in quel caso abbiamo una std::initializer_list&lt;vector&lt;int&gt;&gt;). Per evitare il problema dobbiamo dunque riscrivere la nostra funzione in questo modo:<br />
+<DIV>
+<DIV class="page-snippet-container">
+	<div id=cecompiler1 class='ace_coliru_editor'></p>
+<pre>#include &lt;iostream&gt;
+#include &lt;functional&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+function&lt;void()&gt; f()
+{
+    vector&lt;int&gt; v(1000, 0);
+    cout &lt;&lt; "v size is: " &lt;&lt; v.size() &lt;&lt; endl;
+
+    return [ v = move(v) ]() { //adesso v è un vector&lt;int&gt;
+        cout &lt;&lt; "inside lambda =&gt; v size is: " &lt;&lt; v.size() &lt;&lt; endl;
+    };
+}
+
+int main()
+{
+    f()();
+}</pre>
+<p></div>
+</DIV>
+	<INPUT id="cecompiler1_compile" class="page-snippet-button" type="button" value="Run">
+	<DIV id="cecompiler1_output" class="page-snippet-container"></DIV>
+<script type="text/javascript">
+	TurnIntoCompiler('cecompiler1');
+</script>
+</DIV></p>
+<p style="text-align: justify;">Finalmente il compilatore dedurrà correttamente <strong>v</strong> nella capture list come un <strong>vector&lt;int&gt;</strong>. Con questa modifica il risultato è quello atteso!</p>
+<p style="text-align: justify;">Concludendo: <strong>evitate</strong> <strong>di usare la brace initialization all&#8217;interno delle capture list</strong>, ma piuttosto utilizzate la notazione <strong>VAR = EXPR</strong>, perchè <strong>auto + brace initialization</strong> implica che il tipo dedotto sia una std::initializer_list.</p>
+<p><strong>Biblio</strong>: [Scott Meyers] &#8211; <a title="Item 7 - More Effective C++" href="http://aristeia.com/EC++11-14/parens%20or%20braces%202014-03-18.pdf" target="_blank">Item 7 More Effective C++</a></p>
+]]></content:encoded>
+		<post-id xmlns="com-wordpress:feed-additions:1">3229</post-id>	</item>
+	</channel>
+</rss>

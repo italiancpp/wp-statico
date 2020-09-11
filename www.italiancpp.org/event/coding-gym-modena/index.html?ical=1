@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20180627T210000
+DTEND;TZID=Europe/Rome:20180627T230000
+DTSTAMP:20200908T153103
+CREATED:20180401T175425Z
+LAST-MODIFIED:20180530T065556Z
+UID:8526-1530133200-1530140400@www.italiancpp.org
+SUMMARY:Coding Gym / Modena
+DESCRIPTION:Vai all&#8217;evento\n\n    window.location = "http://conoscerelinux.org/courses/coding-gym-may18/";\n \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/coding-gym-modena/
+LOCATION:Via Strada Barchetta\, 77\, Modena\, 41123\, Italia
+CATEGORIES:Coding Gym
+ORGANIZER;CN="Coding%20Gym":MAILTO:staff@coding-gym.org
+END:VEVENT
+END:VCALENDAR

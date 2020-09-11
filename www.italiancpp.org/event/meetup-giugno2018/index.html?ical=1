@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20180614T200000
+DTEND;TZID=Europe/Rome:20180614T223000
+DTSTAMP:20200908T153001
+CREATED:20180513T091759Z
+LAST-MODIFIED:20180618T161050Z
+UID:8620-1529006400-1529015400@www.italiancpp.org
+SUMMARY:Meetup Giugno / Modena
+DESCRIPTION: \nPost-modern C++ Refactoring\nFacilitatore: Marco Arena\nUn nuovo appuntamento a Modena dedicato al C++ organizzato in collaborazione con l&#8217;associazione ConoscereLinux. \n  \nUltima serata prima della pausa estiva (Luglio e Agosto).\nFaremo un workshop per imparare sul campo idiomi e costrutti del C++ di &#8220;nuova generazione&#8221;.\nFacilitatore: Marco Arena. \n20:00 \nArrivo e saluti iniziali &#8211; Marco Arena \n20:05 \nWorkshop: Post-modern C++ refactoring &#8211; Marco Arena \nBruce Lee affermava che &#8220;il miglior combattente non è un pugile un karateka o un judoka\, ma colui che sa adattarsi a qualsiasi stile&#8221;. Ho sempre associato questa idea al C++ perché flessibile e indipendente da un paradigma particolare. \nQuesta convinzione si è rafforzata notevolmente nell&#8217;ultima decade: con 3 aggiornamenti dello standard il C++ e il suo ecosistema hanno accolto costrutti e idiomi provenienti da paradigmi differenti. \nI programmatori C++ di nuova generazione devono conoscere e\, spesso\, padroneggiare più di un paradigma\, non solo per essere capaci di manutenere efficacemente codice &#8220;misto&#8221; ma anche per gestire al meglio situazioni dove un certo paradigma prevale sugli altri (&#8220;no size fits all&#8221;). \nIn questo workshop impareremo e ci eserciteremo su alcuni degli idiomi e concetti più importanti del C++ nel 2018\, passando per gli ultimi 3 standard. \nUseremo tech.io\, una piattaforma interattiva\, facendo brevi esercizi di refactoring su una piccola codebase pseudo-legacy. I PC li forniamo noi. \nFAQ \n1) Sono uno studente/principiante e conosco poco il C++. Posso partecipare?\nAssolutamente sì! Ogni sezione sarà introdotta da un po&#8217; di teoria e gli esercizi saranno semplici.\nE ovviamente puoi fare domande! \n2) Il codice sarà disponibile dopo il workshop?\nAssolutamente sì! La piattaforma resta attiva anche dopo il workshop e\, inoltre\, potrai compilare tutto in locale perché il progetto sarà su github (con un CMake già pronto). \n3) Sono un esperto programmatore C++. Mi annoierò?\nEh ma se parti così&#8230; 🙂 Proverò a sorprenderti con qualche idioma nascosto che magari ti sei perso. Oppure potrai aggiungere tu più valore al workshop condividendo qualcosa. \n22:00 \nPizza e networking \n  \nMateriale della serata: \n\nLink al workshop su tech.io\nrepository git sul quale è basato\n\n\nCome sono strutturati i nostri meetup serali: \n\npresentazione tecnica con formato a scelta dello speaker (talk frontale\, workshop\, live coding\, ecc)\nspazio fare domande e confrontarsi\nuna pizza tutti insieme per fare networking e\, perché no\, parlare d&#8217;altro\n\nIn regalo a tutti i partecipanti i nostri mitici stickers 🙂 \n \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-giugno2018/
+LOCATION:Via Strada Barchetta\, 77\, Modena\, 41123\, Italia
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

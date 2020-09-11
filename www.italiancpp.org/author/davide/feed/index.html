@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>davide &#8211; Italian C++ Community</title>
+	<atom:link href="https://www.italiancpp.org/author/davide/feed/" rel="self" type="application/rss+xml" />
+	<link>https://www.italiancpp.org</link>
+	<description></description>
+	<lastBuildDate>Mon, 24 Aug 2020 13:03:53 +0000</lastBuildDate>
+	<language>it-IT</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.7.18</generator>
+<site xmlns="com-wordpress:feed-additions:1">106700034</site>	<item>
+		<title>auto: il linguaggio non è tutto</title>
+		<link>https://www.italiancpp.org/2013/06/24/auto-il-linguaggio-non-e-tutto/</link>
+		<comments>https://www.italiancpp.org/2013/06/24/auto-il-linguaggio-non-e-tutto/#comments</comments>
+		<pubDate>Mon, 24 Jun 2013 09:44:06 +0000</pubDate>
+		<dc:creator><![CDATA[davide]]></dc:creator>
+				<category><![CDATA[Hands-on]]></category>
+		<category><![CDATA[basic]]></category>
+
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=625</guid>
+		<description><![CDATA[Molta enfasi di recente è stata posta sul nuovo uso della keyword auto in C++11 (si veda per esempio qui). In sintesi, auto sostituisce un tipo esplicito con una richiesta rivolta al compilatore di riempire con l&#8217;informazione corretta: std::vector&#60;double&#62; v; auto it = v.begin(); Il frammento sopra afferma: lascio al compilatore la deduzione del tipo di [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p style="text-align: justify;">Molta enfasi di recente è stata posta sul nuovo uso della keyword <strong>auto</strong> in C++11 (si veda per esempio <a title="qui" href="http://herbsutter.com/2013/06/05/gotw-92-auto-variables-part-1/">qui</a>). In sintesi, auto sostituisce un tipo esplicito con una richiesta rivolta al compilatore di riempire con l&#8217;informazione corretta:</p>
+<p><code lang="cpp" escaped="true"><br />
+std::vector&lt;double&gt; v;<br />
+auto it = v.begin();<br />
+</code></p>
+<p style="text-align: justify;">Il frammento sopra afferma: <em>lascio al compilatore la deduzione del tipo di it.</em></p>
+<p style="text-align: justify;">La maggior parte dei commenti però tende a enfatizzare <em>i casi in cui usare auto,</em> ma il vero problema è quando <em>non </em>usarlo. Siccome la keyword risparmia fatica al programmatore, ricordare continuamente &#8220;usate auto qui, usate auto là&#8221; porta facilmente a pensare che vada usato sempre, e diventa abbastanza naturale abusarne. auto però non è gratis: <strong>è fondamentale che il codice esprima correttamente l&#8217;intento del programmatore</strong>. se l&#8217;intento è chiaro, i bug diventano evidenti e si possono correggere facilmente. ma <strong>ci sono casi in cui l&#8217;uso di auto nasconde l&#8217;intento</strong>:</p>
+<ul style="text-align: justify;">
+<li>rileggendo il codice a distanza di tempo,<strong> diventa più difficile</strong> <strong>capire cosa</strong> <strong>sta</strong> <strong>succedendo</strong> (soprattutto se <em>tutte</em> le variabili locali sono auto&#8230; caso realmente accaduto)</li>
+<li>ci sono casi in cui un <strong>cast</strong> viene <strong>involontariamente</strong> <strong>eliminato: </strong>nell&#8217;esempio semplificato sopra, it poteva essere const_iterator, ma il programmatore intendeva dire <em>auto it = v.cbegin() </em>oppure <em>const_iterator it = v.begin()</em>?.</li>
+<li>(caso particolare del punto precedente) alcuni container restituiscono dei proxy, e l&#8217;uso indiscriminato di auto può rompere del codice funzionante</li>
+</ul>
+<p><code lang="cpp" escaped="true"><br />
+bool f1()<br />
+{<br />
+   std::vector&lt;bool&gt;* vp = new std::vector&lt;bool&gt;(1000, true);<br />
+   bool y = (*vp)[314]; // ok<br />
+   delete vp;<br />
+   return y;<br />
+}</p>
+<p>bool f2()<br />
+{<br />
+   std::vector&lt;bool&gt;* vp = new std::vector&lt;bool&gt;(1000, true);<br />
+   auto y = (*vp)[314]; // mmm...<br />
+   delete vp;<br />
+   return y; // argh! il proxy potrebbe leggere il container già distrutto<br />
+}<br />
+</code></p>
+<ul>
+<li> un <strong>IDE</strong> che fa un parsing euristico potrebbe <strong>non</strong> essere più <strong>in grado</strong> <strong>di</strong> <strong>elencare</strong> <strong>correttamente</strong> <strong>tutti</strong> <strong>i punti in cui un tipo viene usato; </strong>a volte il <em>completamento automatico</em> non funziona più. si pensi ad esempio a:</li>
+</ul>
+<p><code lang="cpp" escaped="true"><br />
+class ABC<br />
+{<br />
+   int size() const;<br />
+};<br />
+</code></p>
+<p>ABC GimmeMyObject();</p>
+<p><code lang="cpp" escaped="true"><br />
+// molto più tardi...<br />
+auto abc = GimmeMyObject();<br />
+auto n = GimmeMyObject().size();<br />
+</code></p>
+<p style="text-align: justify;">Durante il refactoring, si vogliono trovare tutti gli oggetti di tipo ABC; normalmente basta una ricerca di testo (ci possono essere mille motivi: progetto troppo grosso, o stiamo usando un modem a 56k e vi&#8230;), ma se la variabile è auto, ci vuole un IDE più sofisticato e ben integrato con il compilatore.</p>
+<p style="text-align: justify;">In sintesi, <span style="line-height: 12px;">è una <span style="text-decoration: underline;">buona</span> idea usare auto quando:</span></p>
+<ol style="text-align: justify;">
+<li><strong>chiunque è in grado di dedurre il tipo </strong>senza saltellare attraverso il codice<strong>,</strong> vuoi per il nome della variabile, vuoi per la semplicità dell&#8217;inizializzazione (cfr. esempio #1). Di solito, il tipo è un nome dipendente e lunghissimo (std::map&lt;std::string, std::list&lt;double&gt;, MySpecialComparisonOperator, MyCustomAllocator&gt;::const_iterator&#8230;); questa è una buona indicazione per usare auto.</li>
+<li>il <strong>tipo</strong> della variabile <strong>potrebbe</strong> <strong>cambiare</strong> in qualsiasi momento, <strong>mantenendo</strong> <strong>la</strong> <strong>stessa</strong> <strong>interfaccia</strong>. Nell&#8217;esempio #2, si pensi che le prime righe siano in realtà <em>generate da un programma esterno che emette codice c++</em> (ad esempio, <a title="questo" href="http://code.google.com/p/protobuf/">questo</a>). Il tipo esatto di &#8220;n&#8221; potrebbe variare semplicemente aggiornando il programma esterno, ma il cambiamento <em>potrebbe</em> non essere rilevante (spesso basta che sia n un intero con certe proprietà);</li>
+<li>quando c&#8217;è un limite di  80 caratteri per riga (ma suvvia&#8230; siamo nel 2013, <a title="chi mai" href="http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml#Line_Length">chi</a> mai segue una regola del genere?).</li>
+</ol>
+<p style="text-align: justify;">Per enfatizzare che il nostro scopo è <em>scoraggiare criticamente</em>, riportiamo anche i casi contrari: è una <span style="text-decoration: underline;">cattiva</span> idea usare auto quando:</p>
+<ol style="text-align: justify;">
+<li>l&#8217;<strong>inizializzazione non è ovvia</strong>, ovvero solo guardando cosa c&#8217;è a destra dell&#8217;= non è possibile dedurre il tipo della variabile. auto significa &#8220;lascio la deduzione al compilatore&#8221;, ma non &#8220;lascio la deduzione al compilatore&#8230; perché io non la so fare&#8221; (questo si applica anche alle somme di interi di tipo diverso, p.es. short + unsigned char)</li>
+<li>c&#8217;è un <strong>cast  </strong>di mezzo<br />
+<code lang="cpp" escaped="true"><br />
+auto x = static_cast&lt;int&gt;(GetNumberAsDouble()); // mmm... l'intento è chiaro, ma il codice è contorto<br />
+</code></li>
+<li>c&#8217;è un <strong>proxy</strong>: auto rischia di tenere in vita degli oggetti che non sono pensati per sopravvivere a lungo</li>
+<li><span style="line-height: 12px;">si esagera! non è il caso di iniziare un sorgente con:</span></li>
+</ol>
+<p><code lang="cpp" escaped="true"><br />
+auto main(auto argc, const auto* argv[]) -&gt; int // uhm... forse in c++2075...<br />
+</code></p>
+<p class="lang:c++ decode:true">
+]]></content:encoded>
+			<wfw:commentRss>https://www.italiancpp.org/2013/06/24/auto-il-linguaggio-non-e-tutto/feed/</wfw:commentRss>
+		<slash:comments>1</slash:comments>
+	<post-id xmlns="com-wordpress:feed-additions:1">625</post-id>	</item>
+	</channel>
+</rss>

@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;TZID=Europe/Rome:20151024T080000
+DTEND;TZID=Europe/Rome:20151024T160000
+DTSTAMP:20200908T151126
+CREATED:20150908T165046Z
+LAST-MODIFIED:20170824T064933Z
+UID:5179-1445673600-1445702400@www.italiancpp.org
+SUMMARY:Meetup a Roma
+DESCRIPTION:\n \nTutte le foto\n\n  \nVideo delle sessioni\n  \nQuesto meetup è piaciuto?\n  \nLeggi il post sul meetup\n� \nSabato 24 Ottobre\nRoma nun fa la stupida e compila&#8230;\n \n30+ partecipanti\n \n \n� \nDurante l&#8217;evento\, abbiamo estratto 3 copie di &#8220;Effective Modern C++&#8221; di Scott Meyers!\n \nGrazie al Community Program di \n \n \n \nProgramma della giornata (nei link slides\, demo e video):  \n\n\nquando\nquanto\ncosa\nchi\n\n\n\n8.30 &#8211; 9.00\n30'\nRegistrazione\n-\n\n\n9.00 &#8211; 9.15\n15'\nPresentazione della giornata\nMarco Arena\n\n\n9.15 &#8211; 10.15\n60'\nAll’interno di Clang e LLVM\nNicola Gigante\n\n\n10.25 &#8211; 10.55\n30'\nApplicazioni mobili ibride C++/C#\nFranco Milicchio\n\n\n10.55 &#8211; 11.15\n20'\nBreak\n-\n\n\n11.15 &#8211; 11.20\n5'\nEstrazioni copie "Effective Modern C++"\n-\n\n\n11.20 &#8211; 12.20\n60'\nConoscete Microsoft Bridge?\nGaetano Paternò\n\n\n12.30 &#8211; 13.00\n30'\nC++ meets Javascript (V8 in brevis)\nGian Lorenzo Meocci\n\n\n13.00 &#8211; *\n-\nPranzo + Networking\nTutti!\n\n\nPranzo insieme alla mitica Trattoria dell&#8217;Omo!\n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/meetup-roma-2015/
+LOCATION:Via della Vasca Navale\, 79\, Roma\, Italia
+CATEGORIES:Meetup
+ORGANIZER;CN="Italian%20C%2B%2B%20Community":MAILTO:info@italiancpp.org
+END:VEVENT
+END:VCALENDAR

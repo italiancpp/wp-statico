@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Commenti a: DEFER con RAII &#038; lambda</title>
+	<atom:link href="https://www.italiancpp.org/2013/07/16/defer-con-raii-lambda/feed/" rel="self" type="application/rss+xml" />
+	<link>https://www.italiancpp.org/2013/07/16/defer-con-raii-lambda/</link>
+	<description></description>
+	<lastBuildDate>Mon, 20 Mar 2017 21:21:21 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.7.18</generator>
+	<item>
+		<title>Di: marco</title>
+		<link>https://www.italiancpp.org/2013/07/16/defer-con-raii-lambda/#comment-14</link>
+		<dc:creator><![CDATA[marco]]></dc:creator>
+		<pubDate>Fri, 23 Aug 2013 14:13:34 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1072#comment-14</guid>
+		<description><![CDATA[Mmm io riesco ad editare (ho un bottoncino &quot;Modifica&quot; proprio sotto il commento). Forse c&#039;è qualche strano privilegio wordpress da cambiare, ci guardo, grazie per la segnalazione!
+
+Per la questione dell&#039;include, Crayon (il syntax highlighter usato per postare codice) non dovrebbe aver problemi con maggiori/minori e virgolette.]]></description>
+		<content:encoded><![CDATA[<p>Mmm io riesco ad editare (ho un bottoncino &#8220;Modifica&#8221; proprio sotto il commento). Forse c&#8217;è qualche strano privilegio wordpress da cambiare, ci guardo, grazie per la segnalazione!</p>
+<p>Per la questione dell&#8217;include, Crayon (il syntax highlighter usato per postare codice) non dovrebbe aver problemi con maggiori/minori e virgolette.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: Luca Risolia</title>
+		<link>https://www.italiancpp.org/2013/07/16/defer-con-raii-lambda/#comment-13</link>
+		<dc:creator><![CDATA[Luca Risolia]]></dc:creator>
+		<pubDate>Fri, 23 Aug 2013 13:47:29 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1072#comment-13</guid>
+		<description><![CDATA[Ciao Marco, mi sai dire se c&#039;e&#039; la possibilità di rieditare la propria risposta, per esempio per correggere eventuali errori di grammatica? Non riesco a trovare il modo; comunque, nell&#039;esempio sopra intendevo ovviamente &quot;#include &quot; (spero il sito non interpreti quanto scritto fra virgolette come un tag HTML).]]></description>
+		<content:encoded><![CDATA[<p>Ciao Marco, mi sai dire se c&#8217;e&#8217; la possibilità di rieditare la propria risposta, per esempio per correggere eventuali errori di grammatica? Non riesco a trovare il modo; comunque, nell&#8217;esempio sopra intendevo ovviamente &#8220;#include &#8221; (spero il sito non interpreti quanto scritto fra virgolette come un tag HTML).</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: marco</title>
+		<link>https://www.italiancpp.org/2013/07/16/defer-con-raii-lambda/#comment-12</link>
+		<dc:creator><![CDATA[marco]]></dc:creator>
+		<pubDate>Fri, 23 Aug 2013 13:36:11 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1072#comment-12</guid>
+		<description><![CDATA[Grazie Luca, sia per il feedback che per la soluzione alternativa!]]></description>
+		<content:encoded><![CDATA[<p>Grazie Luca, sia per il feedback che per la soluzione alternativa!</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: Luca Risolia</title>
+		<link>https://www.italiancpp.org/2013/07/16/defer-con-raii-lambda/#comment-11</link>
+		<dc:creator><![CDATA[Luca Risolia]]></dc:creator>
+		<pubDate>Fri, 23 Aug 2013 12:59:29 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1072#comment-11</guid>
+		<description><![CDATA[Finalmente ho trovato il tempo per iscrivermi. Complimenti per il sito.
+
+Oltre ai commenti che avevo fatto su linkedin, vorrei aggiungere una soluzione alternativa che fa uso delle librerie boost, ovvero di scope_exit, che va bene anche in C++98/03 e che, a mio avviso, resta leggibile anche in C++11, nonostante il supporto per le lambda-expressions:
+
+&lt;pre&gt;
+#include 
+
+void IWillUseTheAPI() {
+   Init();
+   BOOST_SCOPE_EXIT(void) { // SCOPE_EXIT supporta la lista di cattura
+        Terminate(); // nothrow/noexcept
+   }
+   BOOST_SCOPE_EXIT_END
+   // ...
+}
+&lt;/pre&gt;]]></description>
+		<content:encoded><![CDATA[<p>Finalmente ho trovato il tempo per iscrivermi. Complimenti per il sito.</p>
+<p>Oltre ai commenti che avevo fatto su linkedin, vorrei aggiungere una soluzione alternativa che fa uso delle librerie boost, ovvero di scope_exit, che va bene anche in C++98/03 e che, a mio avviso, resta leggibile anche in C++11, nonostante il supporto per le lambda-expressions:</p>
+<pre>
+#include 
+
+void IWillUseTheAPI() {
+   Init();
+   BOOST_SCOPE_EXIT(void) { // SCOPE_EXIT supporta la lista di cattura
+        Terminate(); // nothrow/noexcept
+   }
+   BOOST_SCOPE_EXIT_END
+   // ...
+}
+</pre>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: marco</title>
+		<link>https://www.italiancpp.org/2013/07/16/defer-con-raii-lambda/#comment-10</link>
+		<dc:creator><![CDATA[marco]]></dc:creator>
+		<pubDate>Fri, 23 Aug 2013 08:07:54 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1072#comment-10</guid>
+		<description><![CDATA[Ciao Goffredo, grazie per il commento!
+
+1) assolutamente sì! Io mi sono ispirato dal GO, visto in ufficio da un mio collega.
+
+2) concordo, non l&#039;ho scritto per semplicità ma hai fatto benissimo a scriverlo nei commenti.]]></description>
+		<content:encoded><![CDATA[<p>Ciao Goffredo, grazie per il commento!</p>
+<p>1) assolutamente sì! Io mi sono ispirato dal GO, visto in ufficio da un mio collega.</p>
+<p>2) concordo, non l&#8217;ho scritto per semplicità ma hai fatto benissimo a scriverlo nei commenti.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: Goffredo</title>
+		<link>https://www.italiancpp.org/2013/07/16/defer-con-raii-lambda/#comment-9</link>
+		<dc:creator><![CDATA[Goffredo]]></dc:creator>
+		<pubDate>Thu, 08 Aug 2013 20:21:54 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1072#comment-9</guid>
+		<description><![CDATA[Ciao,
+
+anche io mi sono fatto un po&#039; &quot;di ginnastica mentale&quot; su quest&#039;argomento, e volevo contribuire con un paio di osservazioni:
+
+1) la prima volta che ho visto questo paradigma è stato quando studiai il linguaggio D (dietro cui c&#039;è sempre Alexandrescu), e comunque anche la libreria boost offre alcune soluzioni analoghe (vedi scope_exit).
+
+2) la seconda è più sostanziale: essendo chiamato all&#039;interno di un distruttore, il codice passato al DEFER  NON deve lanciare eccezioni. Il motivo è semplice: se la DEFER viene invocata durante lo &lt;i&gt;stack unwinding&lt;/i&gt; dovuto ad un eccezione, ed il codice a sua volta lancia un&#039;altra accezione, avremmo due eccezioni contemporaneamente; lo standard in questo caso richiederebbe l&#039;invocazione di std::terminate().
+
+My 2¢]]></description>
+		<content:encoded><![CDATA[<p>Ciao,</p>
+<p>anche io mi sono fatto un po&#8217; &#8220;di ginnastica mentale&#8221; su quest&#8217;argomento, e volevo contribuire con un paio di osservazioni:</p>
+<p>1) la prima volta che ho visto questo paradigma è stato quando studiai il linguaggio D (dietro cui c&#8217;è sempre Alexandrescu), e comunque anche la libreria boost offre alcune soluzioni analoghe (vedi scope_exit).</p>
+<p>2) la seconda è più sostanziale: essendo chiamato all&#8217;interno di un distruttore, il codice passato al DEFER  NON deve lanciare eccezioni. Il motivo è semplice: se la DEFER viene invocata durante lo <i>stack unwinding</i> dovuto ad un eccezione, ed il codice a sua volta lancia un&#8217;altra accezione, avremmo due eccezioni contemporaneamente; lo standard in questo caso richiederebbe l&#8217;invocazione di std::terminate().</p>
+<p>My 2¢</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: marco</title>
+		<link>https://www.italiancpp.org/2013/07/16/defer-con-raii-lambda/#comment-8</link>
+		<dc:creator><![CDATA[marco]]></dc:creator>
+		<pubDate>Sat, 20 Jul 2013 13:30:06 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1072#comment-8</guid>
+		<description><![CDATA[L&#039;esempio è volutamente semplice, infatti si è creata anche un&#039;interessante discussione su &lt;a href=&quot;http://lnkd.in/RZ57hk&quot; rel=&quot;nofollow&quot;&gt;linkedin&lt;/a&gt;. Nel caso di API hai ragione, un wrapper ad-hoc nasconderebbe i dettagli di init/terminate. Anche se ci sono casi in cui l&#039;uso dell&#039;API è confinato in un solo punto, qui forse il DEFER ti evita di dover scrivere un wrapper che useresti solo da una parte. 
+
+In generale, secondo me ci sono due utilizzi interessanti del DEFER:
+
+1) quando vuoi eseguire del codice &quot;semplice&quot; alla fine di una funzione. Per semplice intendo che non faccia cose per cui sarebbe opportuno un oggetto a parte. In questo caso ricade l&#039;esempio dell&#039;API se l&#039;utilizzo è confinato in un solo punto. Altri esempi sono logging (e.g. vuoi a tutti i costi loggare l&#039;uscita da una funzione - anche in caso di eccezione) e profilazione.
+
+2) quando vuoi scrivere codice prototipale. Riprendi l&#039;esempio dell&#039;API, magari stai scrivendo un codice che si interfaccia con una libreria esterna. Fai una prima prova usando DEFER, tutto funziona e non hai dovuto scrivere nessun wrapper. Poi ti rendi conto che userai l&#039;API in un secondo punto. Allora introduci un oggetto più intelligente. In questo senso DEFER ti ha anche aiutato a fare una piccola scelta di design, senza però toglierti la possibilità di: (1) provare in fretta la struttura del tuo codice, (2) essere conformi agli idiomi del C++ (RAII). Chiaramente il rovescio della medaglia è lasciare il codice con due DEFER, che potrebbe non essere l&#039;ideale :) Ma qui si cade, poi, nel dover distinguere prototipazione e produzione, che spesso dipende dal proprio buon senso e da tanti altri fattori che farebbero andare troppo fuori tema questo commento!]]></description>
+		<content:encoded><![CDATA[<p>L&#8217;esempio è volutamente semplice, infatti si è creata anche un&#8217;interessante discussione su <a href="http://lnkd.in/RZ57hk" rel="nofollow">linkedin</a>. Nel caso di API hai ragione, un wrapper ad-hoc nasconderebbe i dettagli di init/terminate. Anche se ci sono casi in cui l&#8217;uso dell&#8217;API è confinato in un solo punto, qui forse il DEFER ti evita di dover scrivere un wrapper che useresti solo da una parte. </p>
+<p>In generale, secondo me ci sono due utilizzi interessanti del DEFER:</p>
+<p>1) quando vuoi eseguire del codice &#8220;semplice&#8221; alla fine di una funzione. Per semplice intendo che non faccia cose per cui sarebbe opportuno un oggetto a parte. In questo caso ricade l&#8217;esempio dell&#8217;API se l&#8217;utilizzo è confinato in un solo punto. Altri esempi sono logging (e.g. vuoi a tutti i costi loggare l&#8217;uscita da una funzione &#8211; anche in caso di eccezione) e profilazione.</p>
+<p>2) quando vuoi scrivere codice prototipale. Riprendi l&#8217;esempio dell&#8217;API, magari stai scrivendo un codice che si interfaccia con una libreria esterna. Fai una prima prova usando DEFER, tutto funziona e non hai dovuto scrivere nessun wrapper. Poi ti rendi conto che userai l&#8217;API in un secondo punto. Allora introduci un oggetto più intelligente. In questo senso DEFER ti ha anche aiutato a fare una piccola scelta di design, senza però toglierti la possibilità di: (1) provare in fretta la struttura del tuo codice, (2) essere conformi agli idiomi del C++ (RAII). Chiaramente il rovescio della medaglia è lasciare il codice con due DEFER, che potrebbe non essere l&#8217;ideale 🙂 Ma qui si cade, poi, nel dover distinguere prototipazione e produzione, che spesso dipende dal proprio buon senso e da tanti altri fattori che farebbero andare troppo fuori tema questo commento!</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>Di: stefano</title>
+		<link>https://www.italiancpp.org/2013/07/16/defer-con-raii-lambda/#comment-7</link>
+		<dc:creator><![CDATA[stefano]]></dc:creator>
+		<pubDate>Sat, 20 Jul 2013 12:35:50 +0000</pubDate>
+		<guid isPermaLink="false">http://www.italiancpp.org/?p=1072#comment-7</guid>
+		<description><![CDATA[Bello avere a disposizione un sistema analogo al &quot;finally&quot; per garantire l&#039;esecuzione del codice &quot;cascasse il mondo&quot;. Ringrazio Marco per la scoperta!
+
+Ma con il wrapper &quot;base&quot; potrei nascondere i &quot;dettagli tecnici&quot;. Usando il wrapper non ho la preoccupazione di proteggere ogni uso della libreria con DEFER(...). Il codice/algoritmo sarebbe semplificato, senza queste &quot;distrazioni&quot;.
+
+Quali sono le linee guida in questo caso?
+Quando è meglio (o necessario) usare direttamente DEFER piuttosto che creare il wrapper?]]></description>
+		<content:encoded><![CDATA[<p>Bello avere a disposizione un sistema analogo al &#8220;finally&#8221; per garantire l&#8217;esecuzione del codice &#8220;cascasse il mondo&#8221;. Ringrazio Marco per la scoperta!</p>
+<p>Ma con il wrapper &#8220;base&#8221; potrei nascondere i &#8220;dettagli tecnici&#8221;. Usando il wrapper non ho la preoccupazione di proteggere ogni uso della libreria con DEFER(&#8230;). Il codice/algoritmo sarebbe semplificato, senza queste &#8220;distrazioni&#8221;.</p>
+<p>Quali sono le linee guida in questo caso?<br />
+Quando è meglio (o necessario) usare direttamente DEFER piuttosto che creare il wrapper?</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>

@@ -1,0 +1,22 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Italian C++ Community - ECPv4.6.20.1//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Italian C++ Community
+X-ORIGINAL-URL:https://www.italiancpp.org
+X-WR-CALDESC:Events for Italian C++ Community
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20140924
+DTEND;VALUE=DATE:20140925
+DTSTAMP:20200908T151448
+CREATED:20140717T093326Z
+LAST-MODIFIED:20170824T064803Z
+UID:3346-1411516800-1411603199@www.italiancpp.org
+SUMMARY:Community Days 2014 - Roma
+DESCRIPTION:\nTutte le foto\n  \n \n  \nAbbiamo curato un&#8217;intera track C++ per 20+ persone!\n� \nOspite d&#8217;eccezione: Bartosz Milewski!\n  \nIl nuovo C++? Torniamo alle basi\nMarco Arena\n  \nC++\, un linguaggio evoluto per software moderno\nNicola Bonelli & Paolo Severini\n  \nFunctional techniques in C++\nBartosz Milewski\n  \nApp Windows Phone in C++\nMirco Vanini\n  \nGuiarda i video delle sessioni!\n  \n\n\n	Correlati\n
+URL:https://www.italiancpp.org/event/community-days-2014-roma/
+LOCATION:Viale Avignone\, 10\, Roma\, 00144\, Italia
+CATEGORIES:Partecipazione
+END:VEVENT
+END:VCALENDAR
