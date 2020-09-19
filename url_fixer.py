@@ -9,7 +9,6 @@ def read_parameters():
 def determine_depth(file_path):
 	return file_path.count('/')
 
-
 def crawl_files(root_folder, search_url, replace_url):
 	base_depth = determine_depth(root_folder)
 	
