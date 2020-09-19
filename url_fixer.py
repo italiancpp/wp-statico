@@ -21,14 +21,14 @@ def crawl_files(root_folder, search_url, replace_url):
 				
 				print (file_path + " -- " + str(depth_below_root))
 				count_replacements +=scan_replace(search_url, replace_url, file_path, depth_below_root)
-	print (str(count_replacements) + "sostituzioni")
+	print (str(count_replacements) + " sostituzioni")
 			
 def scan_replace(search_url, replace_url, file_path, depth_below_root):
 	web_page = open(file_path, "r")
 	text = web_page.read()
 	
 	if search_url in text:
-		print ("XFound in " + str(file_path))
+		print ("Found in " + str(file_path))
 		
 		relative_prefix = "../" * (depth_below_root -1)
 		text = text.replace(search_url, relative_prefix + replace_url)
