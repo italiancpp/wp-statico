@@ -43,9 +43,14 @@ def scan_replace(search_url, replace_url, file_path, depth_below_root):
 	return 0
 
 
+def auto_commit():
+	print ("Commit message (ctrl+c per stoppare tutto):")
+	message = input()
+	os.system("git commit -a -m '" + message + "'")
 
 if __name__ == "__main__":
 	root_folder = os.path.abspath("www.italiancpp.org/") # Ho sostituito migliaia di URL ed e' rimasta sempre questa.
 	search_url, replace_url = read_parameters()
 	print("Running in " + root_folder)
 	crawl_files(root_folder, search_url, replace_url)
+	auto_commit()
