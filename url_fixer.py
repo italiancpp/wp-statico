@@ -4,7 +4,7 @@ import sys
 import os
 
 def read_parameters():
-	return os.path.abspath(sys.argv[1]), sys.argv[2], sys.argv[3]
+	return sys.argv[1], sys.argv[2]
 	
 def determine_depth(file_path):
 	return file_path.count('/')
@@ -45,6 +45,7 @@ def scan_replace(search_url, replace_url, file_path, depth_below_root):
 
 
 if __name__ == "__main__":
-	root_folder, search_url, replace_url = read_parameters()
+	root_folder = os.path.abspath("www.italiancpp.org/") # Ho sostituito migliaia di URL ed e' rimasta sempre questa.
+	search_url, replace_url = read_parameters()
 	print("Running in " + root_folder)
 	crawl_files(root_folder, search_url, replace_url)
